@@ -14,7 +14,7 @@ public class Insertion extends JPanel {
         this.arr = arr;
     }
 
-    public void InserstionSort() {
+    public void sort() {
         for (int i = 1; i < AlgVisualiser.N; ++i) {
             int key = arr[i];
             int j = i - 1;

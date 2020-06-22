@@ -19,7 +19,7 @@ public class Bubble extends JPanel {
         this.arr = arr;
     }
 
-    public void bubbleSort() {
+    public void sort() {
         for (int i = 0; i < AlgVisualiser.N - 1; i++) {
             for (int j = 0; j < AlgVisualiser.N - i - 1; j++) {
                 if (arr[j] > arr[j + 1]) {

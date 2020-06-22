@@ -14,7 +14,7 @@ public class Selection extends JPanel {
         this.arr = arr;
     }
 
-    public void selectionSort() {
+    public void sort() {
         int n = arr.length;
 
         // One by one move boundary of unsorted subarray

@@ -16,26 +16,24 @@ public class AlgVisualiser {
     static final int CONTENT_WIDTH = 800;
     static final int CONTENT_HEIGHT = 800;
     static JFrame frame = new JFrame("Sorting Algorithms");
+    static JButton bubbleButton;
+    static JButton insertionButton;
+    static JButton selectionButton;
+    static Icon bubbleIcon;
+    static Icon selectionIcon;
+    static Icon insertionIcon;
     static Bubble bubbleSort;
     static Insertion insertSort;
+    static Selection selectionSort;
 
     public static void main(String[] args) {
 
+        setFrame();
+        initializeVars();
+        displayMenu();
+
         Integer[] arr = new Integer[N];
         arr = shuffleArr(arr);
-
-        setFrame();
-
-        // bubbleSort = new Bubble(arr);
-        // frame.add(bubbleSort);
-
-        // sort the unsorted arr
-        // bubbleSort.bubbleSort();
-
-        Selection selectionSort = new Selection(arr);
-        frame.add(selectionSort);
-
-        selectionSort.selectionSort();
     }
 
     public static void setFrame() {
@@ -44,6 +42,15 @@ public class AlgVisualiser {
         frame.getContentPane().setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
         frame.pack();
         frame.setLocationRelativeTo(null);
+        displayMenu();
+    }
+
+    public static void initializeVars() {
+
+    }
+
+    public static void displayMenu() {
+        // display the menu buttons
     }
 
     public static Integer[] shuffleArr(Integer[] arr) {
