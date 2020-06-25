@@ -3,25 +3,24 @@ Program that visualizes the sorting of an unsorted
 array of Integers from 1 to n.
 */
 
+import java.awt.Color;
 import java.awt.Dimension;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import javax.swing.*;
+import java.awt.event.*;
 
-public class AlgVisualiser {
+public class AlgVisualiser implements ActionListener{
 
     static final int N = 100;
-
+    static Integer[] arr;
     static final int CONTENT_WIDTH = 800;
     static final int CONTENT_HEIGHT = 800;
     static JFrame frame = new JFrame("Sorting Algorithms");
+    static JPanel buttonPanel = new JPanel();
+    static JPanel arrPanel =  new JPanel();
     static JButton bubbleButton;
     static JButton insertionButton;
     static JButton selectionButton;
-    static Icon bubbleIcon;
-    static Icon selectionIcon;
-    static Icon insertionIcon;
     static Bubble bubbleSort;
     static Insertion insertSort;
     static Selection selectionSort;
@@ -30,10 +29,8 @@ public class AlgVisualiser {
 
         setFrame();
         initializeVars();
-        displayMenu();
+        buttonPanel.setVisible(true);
 
-        Integer[] arr = new Integer[N];
-        arr = shuffleArr(arr);
     }
 
     public static void setFrame() {
@@ -42,15 +39,71 @@ public class AlgVisualiser {
         frame.getContentPane().setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
         frame.pack();
         frame.setLocationRelativeTo(null);
-        displayMenu();
+        frame.add(arrPanel);
+        frame.add(buttonPanel);
     }
 
     public static void initializeVars() {
+        // initialize the array
+        arr = new Integer[N];
+        arr = fillArr(arr);
+        arr = shuffleArr(arr);
+
+        AlgVisualiser alg = new AlgVisualiser();
+
+        //initialize the JButtons
+        bubbleButton = new JButton("Bubble Sort");
+        bubbleButton.setPreferredSize(new Dimension(200,200));
+        bubbleButton.addActionListener(alg);
+
+        selectionButton = new JButton("Selection Sort");
+        selectionButton.setPreferredSize(new Dimension(200,200));
+        selectionButton.addActionListener(alg);
+
+        insertionButton = new JButton("Insertion Sort");
+        insertionButton.setPreferredSize(new Dimension(200,200));
+        insertionButton.addActionListener(alg);
+
+        bubbleButton.setBackground(Color.WHITE);
+        selectionButton.setBackground(Color.WHITE);
+        insertionButton.setBackground(Color.WHITE);
+
+        buttonPanel.setBackground(Color.DARK_GRAY);
+        buttonPanel.add(bubbleButton);
+        buttonPanel.add(selectionButton);
+        buttonPanel.add(insertionButton);
+
+        arrPanel.setPreferredSize(new Dimension(800,750));
+        arrPanel.setBackground(Color.LIGHT_GRAY);
+
+        //initialize the sorting algorithms
+        bubbleSort = new Bubble(arr);
+        insertSort = new Insertion(arr);
+        selectionSort = new Selection(arr);
 
     }
 
-    public static void displayMenu() {
-        // display the menu buttons
+
+    public void actionPerformed(ActionEvent event) {
+        //find which button was clicked
+        if(event.getSource() == bubbleButton){
+
+            System.out.println("x");
+            buttonPanel.setVisible(false);
+            bubbleSort.displayArr();
+            //bubbleSort.sort();
+
+        } else if(event.getSource() == selectionButton){
+
+            buttonPanel.setVisible(false);
+            //selectionSort.sort();
+
+        }  else if(event.getSource() == insertionButton){
+
+            buttonPanel.setVisible(false);
+            //insertSort.sort();
+
+        }
     }
 
     public static Integer[] shuffleArr(Integer[] arr) {

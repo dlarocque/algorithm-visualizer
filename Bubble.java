@@ -19,17 +19,21 @@ public class Bubble extends JPanel {
         this.arr = arr;
     }
 
+    public void displayArr(){
+        System.out.println("y");
+        AlgVisualiser.arrPanel.repaint();
+    }
+
     public void sort() {
         for (int i = 0; i < AlgVisualiser.N - 1; i++) {
             for (int j = 0; j < AlgVisualiser.N - i - 1; j++) {
                 if (arr[j] > arr[j + 1]) {
-                    // swap arr[j+1] and arr[i]
                     checkedIndex1 = i;
                     checkedIndex2 = j;
                     int temp = arr[j];
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
-                    AlgVisualiser.frame.repaint();
+                    AlgVisualiser.arrPanel.repaint();
                     try {
                         Thread.sleep(2);
                     } catch (InterruptedException e) {
@@ -40,7 +44,7 @@ public class Bubble extends JPanel {
         }
         checkedIndex1 = -1;
         checkedIndex2 = -1;
-        AlgVisualiser.frame.repaint();
+        AlgVisualiser.arrPanel.repaint();
     }
 
     @Override
