@@ -5,6 +5,7 @@ array of Integers from 1 to n.
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.CardLayout;
 import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -27,20 +28,22 @@ public class AlgVisualiser implements ActionListener{
 
     public static void main(String[] args) {
 
-        setFrame();
         initializeVars();
+        setFrame();
         buttonPanel.setVisible(true);
 
     }
 
     public static void setFrame() {
+        frame.setLayout(new CardLayout());
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
         frame.pack();
         frame.setLocationRelativeTo(null);
-        frame.add(arrPanel);
+        arrPanel.setVisible(false);
         frame.add(buttonPanel);
+        frame.add(arrPanel);
     }
 
     public static void initializeVars() {
@@ -48,6 +51,9 @@ public class AlgVisualiser implements ActionListener{
         arr = new Integer[N];
         arr = fillArr(arr);
         arr = shuffleArr(arr);
+
+        bubbleSort = new Bubble(arr);
+        bubbleSort.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
 
         AlgVisualiser alg = new AlgVisualiser();
 
@@ -69,12 +75,14 @@ public class AlgVisualiser implements ActionListener{
         insertionButton.setBackground(Color.WHITE);
 
         buttonPanel.setBackground(Color.DARK_GRAY);
+        buttonPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
         buttonPanel.add(bubbleButton);
         buttonPanel.add(selectionButton);
         buttonPanel.add(insertionButton);
 
-        arrPanel.setPreferredSize(new Dimension(800,750));
-        arrPanel.setBackground(Color.LIGHT_GRAY);
+        arrPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
+        arrPanel.add(bubbleSort);
+        arrPanel.setBackground(Color.BLACK);
 
         //initialize the sorting algorithms
         bubbleSort = new Bubble(arr);
@@ -87,11 +95,9 @@ public class AlgVisualiser implements ActionListener{
     public void actionPerformed(ActionEvent event) {
         //find which button was clicked
         if(event.getSource() == bubbleButton){
-
-            System.out.println("x");
             buttonPanel.setVisible(false);
+            arrPanel.setVisible(true);
             bubbleSort.displayArr();
-            //bubbleSort.sort();
 
         } else if(event.getSource() == selectionButton){
 

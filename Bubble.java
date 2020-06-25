@@ -20,11 +20,11 @@ public class Bubble extends JPanel {
     }
 
     public void displayArr(){
-        System.out.println("y");
-        AlgVisualiser.arrPanel.repaint();
+        AlgVisualiser.frame.repaint();
     }
 
     public void sort() {
+        
         for (int i = 0; i < AlgVisualiser.N - 1; i++) {
             for (int j = 0; j < AlgVisualiser.N - i - 1; j++) {
                 if (arr[j] > arr[j + 1]) {
@@ -33,7 +33,7 @@ public class Bubble extends JPanel {
                     int temp = arr[j];
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
-                    AlgVisualiser.arrPanel.repaint();
+                    AlgVisualiser.frame.repaint();
                     try {
                         Thread.sleep(2);
                     } catch (InterruptedException e) {
@@ -44,11 +44,13 @@ public class Bubble extends JPanel {
         }
         checkedIndex1 = -1;
         checkedIndex2 = -1;
-        AlgVisualiser.arrPanel.repaint();
+        AlgVisualiser.frame.repaint();
     }
 
     @Override
     public void paintComponent(Graphics g) {
+        System.out.println("z");
+
         Graphics2D graphics2d = (Graphics2D) g;
 
         graphics2d.setColor(Color.DARK_GRAY);
