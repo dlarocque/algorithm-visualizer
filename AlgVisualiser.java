@@ -1,8 +1,3 @@
-/*
-Program that visualizes the sorting of an unsorted
-array of Integers from 1 to n.
-*/
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.CardLayout;
@@ -10,40 +5,36 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class AlgVisualiser implements ActionListener{
+public class AlgVisualiser implements ActionListener {
 
     static final int N = 100;
     static Integer[] arr;
     static final int CONTENT_WIDTH = 800;
     static final int CONTENT_HEIGHT = 800;
     static JFrame frame = new JFrame("Sorting Algorithms");
+    static JPanel mainPanel = new JPanel();
     static JPanel buttonPanel = new JPanel();
-    static JPanel arrPanel =  new JPanel();
     static JButton bubbleButton;
     static JButton insertionButton;
     static JButton selectionButton;
     static Bubble bubbleSort;
     static Insertion insertSort;
     static Selection selectionSort;
+    static CardLayout cardLayout = new CardLayout();
 
     public static void main(String[] args) {
-
-        initializeVars();
         setFrame();
+        initializeVars();
         buttonPanel.setVisible(true);
-
     }
 
     public static void setFrame() {
-        frame.setLayout(new CardLayout());
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
         frame.pack();
         frame.setLocationRelativeTo(null);
-        arrPanel.setVisible(false);
-        frame.add(buttonPanel);
-        frame.add(arrPanel);
+        frame.add(mainPanel);
     }
 
     public static void initializeVars() {
@@ -53,21 +44,25 @@ public class AlgVisualiser implements ActionListener{
         arr = shuffleArr(arr);
 
         bubbleSort = new Bubble(arr);
+        insertSort = new Insertion(arr);
+        selectionSort = new Selection(arr);
         bubbleSort.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
+        insertSort.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
+        selectionSort.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
 
         AlgVisualiser alg = new AlgVisualiser();
 
-        //initialize the JButtons
+        // initialize the JButtons
         bubbleButton = new JButton("Bubble Sort");
-        bubbleButton.setPreferredSize(new Dimension(200,200));
+        bubbleButton.setPreferredSize(new Dimension(200, 200));
         bubbleButton.addActionListener(alg);
 
         selectionButton = new JButton("Selection Sort");
-        selectionButton.setPreferredSize(new Dimension(200,200));
+        selectionButton.setPreferredSize(new Dimension(200, 200));
         selectionButton.addActionListener(alg);
 
         insertionButton = new JButton("Insertion Sort");
-        insertionButton.setPreferredSize(new Dimension(200,200));
+        insertionButton.setPreferredSize(new Dimension(200, 200));
         insertionButton.addActionListener(alg);
 
         bubbleButton.setBackground(Color.WHITE);
@@ -80,34 +75,30 @@ public class AlgVisualiser implements ActionListener{
         buttonPanel.add(selectionButton);
         buttonPanel.add(insertionButton);
 
-        arrPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
-        arrPanel.add(bubbleSort);
-        arrPanel.setBackground(Color.BLACK);
-
-        //initialize the sorting algorithms
-        bubbleSort = new Bubble(arr);
-        insertSort = new Insertion(arr);
-        selectionSort = new Selection(arr);
+        mainPanel.setLayout(cardLayout);
+        mainPanel.add(buttonPanel);
+        mainPanel.add(bubbleSort);
+        mainPanel.add(insertSort);
+        mainPanel.add(selectionSort);
 
     }
 
-
     public void actionPerformed(ActionEvent event) {
-        //find which button was clicked
-        if(event.getSource() == bubbleButton){
-            buttonPanel.setVisible(false);
-            arrPanel.setVisible(true);
-            bubbleSort.displayArr();
+        // find which button was clicked
+        if (event.getSource() == bubbleButton) {
+            cardLayout.next(mainPanel);
+            //frame.validate();
+            bubbleSort.sort();
 
-        } else if(event.getSource() == selectionButton){
-
-            buttonPanel.setVisible(false);
-            //selectionSort.sort();
-
-        }  else if(event.getSource() == insertionButton){
+        } else if (event.getSource() == selectionButton) {
 
             buttonPanel.setVisible(false);
-            //insertSort.sort();
+            // selectionSort.sort();
+
+        } else if (event.getSource() == insertionButton) {
+
+            buttonPanel.setVisible(false);
+            // insertSort.sort();
 
         }
     }

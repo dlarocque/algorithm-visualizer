@@ -33,18 +33,23 @@ public class Bubble extends JPanel {
                     int temp = arr[j];
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
-                    AlgVisualiser.frame.repaint();
+                    System.out.println("s");
+                    this.repaint();
+                    //AlgVisualiser.frame.revalidate();
+                    //AlgVisualiser.frame.repaint();
                     try {
-                        Thread.sleep(2);
+                        Thread.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    
                 }
             }
         }
         checkedIndex1 = -1;
         checkedIndex2 = -1;
-        AlgVisualiser.frame.repaint();
+        //AlgVisualiser.frame.revalidate();
+        //AlgVisualiser.frame.repaint();
     }
 
     @Override
