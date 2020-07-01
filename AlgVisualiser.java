@@ -1,3 +1,10 @@
+/*
+**-dont use preferred sizes for everything
+**-don't use static for everything
+**-add getters and setters
+**-no need for revalidate
+*/
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.CardLayout;
@@ -7,63 +14,64 @@ import java.awt.event.*;
 
 public class AlgVisualiser implements ActionListener {
 
-    static final int N = 100;
-    static Integer[] arr;
-    static final int CONTENT_WIDTH = 800;
-    static final int CONTENT_HEIGHT = 800;
-    static JFrame frame = new JFrame("Sorting Algorithms");
-    static JPanel mainPanel = new JPanel();
-    static JPanel buttonPanel = new JPanel();
-    static JButton bubbleButton;
-    static JButton insertionButton;
-    static JButton selectionButton;
-    static Bubble bubbleSort;
-    static Insertion insertSort;
-    static Selection selectionSort;
-    static CardLayout cardLayout = new CardLayout();
+    final int N = 100;
+    Integer[] arr;
+    final int CONTENT_WIDTH = 800;
+    final int CONTENT_HEIGHT = 800;
+    JFrame frame = new JFrame("Sorting Algorithms");
+    JPanel buttonPanel = new JPanel();
+    JPanel arrPanel = new JPanel();
+    JButton bubbleButton;
+    JButton insertionButton;
+    JButton selectionButton;
+    Bubble bubbleSort;
+    Insertion insertSort;
+    Selection selectionSort;
 
     public static void main(String[] args) {
-        setFrame();
-        initializeVars();
-        buttonPanel.setVisible(true);
+        AlgVisualiser alg = new AlgVisualiser();
+        alg.initializeVars();
+        alg.setFrame();
     }
 
-    public static void setFrame() {
+    public void setFrame() {
+        frame.setLayout(new CardLayout());
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
-        frame.pack();
         frame.setLocationRelativeTo(null);
-        frame.add(mainPanel);
+        buttonPanel.setVisible(true);
+        frame.add(buttonPanel);
+        frame.add(arrPanel);
+        frame.pack();
     }
 
-    public static void initializeVars() {
-        // initialize the array
+    public void initializeVars() {
+
         arr = new Integer[N];
         arr = fillArr(arr);
         arr = shuffleArr(arr);
 
-        bubbleSort = new Bubble(arr);
-        insertSort = new Insertion(arr);
-        selectionSort = new Selection(arr);
+        bubbleSort = new Bubble(this, arr);
         bubbleSort.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
+
+        insertSort = new Insertion(this, arr);
         insertSort.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
+
+        selectionSort = new Selection(this, arr);
         selectionSort.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
 
-        AlgVisualiser alg = new AlgVisualiser();
-
-        // initialize the JButtons
         bubbleButton = new JButton("Bubble Sort");
         bubbleButton.setPreferredSize(new Dimension(200, 200));
-        bubbleButton.addActionListener(alg);
+        bubbleButton.addActionListener(this);
 
         selectionButton = new JButton("Selection Sort");
         selectionButton.setPreferredSize(new Dimension(200, 200));
-        selectionButton.addActionListener(alg);
+        selectionButton.addActionListener(this);
 
         insertionButton = new JButton("Insertion Sort");
         insertionButton.setPreferredSize(new Dimension(200, 200));
-        insertionButton.addActionListener(alg);
+        insertionButton.addActionListener(this);
 
         bubbleButton.setBackground(Color.WHITE);
         selectionButton.setBackground(Color.WHITE);
@@ -75,55 +83,56 @@ public class AlgVisualiser implements ActionListener {
         buttonPanel.add(selectionButton);
         buttonPanel.add(insertionButton);
 
-        mainPanel.setLayout(cardLayout);
-        mainPanel.add(buttonPanel);
-        mainPanel.add(bubbleSort);
-        mainPanel.add(insertSort);
-        mainPanel.add(selectionSort);
-
+        arrPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
+        arrPanel.add(bubbleSort);
     }
 
     public void actionPerformed(ActionEvent event) {
-        // find which button was clicked
+
         if (event.getSource() == bubbleButton) {
-            cardLayout.next(mainPanel);
-            //frame.validate();
+            buttonPanel.setVisible(false);
+            arrPanel.setVisible(true);
             bubbleSort.sort();
-
         } else if (event.getSource() == selectionButton) {
-
             buttonPanel.setVisible(false);
-            // selectionSort.sort();
-
+            arrPanel.setVisible(true);
+            insertSort.sort();
         } else if (event.getSource() == insertionButton) {
-
             buttonPanel.setVisible(false);
-            // insertSort.sort();
-
+            arrPanel.setVisible(true);
+            selectionSort.sort();
         }
+
     }
 
-    public static Integer[] shuffleArr(Integer[] arr) {
+    public Integer[] shuffleArr(Integer[] arr) {
         arr = fillArr(arr);
-        // Use list methods to shuffle the array, then return to array
         List<Integer> list = Arrays.asList(arr);
         Collections.shuffle(list);
         arr = list.toArray(arr);
         return arr;
     }
 
-    public static String printArr(Integer[] arr) {
-        String line = "[ ";
-        for (int i = 0; i < N; i++) {
-            line += arr[i] + ", ";
-        }
-        return line + "]";
-    }
-
-    public static Integer[] fillArr(Integer[] arr) {
+    public Integer[] fillArr(Integer[] arr) {
         for (int i = 0; i < N; i++) {
             arr[i] = i + 1;
         }
         return arr;
+    }
+
+    public int getArraySize() {
+        return N;
+    }
+
+    public int getHeight() {
+        return CONTENT_HEIGHT;
+    }
+
+    public int getWidth() {
+        return CONTENT_WIDTH;
+    }
+
+    public JFrame getJFrame() {
+        return frame;
     }
 }

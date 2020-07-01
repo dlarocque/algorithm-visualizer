@@ -5,12 +5,14 @@ public class Selection extends JPanel {
     /**
      *
      */
+    private AlgVisualiser alg;
     private static final long serialVersionUID = 1L;
-    private static int checkedIndex1;
-    private static int checkedIndex2;
+    private int checkedIndex1;
+    private int checkedIndex2;
     private Integer[] arr;
 
-    public Selection(Integer[] arr) {
+    public Selection(AlgVisualiser alg, Integer[] arr) {
+        this.alg = alg;
         this.arr = arr;
     }
 
@@ -26,7 +28,7 @@ public class Selection extends JPanel {
                 checkedIndex2 = j;
                 if (arr[j] < arr[min_idx])
                     min_idx = j;
-                AlgVisualiser.frame.repaint();
+                    this.repaint();
                 try {
                     Thread.sleep(2);
                 } catch (InterruptedException e) {
@@ -41,7 +43,7 @@ public class Selection extends JPanel {
         }
         checkedIndex1 = -1;
         checkedIndex2 = -1;
-        AlgVisualiser.frame.repaint();
+        this.repaint();
     }
 
     @Override
@@ -49,12 +51,12 @@ public class Selection extends JPanel {
         Graphics2D graphics2d = (Graphics2D) g;
 
         graphics2d.setColor(Color.DARK_GRAY);
-        graphics2d.fillRect(0, 0, AlgVisualiser.CONTENT_WIDTH, AlgVisualiser.CONTENT_HEIGHT);
+        graphics2d.fillRect(0, 0, alg.getWidth(), alg.getHeight());
         for (int i = 0; i < arr.length; i++) {
-            int width = (int) (AlgVisualiser.CONTENT_WIDTH / (double) AlgVisualiser.N);
-            int height = arr[i] * (AlgVisualiser.CONTENT_HEIGHT / AlgVisualiser.N);
+            int width = (int) (alg.getWidth() / (double) alg.getArraySize());
+            int height = arr[i] * (alg.getHeight() / alg.getArraySize());
             int x = i * width;
-            int y = AlgVisualiser.CONTENT_HEIGHT - height;
+            int y = alg.getHeight() - height;
             if (i == checkedIndex1 || i == checkedIndex2) {
                 graphics2d.setColor(Color.RED);
             } else if (checkedIndex1 == -1) {
