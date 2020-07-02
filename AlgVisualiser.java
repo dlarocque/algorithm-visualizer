@@ -13,16 +13,16 @@ import java.awt.event.*;
 public class AlgVisualiser implements ActionListener {
 
     final int N = 100;
-    Integer[] arr;
     final int CONTENT_WIDTH = 800;
     final int CONTENT_HEIGHT = 800;
-    JFrame frame = new JFrame("Sorting Algorithms");
-    DisplayArr display;
-    JPanel buttonPanel = new JPanel();
-    JButton bubbleButton;
-    JButton insertionButton;
-    JButton selectionButton;
-    SwingWorker<Void, Integer[]> bubbleWorker;
+    private Integer[] arr;
+    private  JFrame frame = new JFrame("Sorting Algorithms");
+    private DisplayArr display;
+    private JPanel buttonPanel = new JPanel();
+    private JButton bubbleButton;
+    private JButton insertionButton;
+    private JButton selectionButton;
+    private SwingWorker<Void, Integer[]> bubbleWorker;
     private boolean doBubbleSort;
     private boolean doInsertionSort;
     private boolean doSelectionSort;
@@ -38,7 +38,6 @@ public class AlgVisualiser implements ActionListener {
         frame.setLayout(new CardLayout());
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.getContentPane().setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
         buttonPanel.setVisible(true);
         frame.add(buttonPanel);
         frame.add(display);
@@ -48,17 +47,13 @@ public class AlgVisualiser implements ActionListener {
 
     public void initializeVars() {
 
-        doBubbleSort = false;
-        doInsertionSort = false;
-        doSelectionSort = false;
-
         arr = new Integer[N];
         arr = fillArr(arr);
         arr = shuffleArr(arr);
 
         display = new DisplayArr(this, arr);
         display.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
-
+        
         bubbleButton = new JButton("Bubble Sort");
         bubbleButton.addActionListener(this);
 
@@ -104,6 +99,19 @@ public class AlgVisualiser implements ActionListener {
             bubbleWorker.execute();
         }
 
+    }
+    
+    public void reset() {
+        /*
+        Things to reset
+        -JButtonPanel visible
+        -display invisible
+        -shuffle array
+        */
+        display.setVisible(false);
+        buttonPanel.setVisible(true);
+        arr = shuffleArr(arr);
+        bubbleWorker = new bubbleWorker(this, arr, display);
     }
 
     public Integer[] shuffleArr(Integer[] arr) {
