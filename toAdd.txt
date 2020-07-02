@@ -1,22 +1,12 @@
 THINGS TO ADD TO THE PROGRAM
 -------------------------------------------
 
-Interface to select the sorting algorithm
--button for each of the algorithms
--home button (if not already home)
--sorting speed?
+Action to reset the program / bring the user back to the menu
+-JButton
+-JLabel with instructions
+-JOptionPane
 
-Time calculation / measures
--Top right corner, or at end of the sorting
+Information tab describing the process for each sorting algorithm
 
-Info panel, explaining each sorting algorithm
--in the menu
-
-JButtons
--Icons(images)
--Location
--Size
--Visibility
-
-ActionListener
--Action
+Background image in the menu
+Better looking Buttons and layout
