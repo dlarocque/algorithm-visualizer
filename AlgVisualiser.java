@@ -1,7 +1,4 @@
-/*
-    add an action Listener to space bar to reset program
-    add text on paintComponent to tell this to the user
-*/
+package AlgVisualiser;
 
 import java.awt.Color;
 import java.awt.Dimension;
