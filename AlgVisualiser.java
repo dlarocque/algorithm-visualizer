@@ -99,18 +99,12 @@ public class AlgVisualiser implements ActionListener {
     }
     
     public void reset() {
-        /*
-        Things to reset
-        -JButtonPanel visible
-        -display invisible
-        -shuffle array
-        */
         display.setVisible(false);
         buttonPanel.setVisible(true);
         arr = shuffleArr(arr);
         bubbleWorker = new bubbleWorker(this, arr, display);
     }
-
+    
     public Integer[] shuffleArr(Integer[] arr) {
         arr = fillArr(arr);
         List<Integer> list = Arrays.asList(arr);

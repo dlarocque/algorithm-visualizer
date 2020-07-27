@@ -1,10 +1,17 @@
 THINGS TO ADD TO THE PROGRAM
 -------------------------------------------
 
+Make the program an executable file
+-with maven??? (fix paths in environment variables)
+
 Action to reset the program / bring the user back to the menu
 -JButton
 -JLabel with instructions
 -JOptionPane
+
+Add more complex sorting algorithms
+-Sort very large amounts of data
+--Not sure how i would use java awt for this
 
 Information tab describing the process for each sorting algorithm
 
