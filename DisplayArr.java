@@ -4,7 +4,7 @@
  sorting by overriding the paintComponent 
  method from Java Swing and Thread.wait to slow it down.
  */
-
+package AlgorithmVisualizer;
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
