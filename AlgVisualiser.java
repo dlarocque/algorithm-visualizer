@@ -1,4 +1,4 @@
-package AlgVisualiser;
+package AlgorithmVisualizer;
 
 import java.awt.Color;
 import java.awt.Dimension;
