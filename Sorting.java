@@ -3,7 +3,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-public class bubbleWorker extends SwingWorker<Void, Integer[]> {
+public class Sorting extends SwingWorker<Void, Integer[]> {
 
     protected int checkedIndex1;
     protected int checkedIndex2;
@@ -11,7 +11,7 @@ public class bubbleWorker extends SwingWorker<Void, Integer[]> {
     private AlgVisualiser alg;
     private DisplayArr display;
 
-    public bubbleWorker(AlgVisualiser alg, Integer[] arr, DisplayArr display) {
+    public Sorting(AlgVisualiser alg, Integer[] arr, DisplayArr display) {
         this.alg = alg;
         this.arr = arr;
         this.display = display;

@@ -69,7 +69,7 @@ public class AlgVisualiser implements ActionListener {
         buttonPanel.add(selectionButton);
         buttonPanel.add(insertionButton);
 
-        bubbleWorker = new bubbleWorker(this, arr, display);
+        bubbleWorker = new Sorting(this, arr, display);
 
     }
 
@@ -102,7 +102,7 @@ public class AlgVisualiser implements ActionListener {
         display.setVisible(false);
         buttonPanel.setVisible(true);
         arr = shuffleArr(arr);
-        bubbleWorker = new bubbleWorker(this, arr, display);
+        bubbleWorker = new Sorting(this, arr, display);
     }
     
     public Integer[] shuffleArr(Integer[] arr) {
