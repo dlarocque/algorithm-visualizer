@@ -1,4 +1,5 @@
-package AlgorithmVisualizer;
+package algorithmVisualizer;
+
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -8,10 +9,10 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
     protected int checkedIndex1;
     protected int checkedIndex2;
     private Integer[] arr;
-    private AlgVisualiser alg;
+    private AlgVisualizer alg;
     private DisplayArr display;
 
-    public Sorting(AlgVisualiser alg, Integer[] arr, DisplayArr display) {
+    public Sorting(AlgVisualizer alg, Integer[] arr, DisplayArr display) {
         this.alg = alg;
         this.arr = arr;
         this.display = display;

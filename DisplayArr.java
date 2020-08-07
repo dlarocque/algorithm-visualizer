@@ -1,10 +1,6 @@
+package algorithmVisualizer;
 
-/**
- Bubble Sort algorithm that displays the 
- sorting by overriding the paintComponent 
- method from Java Swing and Thread.wait to slow it down.
- */
-package AlgorithmVisualizer;
+
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
@@ -16,9 +12,9 @@ public class DisplayArr extends JComponent {
     protected List<Integer> checkedIndex2 = new ArrayList<Integer>();
     private static final long serialVersionUID = 1L;
     protected Integer[] arr;
-    protected AlgVisualiser alg;
+    protected AlgVisualizer alg;
 
-    public DisplayArr(AlgVisualiser alg, Integer[] arr) {
+    public DisplayArr(AlgVisualizer alg, Integer[] arr) {
         this.alg = alg;
         this.arr = arr;
     }
