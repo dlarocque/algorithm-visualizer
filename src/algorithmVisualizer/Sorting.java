@@ -26,6 +26,8 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
             insertionSort();
         } else if (alg.getSort().equals("Selection Sort")) {
             selectionSort();
+        } else {
+        	display.repaint();
         }
         return null;
     }

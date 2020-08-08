@@ -24,14 +24,14 @@ public class DisplayArr extends JComponent {
         
         Graphics2D graphics2d = (Graphics2D) g;
         graphics2d.setColor(Color.DARK_GRAY);
-        graphics2d.fillRect(0, 0, alg.getWidth(), alg.getHeight());
+        graphics2d.fillRect(0, 0, alg.getWidth(), alg.getArrDispHeight());
 
         for (int i = 0; i < arr.length; i++) {
 
             int width = (int) (alg.getWidth() / (double) alg.getArraySize());
-            int height = arr[i] * (alg.getHeight() / alg.getArraySize());
+            int height = arr[i] * (alg.getArrDispHeight() / alg.getArraySize());
             int x = i * width;
-            int y = alg.getHeight() - height;
+            int y = alg.getArrDispHeight() - height;
             try {
                 if (i == checkedIndex1.get(0) || i == checkedIndex2.get(0)) {
                     graphics2d.setColor(Color.RED);
@@ -46,8 +46,8 @@ public class DisplayArr extends JComponent {
 
             graphics2d.fillRect(x, y, width, height);
         }
-        checkedIndex1.remove(0);
-        checkedIndex2.remove(0);
+        //checkedIndex1.remove(0);  // 0 out of bounds for length 0
+        //checkedIndex2.remove(0);
     }
 
     public void addCheckedIndex1(Integer checkedIndex) {

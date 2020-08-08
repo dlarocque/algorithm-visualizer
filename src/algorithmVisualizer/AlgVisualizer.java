@@ -1,9 +1,8 @@
 package algorithmVisualizer;
 
-
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.CardLayout;
 import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -11,16 +10,20 @@ import java.awt.event.*;
 public class AlgVisualizer implements ActionListener {
 
     final int N = 100;
+    // Size of the entire frame
     final int CONTENT_WIDTH = 800;
-    final int CONTENT_HEIGHT = 800;
+    final int CONTENT_HEIGHT = 860;
+    final int ARR_DISPLAY_HEIGHT = 800;
     private Integer[] arr;
-    private  JFrame frame = new JFrame("Sorting Algorithms");
-    private DisplayArr display;
-    private JPanel buttonPanel = new JPanel();
+    private  JFrame frame = new JFrame("Algorithm Visualizer");
+    private JPanel arrPanel;
+    private DisplayArr displayArr;
+    private JPanel buttonPanel;
     private JButton bubbleButton;
     private JButton insertionButton;
     private JButton selectionButton;
-    private SwingWorker<Void, Integer[]> bubbleWorker;
+    private JButton resetButton;
+    private SwingWorker<Void, Integer[]> sort;
     private boolean doBubbleSort;
     private boolean doInsertionSort;
     private boolean doSelectionSort;
@@ -33,12 +36,24 @@ public class AlgVisualizer implements ActionListener {
     }
 
     public void setFrame() {
-        frame.setLayout(new CardLayout());
+        //frame.setLayout(new CardLayout()); // to change
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.DARK_GRAY);
+        buttonPanel.add(resetButton);
+        buttonPanel.add(bubbleButton);
+        buttonPanel.add(selectionButton);
+        buttonPanel.add(insertionButton);
         buttonPanel.setVisible(true);
-        frame.add(buttonPanel);
-        frame.add(display);
+        
+        arrPanel = new JPanel();
+        arrPanel.add(displayArr);
+        arrPanel.setVisible(true);
+        
+        frame.add(buttonPanel, BorderLayout.PAGE_START);
+        frame.add(arrPanel, BorderLayout.PAGE_END);
         frame.pack();
         frame.setLocationRelativeTo(null);
     }
@@ -49,8 +64,11 @@ public class AlgVisualizer implements ActionListener {
         arr = fillArr(arr);
         arr = shuffleArr(arr);
 
-        display = new DisplayArr(this, arr);
-        display.setPreferredSize(new Dimension(CONTENT_WIDTH, CONTENT_HEIGHT));
+        displayArr = new DisplayArr(this, arr);
+        displayArr.setPreferredSize(new Dimension(CONTENT_WIDTH, ARR_DISPLAY_HEIGHT));
+        
+        resetButton = new JButton("Reset");
+        resetButton.addActionListener(this);
         
         bubbleButton = new JButton("Bubble Sort");
         bubbleButton.addActionListener(this);
@@ -61,49 +79,38 @@ public class AlgVisualizer implements ActionListener {
         insertionButton = new JButton("Insertion Sort");
         insertionButton.addActionListener(this);
 
+        resetButton.setBackground(Color.WHITE);
         bubbleButton.setBackground(Color.WHITE);
         selectionButton.setBackground(Color.WHITE);
         insertionButton.setBackground(Color.WHITE);
 
-        buttonPanel.setBackground(Color.DARK_GRAY);
-        buttonPanel.add(bubbleButton);
-        buttonPanel.add(selectionButton);
-        buttonPanel.add(insertionButton);
-
-        bubbleWorker = new Sorting(this, arr, display);
+        sort = new Sorting(this, arr, displayArr);
 
     }
 
     public void actionPerformed(ActionEvent event) {
-
         doBubbleSort = false;
         doSelectionSort = false;
         doInsertionSort = false;
 
         if (event.getSource() == bubbleButton) {
-            buttonPanel.setVisible(false);
-            display.setVisible(true);
             doBubbleSort = true;
-            bubbleWorker.execute();
+            sort.execute();
         } else if (event.getSource() == selectionButton) {
-            buttonPanel.setVisible(false);
-            display.setVisible(true);
             doSelectionSort = true;
-            bubbleWorker.execute();
+            sort.execute();
         } else if (event.getSource() == insertionButton) {
-            buttonPanel.setVisible(false);
-            display.setVisible(true);
             doInsertionSort = true;
-            bubbleWorker.execute();
+            sort.execute();
+        } else if (event.getSource() == resetButton) {
+        	reset();
         }
 
     }
     
     public void reset() {
-        display.setVisible(false);
-        buttonPanel.setVisible(true);
         arr = shuffleArr(arr);
-        bubbleWorker = new Sorting(this, arr, display);
+        sort = new Sorting(this, arr, displayArr);
     }
     
     public Integer[] shuffleArr(Integer[] arr) {
@@ -123,6 +130,10 @@ public class AlgVisualizer implements ActionListener {
 
     public int getArraySize() {
         return N;
+    }
+    
+    public int getArrDispHeight() {
+    	return ARR_DISPLAY_HEIGHT;
     }
 
     public int getHeight() {
