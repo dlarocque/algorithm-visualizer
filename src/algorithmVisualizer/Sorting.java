@@ -1,7 +1,6 @@
 package algorithmVisualizer;
 
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 public class Sorting extends SwingWorker<Void, Integer[]> {
@@ -63,13 +62,6 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
         display.addCheckedIndex2(checkedIndex2);
         publish(arr.clone());
 
-        int input = JOptionPane.showOptionDialog(null, "Sorting Complete! Press OK to Continue.", "Done",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
-        if (input == JOptionPane.OK_OPTION) {
-            alg.reset();
-        }
-
         try {
             Thread.sleep(4);
         } catch (InterruptedException e) {
@@ -102,13 +94,7 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
         display.addCheckedIndex1(checkedIndex1);
         display.addCheckedIndex2(checkedIndex2);
         publish(arr.clone());
-        
-        int input = JOptionPane.showOptionDialog(null, "Sorting Complete! Press OK to Continue.", "Done",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
-        if (input == JOptionPane.OK_OPTION) {
-            alg.reset();
-        }
         try {
             Thread.sleep(2);
         } catch (InterruptedException e) {
@@ -146,12 +132,6 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
         display.addCheckedIndex2(checkedIndex2);
         publish(arr.clone());
 
-        int input = JOptionPane.showOptionDialog(null, "Sorting Complete! Press OK to Continue.", "Done",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
-        if (input == JOptionPane.OK_OPTION) {
-            alg.reset();
-        }
         try {
             Thread.sleep(2);
         } catch (InterruptedException e) {
