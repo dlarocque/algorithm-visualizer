@@ -8,8 +8,8 @@ import java.util.List;
 
 public class DisplayArr extends JComponent {
 
-    protected List<Integer> checkedIndex1 = new ArrayList<Integer>();
-    protected List<Integer> checkedIndex2 = new ArrayList<Integer>();
+    protected List<Integer> checkedIndex1;
+    protected List<Integer> checkedIndex2;
     private static final long serialVersionUID = 1L;
     protected Integer[] arr;
     protected AlgVisualizer alg;
@@ -17,11 +17,12 @@ public class DisplayArr extends JComponent {
     public DisplayArr(AlgVisualizer alg, Integer[] arr) {
         this.alg = alg;
         this.arr = arr;
+        checkedIndex1 = new ArrayList<Integer>();
+        checkedIndex2 = new ArrayList<Integer>();
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        
         Graphics2D graphics2d = (Graphics2D) g;
         graphics2d.setColor(Color.DARK_GRAY);
         graphics2d.fillRect(0, 0, alg.getWidth(), alg.getArrDispHeight());
@@ -56,6 +57,11 @@ public class DisplayArr extends JComponent {
 
     public void addCheckedIndex2(Integer checkedIndex) {
         checkedIndex2.add(0, checkedIndex);
+    }
+    
+    public void clearCheckedIndexes() {
+    	checkedIndex1 = new ArrayList<Integer>();
+    	checkedIndex2 = new ArrayList<Integer>(); 
     }
 
 }
