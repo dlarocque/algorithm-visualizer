@@ -19,6 +19,7 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 
 	@Override
 	protected Void doInBackground() throws Exception {
+		System.out.println("do in background");
 		if (alg.getSort().equals("Bubble Sort")) {
 			bubbleSort();
 		} else if (alg.getSort().equals("Insertion Sort")) {
@@ -39,6 +40,7 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 	public void bubbleSort() {
 		System.out.println("bsort");
 		for (int i = 0; i < alg.getArraySize() - 1; i++) {
+			System.out.println("bsort2");
 			if (alg.getStopSort()) {
 				// Shuffle the array and draw it one last time before breaking loop
 				arr = alg.shuffleArr(arr);

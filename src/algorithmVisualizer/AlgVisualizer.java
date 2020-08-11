@@ -87,13 +87,15 @@ public class AlgVisualizer implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent event) {
+		System.out.println("action Performed");
 		stopSort = false;
 		doBubbleSort = false;
 		doSelectionSort = false;
 		doInsertionSort = false;
 		if (event.getSource() == bubbleButton) {
+			System.out.println("bubble button clicked");
 			doBubbleSort = true;
-			sort.execute();
+			sort.execute(); // not going to doInBackground(), wtf
 		} else if (event.getSource() == selectionButton) {
 			doSelectionSort = true;
 			sort.execute();
@@ -109,6 +111,7 @@ public class AlgVisualizer implements ActionListener {
 	public void reset() {
 		stopSort = true;
 		displayArr.clearCheckedIndexes(); // not working as intended, fix later
+		sort = new Sorting(this, arr, displayArr);
 	}
 
 	public Integer[] shuffleArr(Integer[] arr) {
