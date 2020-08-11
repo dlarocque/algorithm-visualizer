@@ -16,13 +16,9 @@ Once the array is sorted after several seconds, a pop up pane will appear to inf
 
 ## Future updates
 
-- Fix problem where if 'OK' button is not pressed on the pop up pane, the user cannot return to the menu without restarting the program by adding a message on the frame telling the user to press a key to return to the menu.
-
-- Add several more sorting algorithms
+- Add Merge sort and Quick sort.
 
 - Add stats on the top of the screen, or at the end of the sorting such as index swaps, time elapsed.
-
-- Replace buttons with custom images.
 
 - Make the app runnable through a .jar file
 
