@@ -1,67 +1,82 @@
 package algorithmVisualizer;
 
-
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class DisplayArr extends JComponent {
 
-    protected List<Integer> checkedIndex1;
-    protected List<Integer> checkedIndex2;
-    private static final long serialVersionUID = 1L;
-    protected Integer[] arr;
-    protected AlgVisualizer alg;
+	private static final long serialVersionUID = 1L;
+	protected Integer[] arr;
+	protected AlgVisualizer alg;
+	private int framesPainted;
+	private ArrayList<Integer[]> swappedIndexes;
+	private int swappedIndex1;
+	private int swappedIndex2;
+	private boolean complete;
 
-    public DisplayArr(AlgVisualizer alg, Integer[] arr) {
-        this.alg = alg;
-        this.arr = arr;
-        checkedIndex1 = new ArrayList<Integer>();
-        checkedIndex2 = new ArrayList<Integer>();
-    }
+	public DisplayArr(AlgVisualizer alg, Integer[] arr) {
+		this.alg = alg;
+		this.arr = arr;
+		swappedIndexes = new ArrayList<Integer[]>();
+	}
 
-    @Override
-    public void paintComponent(Graphics g) {
-        Graphics2D graphics2d = (Graphics2D) g;
-        graphics2d.setColor(Color.DARK_GRAY);
-        graphics2d.fillRect(0, 0, alg.getWidth(), alg.getArrDispHeight());
+	@Override
+	public void paintComponent(Graphics g) {
+		// Takes ~ 40ms to draw
+		Graphics2D graphics2d = (Graphics2D) g;
+		graphics2d.setColor(Color.DARK_GRAY);
+		graphics2d.fillRect(0, 0, alg.getWidth(), alg.getArrDispHeight());
 
-        for (int i = 0; i < arr.length; i++) {
+		if (alg.getSort().equals("Not Sorting") || complete) {
+			swappedIndex1 = -1;
+			swappedIndex2 = -1;
+		} else {
+			swappedIndex1 = swappedIndexes.get(framesPainted)[0];
+			swappedIndex2 = swappedIndexes.get(framesPainted++)[1];
+		}
 
-            int width = (int) (alg.getWidth() / (double) alg.getArraySize());
-            int height = arr[i] * (alg.getArrDispHeight() / alg.getArraySize());
-            int x = i * width;
-            int y = alg.getArrDispHeight() - height;
-            try {
-                if (i == checkedIndex1.get(0) || i == checkedIndex2.get(0)) {
-                    graphics2d.setColor(Color.RED);
-                } else if (checkedIndex1.get(0) == -1) {
-                    graphics2d.setColor(Color.GREEN);
-                } else {
-                    graphics2d.setColor(Color.WHITE);
-                }
-            } catch (IndexOutOfBoundsException e) {
-                
-            }
+		for (int i = 0; i < arr.length; i++) {
+			int width = (int) (alg.getWidth() / (double) arr.length);
+			int height = arr[i] * (alg.getArrDispHeight() / arr.length);
+			int x = i * width;
+			int y = alg.getArrDispHeight() - height;
+				if ((i == swappedIndex1 || i == swappedIndex2) && !alg.stopSort()) {
+					graphics2d.setColor(Color.RED);
+				} else if (complete) {
+					graphics2d.setColor(Color.GREEN);
+				} else {
+					graphics2d.setColor(Color.WHITE);
+				}
+			graphics2d.fillRect(x, y, width, height);
+		}
+	}
+	
+	public ArrayList<Integer[]> getSwappedIndexes(){
+		return swappedIndexes;
+	}
 
-            graphics2d.fillRect(x, y, width, height);
-        }
-        //checkedIndex1.remove(0);  // 0 out of bounds for length 0
-        //checkedIndex2.remove(0);
-    }
+	public void addSwappedIndexes(int swappedIndex1, int swappedIndex2) {
+		swappedIndexes.add(new Integer[] { swappedIndex1, swappedIndex2 });
+	}
 
-    public void addCheckedIndex1(Integer checkedIndex) {
-        checkedIndex1.add(0, checkedIndex);
-    }
+	public void clearSwappedIndexes() {
+		swappedIndexes = new ArrayList<Integer[]>();
+	}
 
-    public void addCheckedIndex2(Integer checkedIndex) {
-        checkedIndex2.add(0, checkedIndex);
-    }
-    
-    public void clearCheckedIndexes() {
-    	checkedIndex1 = new ArrayList<Integer>();
-    	checkedIndex2 = new ArrayList<Integer>(); 
-    }
+	public void setFramesPainted(int framesPainted) {
+		this.framesPainted = framesPainted;
+	}
 
+	public int getFramesPainted() {
+		return framesPainted;
+	}
+
+	public boolean isComplete() {
+		return complete;
+	}
+
+	public void setComplete(boolean complete) {
+		this.complete = complete;
+	}
 }

@@ -9,8 +9,7 @@ import java.awt.event.*;
 
 public class AlgVisualizer implements ActionListener {
 
-	final int N = 100;
-	// Size of the entire frame
+	final int N = 50;
 	final int CONTENT_WIDTH = 800;
 	final int CONTENT_HEIGHT = 860;
 	final int ARR_DISPLAY_HEIGHT = 800;
@@ -36,7 +35,6 @@ public class AlgVisualizer implements ActionListener {
 	}
 
 	public void setFrame() {
-		// frame.setLayout(new CardLayout()); // to change
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -87,15 +85,13 @@ public class AlgVisualizer implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		System.out.println("action Performed");
 		stopSort = false;
 		doBubbleSort = false;
 		doSelectionSort = false;
 		doInsertionSort = false;
 		if (event.getSource() == bubbleButton) {
-			System.out.println("bubble button clicked");
 			doBubbleSort = true;
-			sort.execute(); // not going to doInBackground(), wtf
+			sort.execute();
 		} else if (event.getSource() == selectionButton) {
 			doSelectionSort = true;
 			sort.execute();
@@ -104,13 +100,18 @@ public class AlgVisualizer implements ActionListener {
 			sort.execute();
 		} else if (event.getSource() == resetButton) {
 			reset();
+			sort.execute();
 		}
-
 	}
 
 	public void reset() {
+		displayArr.clearSwappedIndexes();
+		displayArr.setFramesPainted(0);
+		displayArr.setComplete(false);
 		stopSort = true;
-		displayArr.clearCheckedIndexes(); // not working as intended, fix later
+		doBubbleSort = false;
+		doSelectionSort = false;
+		doInsertionSort = false;
 		sort = new Sorting(this, arr, displayArr);
 	}
 
@@ -129,8 +130,8 @@ public class AlgVisualizer implements ActionListener {
 		return arr;
 	}
 
-	public int getArraySize() {
-		return N;
+	public Integer[] getArr() {
+		return arr;
 	}
 
 	public int getArrDispHeight() {
@@ -153,6 +154,10 @@ public class AlgVisualizer implements ActionListener {
 		return displayArr;
 	}
 
+	public SwingWorker<Void, Integer[]> getSorting() {
+		return sort;
+	}
+
 	public void setSort(String algorithm) {
 		if (algorithm.equals("Bubble Sort")) {
 			doBubbleSort = true;
@@ -164,7 +169,7 @@ public class AlgVisualizer implements ActionListener {
 	}
 
 	public String getSort() {
-		String algorithm = null;
+		String algorithm = "Not Sorting";
 		if (doBubbleSort)
 			algorithm = "Bubble Sort";
 		if (doInsertionSort)
@@ -174,7 +179,7 @@ public class AlgVisualizer implements ActionListener {
 		return algorithm;
 	}
 
-	public boolean getStopSort() {
+	public boolean stopSort() {
 		return stopSort;
 	}
 
