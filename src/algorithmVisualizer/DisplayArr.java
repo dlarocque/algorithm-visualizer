@@ -23,7 +23,7 @@ public class DisplayArr extends JComponent {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		// Takes ~ 40ms to draw
+		// Takes ~ 40ms to draw ( depending on the system )
 		Graphics2D graphics2d = (Graphics2D) g;
 		graphics2d.setColor(Color.DARK_GRAY);
 		graphics2d.fillRect(0, 0, alg.getWidth(), alg.getArrDispHeight());

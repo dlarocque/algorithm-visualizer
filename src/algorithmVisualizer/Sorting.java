@@ -8,6 +8,7 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 	private Integer[] arr;
 	private AlgVisualizer alg;
 	private DisplayArr display;
+	private final int SLEEP_TIME = 60;
 
 	public Sorting(AlgVisualizer alg, Integer[] arr, DisplayArr display) {
 		this.alg = alg;
@@ -17,14 +18,19 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 
 	@Override
 	protected Void doInBackground() throws Exception {
-		if (alg.getSort().equals("Bubble Sort")) {
+		if (alg.stopSort()) {
+			publish(arr.clone());
+			try {
+				Thread.sleep(SLEEP_TIME);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		} else if (alg.getSort().equals("Bubble Sort")) {
 			bubbleSort();
 		} else if (alg.getSort().equals("Insertion Sort")) {
 			insertionSort();
 		} else if (alg.getSort().equals("Selection Sort")) {
 			selectionSort();
-		} else {
-			publish(arr.clone());
 		}
 		return null;
 	}
@@ -60,7 +66,7 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 					display.addSwappedIndexes(j, j + 1);
 					publish(arr.clone());
 					try {
-						Thread.sleep(40);
+						Thread.sleep(SLEEP_TIME);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -68,50 +74,14 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 				}
 			}
 		}
-		display.setComplete(true);
-		publish(arr.clone());
-		try {
-			Thread.sleep(40);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void insertionSort() {
-
-		int n = arr.length;
-
-		for (int i = 1; i < n; ++i) {
-
-			if (alg.stopSort()) {
-				arr = alg.shuffleArr(arr);
-				publish(arr.clone());
-				break;
+		if (!alg.stopSort()) {
+			display.setComplete(true);
+			publish(arr.clone());
+			try {
+				Thread.sleep(SLEEP_TIME);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-
-			int key = arr[i];
-			int j = i - 1;
-
-			while (j >= 0 && arr[j] > key) {
-				arr[j + 1] = arr[j];
-				j = j - 1;
-
-				display.addSwappedIndexes(j, j + 1);
-				publish(arr.clone());
-				try {
-					Thread.sleep(40);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			arr[j + 1] = key;
-		}
-		display.setComplete(true);
-		publish(arr.clone());
-		try {
-			Thread.sleep(40);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -140,19 +110,60 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 			display.addSwappedIndexes(min_idx, i);
 			publish(arr.clone());
 			try {
-				Thread.sleep(40);
+				Thread.sleep(SLEEP_TIME);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		display.setComplete(true);
-		publish(arr.clone());
-		try {
-			Thread.sleep(40);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		if (!alg.stopSort()) {
+			display.setComplete(true);
+			publish(arr.clone());
+			try {
+				Thread.sleep(SLEEP_TIME);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
+	}
 
+	public void insertionSort() {
+
+		int n = arr.length;
+
+		for (int i = 1; i < n; ++i) {
+
+			if (alg.stopSort()) {
+				arr = alg.shuffleArr(arr);
+				publish(arr.clone());
+				break;
+			}
+
+			int key = arr[i];
+			int j = i - 1;
+
+			while (j >= 0 && arr[j] > key) {
+				arr[j + 1] = arr[j];
+				j = j - 1;
+
+				display.addSwappedIndexes(j, j + 1);
+				publish(arr.clone());
+				try {
+					Thread.sleep(SLEEP_TIME);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			arr[j + 1] = key;
+		}
+		if (!alg.stopSort()) {
+			display.setComplete(true);
+			publish(arr.clone());
+			try {
+				Thread.sleep(SLEEP_TIME);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

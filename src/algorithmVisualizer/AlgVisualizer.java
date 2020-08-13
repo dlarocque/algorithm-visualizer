@@ -9,7 +9,7 @@ import java.awt.event.*;
 
 public class AlgVisualizer implements ActionListener {
 
-	final int N = 50;
+	final int N = 100;
 	final int CONTENT_WIDTH = 800;
 	final int CONTENT_HEIGHT = 860;
 	final int ARR_DISPLAY_HEIGHT = 800;
@@ -109,9 +109,7 @@ public class AlgVisualizer implements ActionListener {
 		displayArr.setFramesPainted(0);
 		displayArr.setComplete(false);
 		stopSort = true;
-		doBubbleSort = false;
-		doSelectionSort = false;
-		doInsertionSort = false;
+		shuffleArr(arr);
 		sort = new Sorting(this, arr, displayArr);
 	}
 
