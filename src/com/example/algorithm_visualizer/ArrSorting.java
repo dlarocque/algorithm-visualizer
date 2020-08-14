@@ -3,34 +3,34 @@ package com.example.algorithm_visualizer;
 import java.util.*;
 import javax.swing.SwingWorker;
 
-public class Sorting extends SwingWorker<Void, Integer[]> {
+public class ArrSorting extends SwingWorker<Void, Integer[]> {
 
 	private Integer[] arr;
-	private AlgVisualizer alg;
-	private DisplayArr displayArr;
+	private AlgVisualizer algVisualizer;
+	private ArrDisplay arrDisplay;
 	private final int SLEEP_TIME = 60;
 
-	public Sorting(AlgVisualizer alg, Integer[] arr, DisplayArr displayArr) {
-		this.alg = alg;
+	public ArrSorting(AlgVisualizer algVisualizer, Integer[] arr, ArrDisplay arrDisplay) {
+		this.algVisualizer = algVisualizer;
 		this.arr = arr;
-		this.displayArr = displayArr;
+		this.arrDisplay = arrDisplay;
 	}
 
 	@Override
 	protected Void doInBackground() throws Exception {
-		if (alg.stopSort()) {
+		if (algVisualizer.stopSort()) {
 			publish(arr.clone());
 			try {
 				Thread.sleep(SLEEP_TIME);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			alg.resetSwingWorker(alg, arr, displayArr);
-		} else if (alg.getSort().equals("Bubble Sort")) {
+			algVisualizer.resetSwingWorker(algVisualizer, arr, arrDisplay);
+		} else if (algVisualizer.getSort().equals("Bubble Sort")) {
 			bubbleSort();
-		} else if (alg.getSort().equals("Insertion Sort")) {
+		} else if (algVisualizer.getSort().equals("Insertion Sort")) {
 			insertionSort();
-		} else if (alg.getSort().equals("Selection Sort")) {
+		} else if (algVisualizer.getSort().equals("Selection Sort")) {
 			selectionSort();
 		}
 		return null;
@@ -39,9 +39,10 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 	@Override
 	protected void process(List<Integer[]> chunks) {
 		if (chunks.size() > 1) {
+			// If chunks > 1, Red bars will be out of sync
 			System.out.println(chunks.size());
 		}
-		displayArr.repaint();
+		arrDisplay.repaint();
 	}
 
 	public void bubbleSort() {
@@ -51,9 +52,9 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 		for (int i = 0; i < n - 1; i++) {
 
 			for (int j = 0; j < n - i - 1; j++) {
-				if (alg.stopSort()) {
+				if (algVisualizer.stopSort()) {
 					// Re-shuffle the array and stop sorting
-					arr = alg.shuffleArr(arr);
+					arr = algVisualizer.shuffleArr(arr);
 					publish(arr.clone());
 					break;
 				}
@@ -62,7 +63,7 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 					arr[j] = arr[j + 1];
 					arr[j + 1] = temp;
 					// Paint the new array after swapping
-					displayArr.addSwappedIndexes(j, j + 1);
+					arrDisplay.addSwappedIndexes(j, j + 1);
 					publish(arr.clone());
 					try {
 						Thread.sleep(SLEEP_TIME);
@@ -73,8 +74,8 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 				}
 			}
 		}
-		if (!alg.stopSort()) {
-			displayArr.setComplete(true);
+		if (!algVisualizer.stopSort()) {
+			arrDisplay.setComplete(true);
 			publish(arr.clone());
 			try {
 				Thread.sleep(SLEEP_TIME);
@@ -91,8 +92,8 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 
 		for (int i = 0; i < n - 1; i++) {
 
-			if (alg.stopSort()) {
-				arr = alg.shuffleArr(arr);
+			if (algVisualizer.stopSort()) {
+				arr = algVisualizer.shuffleArr(arr);
 				publish(arr.clone());
 				break;
 			}
@@ -107,7 +108,7 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 			arr[min_idx] = arr[i];
 			arr[i] = temp;
 
-			displayArr.addSwappedIndexes(min_idx, i);
+			arrDisplay.addSwappedIndexes(min_idx, i);
 			publish(arr.clone());
 			try {
 				Thread.sleep(SLEEP_TIME);
@@ -115,8 +116,8 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 				e.printStackTrace();
 			}
 		}
-		if (!alg.stopSort()) {
-			displayArr.setComplete(true);
+		if (!algVisualizer.stopSort()) {
+			arrDisplay.setComplete(true);
 			publish(arr.clone());
 			try {
 				Thread.sleep(SLEEP_TIME);
@@ -136,17 +137,17 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 			int j = i - 1;
 
 			while (j >= 0 && arr[j] > key) {
-				
-				if (alg.stopSort()) {
-					arr = alg.shuffleArr(arr);
+
+				if (algVisualizer.stopSort()) {
+					arr = algVisualizer.shuffleArr(arr);
 					publish(arr.clone());
 					break;
 				}
-				
+
 				arr[j + 1] = arr[j];
 				j = j - 1;
 
-				displayArr.addSwappedIndexes(j, j + 1);
+				arrDisplay.addSwappedIndexes(j, j + 1);
 				publish(arr.clone());
 				try {
 					Thread.sleep(SLEEP_TIME);
@@ -156,8 +157,8 @@ public class Sorting extends SwingWorker<Void, Integer[]> {
 			}
 			arr[j + 1] = key;
 		}
-		if (!alg.stopSort()) {
-			displayArr.setComplete(true);
+		if (!algVisualizer.stopSort()) {
+			arrDisplay.setComplete(true);
 			publish(arr.clone());
 			try {
 				Thread.sleep(SLEEP_TIME);

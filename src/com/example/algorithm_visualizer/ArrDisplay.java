@@ -4,19 +4,19 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class DisplayArr extends JComponent {
+public class ArrDisplay extends JComponent {
 
 	private static final long serialVersionUID = 1L;
-	protected Integer[] arr;
-	protected AlgVisualizer alg;
+	private Integer[] arr;
+	private AlgVisualizer algVisualizer;
 	private int framesPainted;
 	private ArrayList<Integer[]> swappedIndexes;
 	private int swappedIndex1;
 	private int swappedIndex2;
-	private boolean complete;
+	private boolean isComplete;
 
-	public DisplayArr(AlgVisualizer alg, Integer[] arr) {
-		this.alg = alg;
+	public ArrDisplay(AlgVisualizer alg, Integer[] arr) {
+		this.algVisualizer = alg;
 		this.arr = arr;
 		swappedIndexes = new ArrayList<Integer[]>();
 	}
@@ -26,33 +26,33 @@ public class DisplayArr extends JComponent {
 		// Takes ~ 40ms to draw ( depending on the system )
 		Graphics2D graphics2d = (Graphics2D) g;
 		graphics2d.setColor(Color.DARK_GRAY);
-		graphics2d.fillRect(0, 0, alg.getWidth(), alg.getArrDispHeight());
+		graphics2d.fillRect(0, 0, algVisualizer.getWidth(), algVisualizer.getArrDispHeight());
 
-		if (alg.getSort().equals("Not Sorting") || complete) {
+		if (algVisualizer.getSort().equals("Not Sorting") || isComplete) {
 			swappedIndex1 = -1;
 			swappedIndex2 = -1;
-		} else if(!alg.stopSort()){
+		} else if (!algVisualizer.stopSort()) {
 			swappedIndex1 = swappedIndexes.get(framesPainted)[0];
 			swappedIndex2 = swappedIndexes.get(framesPainted++)[1];
 		}
 
 		for (int i = 0; i < arr.length; i++) {
-			int width = (int) (alg.getWidth() / (double) arr.length);
-			int height = arr[i] * (alg.getArrDispHeight() / arr.length);
+			int width = (int) (algVisualizer.getWidth() / (double) arr.length);
+			int height = arr[i] * (algVisualizer.getArrDispHeight() / arr.length);
 			int x = i * width;
-			int y = alg.getArrDispHeight() - height;
-				if ((i == swappedIndex1 || i == swappedIndex2) && !alg.stopSort()) {
-					graphics2d.setColor(Color.RED);
-				} else if (complete) {
-					graphics2d.setColor(Color.GREEN);
-				} else {
-					graphics2d.setColor(Color.WHITE);
-				}
+			int y = algVisualizer.getArrDispHeight() - height;
+			if ((i == swappedIndex1 || i == swappedIndex2) && !algVisualizer.stopSort()) {
+				graphics2d.setColor(Color.RED);
+			} else if (isComplete) {
+				graphics2d.setColor(Color.GREEN);
+			} else {
+				graphics2d.setColor(Color.WHITE);
+			}
 			graphics2d.fillRect(x, y, width, height);
 		}
 	}
-	
-	public ArrayList<Integer[]> getSwappedIndexes(){
+
+	public ArrayList<Integer[]> getSwappedIndexes() {
 		return swappedIndexes;
 	}
 
@@ -73,17 +73,17 @@ public class DisplayArr extends JComponent {
 	}
 
 	public boolean isComplete() {
-		return complete;
+		return isComplete;
 	}
 
 	public void setComplete(boolean complete) {
-		this.complete = complete;
+		this.isComplete = complete;
 	}
-	
+
 	public Integer[] getArr() {
 		return arr;
 	}
-	
+
 	public void setArr(Integer[] arr) {
 		this.arr = arr;
 	}

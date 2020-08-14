@@ -9,31 +9,64 @@ import java.awt.event.*;
 
 public class AlgVisualizer implements ActionListener {
 
-	private int n = 10;
-	final int CONTENT_WIDTH = 800;
-	final int CONTENT_HEIGHT = 860;
-	final int ARR_DISPLAY_HEIGHT = 800;
+	private int n;
+	private final int CONTENT_WIDTH = 800;
+	private final int CONTENT_HEIGHT = 860;
+	private final int ARR_DISPLAY_HEIGHT = 800;
 	private Integer[] arr;
 	private JFrame frame = new JFrame("Algorithm Visualizer");
 	private JPanel arrPanel;
-	private DisplayArr displayArr;
+	private ArrDisplay arrDisplay;
 	private JPanel buttonPanel;
 	private JButton bubbleButton;
 	private JButton insertionButton;
 	private JButton selectionButton;
 	private JButton resetButton;
 	private JComboBox<String> sizeChanger;
-	private String[] sizeOptions = {"10", "50", "100", "200", "400", "800"};
-	private SwingWorker<Void, Integer[]> sort;
+	final String[] SIZE_OPTIONS = { "10", "50", "100", "200", "400", "800" };
+	private SwingWorker<Void, Integer[]> arrSort;
 	private boolean doBubbleSort;
 	private boolean doInsertionSort;
 	private boolean doSelectionSort;
 	private boolean stopSort;
 
 	public static void main(String[] args) {
-		AlgVisualizer alg = new AlgVisualizer();
-		alg.initializeVars();
-		alg.setFrame();
+		AlgVisualizer algVisualizer = new AlgVisualizer();
+		algVisualizer.initializeVars();
+		algVisualizer.setFrame();
+	}
+	
+	public void initializeVars() {
+
+		setN(10);
+		
+		arr = new Integer[n];
+		arr = fillArr(arr);
+		arr = shuffleArr(arr);
+
+		arrDisplay = new ArrDisplay(this, arr);
+		arrDisplay.setPreferredSize(new Dimension(CONTENT_WIDTH, ARR_DISPLAY_HEIGHT));
+
+		arrSort = new ArrSorting(this, arr, arrDisplay);
+
+		resetButton = new JButton("Reset");
+		resetButton.addActionListener(this);
+		resetButton.setBackground(Color.WHITE);
+
+		bubbleButton = new JButton("Bubble Sort");
+		bubbleButton.addActionListener(this);
+		bubbleButton.setBackground(Color.WHITE);
+
+		selectionButton = new JButton("Selection Sort");
+		selectionButton.addActionListener(this);
+		selectionButton.setBackground(Color.WHITE);
+
+		insertionButton = new JButton("Insertion Sort");
+		insertionButton.addActionListener(this);
+		insertionButton.setBackground(Color.WHITE);
+
+		sizeChanger = new JComboBox<String>(SIZE_OPTIONS);
+		sizeChanger.addActionListener(this);
 	}
 
 	public void setFrame() {
@@ -51,44 +84,13 @@ public class AlgVisualizer implements ActionListener {
 		buttonPanel.setVisible(true);
 
 		arrPanel = new JPanel();
-		arrPanel.add(displayArr);
+		arrPanel.add(arrDisplay);
 		arrPanel.setVisible(true);
 
 		frame.add(buttonPanel, BorderLayout.PAGE_START);
 		frame.add(arrPanel, BorderLayout.PAGE_END);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
-	}
-
-	public void initializeVars() {
-
-		arr = new Integer[n];
-		arr = fillArr(arr);
-		arr = shuffleArr(arr);
-
-		displayArr = new DisplayArr(this, arr);
-		displayArr.setPreferredSize(new Dimension(CONTENT_WIDTH, ARR_DISPLAY_HEIGHT));
-
-		sort = new Sorting(this, arr, displayArr);
-
-		resetButton = new JButton("Reset");
-		resetButton.addActionListener(this);
-		resetButton.setBackground(Color.WHITE);
-
-		bubbleButton = new JButton("Bubble Sort");
-		bubbleButton.addActionListener(this);
-		bubbleButton.setBackground(Color.WHITE);
-
-		selectionButton = new JButton("Selection Sort");
-		selectionButton.addActionListener(this);
-		selectionButton.setBackground(Color.WHITE);
-
-		insertionButton = new JButton("Insertion Sort");
-		insertionButton.addActionListener(this);
-		insertionButton.setBackground(Color.WHITE);
-		
-		sizeChanger = new JComboBox<String>(sizeOptions);
-		sizeChanger.addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent event) {
@@ -98,41 +100,40 @@ public class AlgVisualizer implements ActionListener {
 		doInsertionSort = false;
 		if (event.getSource() == bubbleButton) {
 			doBubbleSort = true;
-			sort.execute();
+			arrSort.execute();
 		} else if (event.getSource() == selectionButton) {
 			doSelectionSort = true;
-			sort.execute();
+			arrSort.execute();
 		} else if (event.getSource() == insertionButton) {
 			doInsertionSort = true;
-			sort.execute();
+			arrSort.execute();
 		} else if (event.getSource() == resetButton) {
 			reset();
-			sort.execute(); // update the display of the array that is now shuffled
-		} else if(event.getSource() == sizeChanger) {			
+			arrSort.execute();
+		} else if (event.getSource() == sizeChanger) {
 			// Create a new array of the size selected
-			String selectedSize = (String)sizeChanger.getSelectedItem();
+			String selectedSize = (String) sizeChanger.getSelectedItem();
 			setN(Integer.valueOf(selectedSize));
 			arr = new Integer[n];
 			arr = fillArr(arr);
-			System.out.println(arr.length);
 			// Clear and paint the new array
 			reset();
-			sort.execute();
+			arrSort.execute();
 		}
 	}
 
 	public void reset() {
 		setStopSort(true);
 		shuffleArr(arr);
-		displayArr.clearSwappedIndexes();
-		displayArr.setFramesPainted(0);
-		displayArr.setComplete(false);
-		displayArr.setArr(arr);
-		resetSwingWorker(this, arr, displayArr);
+		arrDisplay.clearSwappedIndexes();
+		arrDisplay.setFramesPainted(0);
+		arrDisplay.setComplete(false);
+		arrDisplay.setArr(arr);
+		resetSwingWorker(this, arr, arrDisplay);
 	}
-	
-	public void resetSwingWorker(AlgVisualizer alg, Integer[] arr, DisplayArr displayArr) {
-		sort = new Sorting(this, arr, displayArr);
+
+	public void resetSwingWorker(AlgVisualizer alg, Integer[] arr, ArrDisplay displayArr) {
+		arrSort = new ArrSorting(this, arr, displayArr);
 	}
 
 	public Integer[] shuffleArr(Integer[] arr) {
@@ -170,33 +171,33 @@ public class AlgVisualizer implements ActionListener {
 		return frame;
 	}
 
-	public DisplayArr getDisplayArr() {
-		return displayArr;
+	public ArrDisplay getDisplayArr() {
+		return arrDisplay;
 	}
 
 	public SwingWorker<Void, Integer[]> getSorting() {
-		return sort;
+		return arrSort;
 	}
 
-	public void setSort(String algorithm) {
-		if (algorithm.equals("Bubble Sort")) {
+	public void setSort(String sort) {
+		if (sort.equals("Bubble Sort")) {
 			doBubbleSort = true;
-		} else if (algorithm.equals("Insertion Sort")) {
+		} else if (sort.equals("Insertion Sort")) {
 			doInsertionSort = true;
-		} else if (algorithm.equals("Selection Sort")) {
+		} else if (sort.equals("Selection Sort")) {
 			doSelectionSort = true;
 		}
 	}
 
 	public String getSort() {
-		String algorithm = "Not Sorting";
+		String sort = "Not Sorting";
 		if (doBubbleSort)
-			algorithm = "Bubble Sort";
+			sort = "Bubble Sort";
 		if (doInsertionSort)
-			algorithm = "Insertion Sort";
+			sort = "Insertion Sort";
 		if (doSelectionSort)
-			algorithm = "Selection Sort";
-		return algorithm;
+			sort = "Selection Sort";
+		return sort;
 	}
 
 	public boolean stopSort() {
@@ -206,11 +207,11 @@ public class AlgVisualizer implements ActionListener {
 	public void setStopSort(boolean toSet) {
 		stopSort = toSet;
 	}
-	
+
 	public int getN() {
 		return n;
 	}
-	
+
 	public void setN(Integer n) {
 		this.n = n;
 	}
