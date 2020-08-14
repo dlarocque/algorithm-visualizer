@@ -100,7 +100,7 @@ public class AlgVisualizer implements ActionListener {
 			sort.execute();
 		} else if (event.getSource() == resetButton) {
 			reset();
-			sort.execute();
+			sort.execute(); // draw the shuffled array after reset
 		}
 	}
 
@@ -110,6 +110,10 @@ public class AlgVisualizer implements ActionListener {
 		displayArr.setComplete(false);
 		stopSort = true;
 		shuffleArr(arr);
+		resetSwingWorker(this, arr, displayArr);
+	}
+	
+	public void resetSwingWorker(AlgVisualizer alg, Integer[] arr, DisplayArr displayArr) {
 		sort = new Sorting(this, arr, displayArr);
 	}
 
