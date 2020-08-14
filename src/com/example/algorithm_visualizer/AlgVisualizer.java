@@ -1,4 +1,4 @@
-package algorithmVisualizer;
+package com.example.algorithm_visualizer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
