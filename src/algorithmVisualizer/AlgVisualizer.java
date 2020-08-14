@@ -37,6 +37,7 @@ public class AlgVisualizer implements ActionListener {
 	public void setFrame() {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 
 		buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.DARK_GRAY);
@@ -100,7 +101,7 @@ public class AlgVisualizer implements ActionListener {
 			sort.execute();
 		} else if (event.getSource() == resetButton) {
 			reset();
-			sort.execute(); // draw the shuffled array after reset
+			sort.execute();
 		}
 	}
 
