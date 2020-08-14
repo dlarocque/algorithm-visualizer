@@ -9,7 +9,7 @@ import java.awt.event.*;
 
 public class AlgVisualizer implements ActionListener {
 
-	final int N = 100;
+	private int n = 10;
 	final int CONTENT_WIDTH = 800;
 	final int CONTENT_HEIGHT = 860;
 	final int ARR_DISPLAY_HEIGHT = 800;
@@ -22,6 +22,8 @@ public class AlgVisualizer implements ActionListener {
 	private JButton insertionButton;
 	private JButton selectionButton;
 	private JButton resetButton;
+	private JComboBox<String> sizeChanger;
+	private String[] sizeOptions = {"10", "50", "100", "200", "400", "800"};
 	private SwingWorker<Void, Integer[]> sort;
 	private boolean doBubbleSort;
 	private boolean doInsertionSort;
@@ -45,6 +47,7 @@ public class AlgVisualizer implements ActionListener {
 		buttonPanel.add(bubbleButton);
 		buttonPanel.add(selectionButton);
 		buttonPanel.add(insertionButton);
+		buttonPanel.add(sizeChanger);
 		buttonPanel.setVisible(true);
 
 		arrPanel = new JPanel();
@@ -59,7 +62,7 @@ public class AlgVisualizer implements ActionListener {
 
 	public void initializeVars() {
 
-		arr = new Integer[N];
+		arr = new Integer[n];
 		arr = fillArr(arr);
 		arr = shuffleArr(arr);
 
@@ -83,6 +86,9 @@ public class AlgVisualizer implements ActionListener {
 		insertionButton = new JButton("Insertion Sort");
 		insertionButton.addActionListener(this);
 		insertionButton.setBackground(Color.WHITE);
+		
+		sizeChanger = new JComboBox<String>(sizeOptions);
+		sizeChanger.addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent event) {
@@ -101,16 +107,27 @@ public class AlgVisualizer implements ActionListener {
 			sort.execute();
 		} else if (event.getSource() == resetButton) {
 			reset();
+			sort.execute(); // update the display of the array that is now shuffled
+		} else if(event.getSource() == sizeChanger) {			
+			// Create a new array of the size selected
+			String selectedSize = (String)sizeChanger.getSelectedItem();
+			setN(Integer.valueOf(selectedSize));
+			arr = new Integer[n];
+			arr = fillArr(arr);
+			System.out.println(arr.length);
+			// Clear and paint the new array
+			reset();
 			sort.execute();
 		}
 	}
 
 	public void reset() {
+		setStopSort(true);
+		shuffleArr(arr);
 		displayArr.clearSwappedIndexes();
 		displayArr.setFramesPainted(0);
 		displayArr.setComplete(false);
-		stopSort = true;
-		shuffleArr(arr);
+		displayArr.setArr(arr);
 		resetSwingWorker(this, arr, displayArr);
 	}
 	
@@ -127,7 +144,7 @@ public class AlgVisualizer implements ActionListener {
 	}
 
 	public Integer[] fillArr(Integer[] arr) {
-		for (int i = 0; i < N; i++) {
+		for (int i = 0; i < n; i++) {
 			arr[i] = i + 1;
 		}
 		return arr;
@@ -188,6 +205,14 @@ public class AlgVisualizer implements ActionListener {
 
 	public void setStopSort(boolean toSet) {
 		stopSort = toSet;
+	}
+	
+	public int getN() {
+		return n;
+	}
+	
+	public void setN(Integer n) {
+		this.n = n;
 	}
 
 }

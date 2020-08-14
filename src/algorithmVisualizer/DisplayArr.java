@@ -31,7 +31,7 @@ public class DisplayArr extends JComponent {
 		if (alg.getSort().equals("Not Sorting") || complete) {
 			swappedIndex1 = -1;
 			swappedIndex2 = -1;
-		} else {
+		} else if(!alg.stopSort()){
 			swappedIndex1 = swappedIndexes.get(framesPainted)[0];
 			swappedIndex2 = swappedIndexes.get(framesPainted++)[1];
 		}
@@ -78,5 +78,13 @@ public class DisplayArr extends JComponent {
 
 	public void setComplete(boolean complete) {
 		this.complete = complete;
+	}
+	
+	public Integer[] getArr() {
+		return arr;
+	}
+	
+	public void setArr(Integer[] arr) {
+		this.arr = arr;
 	}
 }
