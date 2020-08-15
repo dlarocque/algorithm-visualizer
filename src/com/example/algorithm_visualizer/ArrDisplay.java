@@ -41,8 +41,10 @@ public class ArrDisplay extends JComponent {
 			int height = arr[i] * (algVisualizer.getArrDispHeight() / arr.length);
 			int x = i * width;
 			int y = algVisualizer.getArrDispHeight() - height;
-			if ((i == swappedIndex1 || i == swappedIndex2) && !algVisualizer.stopSort()) {
+			if (i == swappedIndex1 && !algVisualizer.stopSort()) {
 				graphics2d.setColor(Color.RED);
+			} else if (i == swappedIndex2 && !algVisualizer.stopSort()) {
+				graphics2d.setColor(Color.CYAN);
 			} else if (isComplete) {
 				graphics2d.setColor(Color.GREEN);
 			} else {
