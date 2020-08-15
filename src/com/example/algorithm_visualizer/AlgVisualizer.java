@@ -21,6 +21,9 @@ public class AlgVisualizer implements ActionListener {
 	private JButton bubbleButton;
 	private JButton insertionButton;
 	private JButton selectionButton;
+	private JButton mergeButton;
+	private JButton quickButton;
+	private JButton bogoButton;
 	private JButton resetButton;
 	private JComboBox<String> sizeChanger;
 	final String[] SIZE_OPTIONS = { "10", "50", "100", "200", "400", "800" };
@@ -28,6 +31,9 @@ public class AlgVisualizer implements ActionListener {
 	private boolean doBubbleSort;
 	private boolean doInsertionSort;
 	private boolean doSelectionSort;
+	private boolean doMergeSort;
+	private boolean doQuickSort;
+	private boolean doBogoSort;
 	private boolean stopSort;
 
 	public static void main(String[] args) {
@@ -35,11 +41,11 @@ public class AlgVisualizer implements ActionListener {
 		algVisualizer.initializeVars();
 		algVisualizer.setFrame();
 	}
-	
+
 	public void initializeVars() {
 
 		setN(10);
-		
+
 		arr = new Integer[n];
 		arr = fillArr(arr);
 		arr = shuffleArr(arr);
@@ -65,6 +71,18 @@ public class AlgVisualizer implements ActionListener {
 		insertionButton.addActionListener(this);
 		insertionButton.setBackground(Color.WHITE);
 
+		mergeButton = new JButton("Merge Sort");
+		mergeButton.addActionListener(this);
+		mergeButton.setBackground(Color.WHITE);
+
+		quickButton = new JButton("Quick Sort");
+		quickButton.addActionListener(this);
+		quickButton.setBackground(Color.WHITE);
+
+		bogoButton = new JButton("Bogo Sort");
+		bogoButton.addActionListener(this);
+		bogoButton.setBackground(Color.WHITE);
+
 		sizeChanger = new JComboBox<String>(SIZE_OPTIONS);
 		sizeChanger.addActionListener(this);
 	}
@@ -80,6 +98,9 @@ public class AlgVisualizer implements ActionListener {
 		buttonPanel.add(bubbleButton);
 		buttonPanel.add(selectionButton);
 		buttonPanel.add(insertionButton);
+		buttonPanel.add(mergeButton);
+		buttonPanel.add(quickButton);
+		buttonPanel.add(bogoButton);
 		buttonPanel.add(sizeChanger);
 		buttonPanel.setVisible(true);
 
@@ -98,6 +119,10 @@ public class AlgVisualizer implements ActionListener {
 		doBubbleSort = false;
 		doSelectionSort = false;
 		doInsertionSort = false;
+		doMergeSort = false;
+		doQuickSort = false;
+		doBogoSort = false;
+
 		if (event.getSource() == bubbleButton) {
 			doBubbleSort = true;
 			arrSort.execute();
@@ -106,6 +131,15 @@ public class AlgVisualizer implements ActionListener {
 			arrSort.execute();
 		} else if (event.getSource() == insertionButton) {
 			doInsertionSort = true;
+			arrSort.execute();
+		} else if (event.getSource() == mergeButton) {
+			doMergeSort = true;
+			arrSort.execute();
+		} else if (event.getSource() == quickButton) {
+			doQuickSort = true;
+			arrSort.execute();
+		} else if (event.getSource() == bogoButton) {
+			doBogoSort = true;
 			arrSort.execute();
 		} else if (event.getSource() == resetButton) {
 			reset();
@@ -186,6 +220,12 @@ public class AlgVisualizer implements ActionListener {
 			doInsertionSort = true;
 		} else if (sort.equals("Selection Sort")) {
 			doSelectionSort = true;
+		} else if (sort.equals("Merge Sort")) {
+			doMergeSort = true;
+		} else if (sort.equals("Quick Sort")) {
+			doQuickSort = true;
+		} else if (sort.equals("Bogo Sort")) {
+			doBogoSort = true;
 		}
 	}
 
@@ -197,6 +237,13 @@ public class AlgVisualizer implements ActionListener {
 			sort = "Insertion Sort";
 		if (doSelectionSort)
 			sort = "Selection Sort";
+		if (doMergeSort)
+			sort = "Merge Sort";
+		if (doQuickSort)
+			sort = "Quick Sort";
+		if (doBogoSort)
+			sort = "Bogo Sort";
+
 		return sort;
 	}
 
