@@ -85,6 +85,7 @@ public class AlgVisualizer implements ActionListener {
 
 		sizeChanger = new JComboBox<String>(SIZE_OPTIONS);
 		sizeChanger.addActionListener(this);
+		sizeChanger.setBackground(Color.WHITE);
 	}
 
 	public void setFrame() {
@@ -158,7 +159,7 @@ public class AlgVisualizer implements ActionListener {
 
 	public void reset() {
 		setStopSort(true);
-		shuffleArr(arr);
+		arr = shuffleArr(arr);
 		arrDisplay.clearSwappedIndexes();
 		arrDisplay.setFramesPainted(0);
 		arrDisplay.setComplete(false);
@@ -209,7 +210,7 @@ public class AlgVisualizer implements ActionListener {
 		return arrDisplay;
 	}
 
-	public SwingWorker<Void, Integer[]> getSorting() {
+	public SwingWorker<Void, Integer[]> getArrSorting() {
 		return arrSort;
 	}
 
@@ -243,7 +244,6 @@ public class AlgVisualizer implements ActionListener {
 			sort = "Quick Sort";
 		if (doBogoSort)
 			sort = "Bogo Sort";
-
 		return sort;
 	}
 
