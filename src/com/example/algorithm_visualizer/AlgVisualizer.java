@@ -116,7 +116,7 @@ public class AlgVisualizer implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		stopSort = false;
+		setStopSort(false);
 		doBubbleSort = false;
 		doSelectionSort = false;
 		doInsertionSort = false;
@@ -252,6 +252,14 @@ public class AlgVisualizer implements ActionListener {
 	}
 
 	public void setStopSort(boolean toSet) {
+		// The availability of the sort buttons depends on the status of stopSort
+		bubbleButton.setEnabled(toSet);
+		selectionButton.setEnabled(toSet);
+		insertionButton.setEnabled(toSet);
+		mergeButton.setEnabled(toSet);
+		quickButton.setEnabled(toSet);
+		bogoButton.setEnabled(toSet);
+
 		stopSort = toSet;
 	}
 
