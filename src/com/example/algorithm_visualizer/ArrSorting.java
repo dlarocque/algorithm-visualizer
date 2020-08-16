@@ -64,14 +64,14 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 
 			for (int j = 0; j < n - i - 1; j++) {
 				if (algVisualizer.stopSort()) {
-					publish(arr.clone()); //is this causing overload?
+					publish(arr.clone()); // is this causing overload?
 					break;
 				} else if (arr[j] > arr[j + 1]) {
 					// swap arr[j] and arr[j+1]
 					int temp = arr[j];
 					arr[j] = arr[j + 1];
 					arr[j + 1] = temp;
-					
+
 					arrDisplay.addSwappedIndexes(j, j + 1);
 					publish(arr.clone());
 					sleep();
@@ -151,32 +151,26 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 		}
 	}
 
-	// Main function that sorts arr[l..r] using
-	// merge()
 	private void mergeSort(int l, int r) {
-		if (algVisualizer.getSort().equals("Merge Sort")) {
-			if (algVisualizer.stopSort()) {
+		if (algVisualizer.getSort().equals("Merge Sort") && !algVisualizer.stopSort()) {
+			if (l < r) {
+				// Find the middle point
+				int m = (l + r) / 2;
+
+				// Sort first and second halves
+				mergeSort(l, m);
+				mergeSort(m + 1, r);
+
+				// Merge the sorted halves
+				merge(l, m, r);
+			}
+			// don't think there is another way to know whether or not
+			// the array is sorted besides this
+			if (isSorted() && !algVisualizer.stopSort()) {
+				arrDisplay.setComplete(true);
 				publish(arr.clone());
 				sleep();
-			} else {
-				if (l < r) {
-					// Find the middle point
-					int m = (l + r) / 2;
 
-					// Sort first and second halves
-					mergeSort(l, m);
-					mergeSort(m + 1, r);
-
-					// Merge the sorted halves
-					merge(l, m, r);
-				}
-				// don't think there is another way to know whether or not
-				// the array is sorted besides this
-				if (isSorted() && !algVisualizer.stopSort()) {
-					arrDisplay.setComplete(true);
-					publish(arr.clone());
-					sleep();
-				}
 			}
 		}
 	}
@@ -185,178 +179,144 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	// First subarray is arr[l..m]
 	// Second subarray is arr[m+1..r]
 	private void merge(int l, int m, int r) {
-		if (algVisualizer.getSort().equals("Merge Sort")) {
-			if (algVisualizer.stopSort()) {
+		if (algVisualizer.getSort().equals("Merge Sort") && !algVisualizer.stopSort()) {
+			// Find sizes of two subarrays to be merged
+			int n1 = m - l + 1;
+			int n2 = r - m;
+
+			// Create temp arrays
+			int L[] = new int[n1];
+			int R[] = new int[n2];
+
+			// Copy data to temp arrays
+			for (int i = 0; i < n1; ++i)
+				L[i] = arr[l + i];
+			for (int j = 0; j < n2; ++j)
+				R[j] = arr[m + 1 + j];
+
+			// Merge the temp arrays
+
+			// Initial indexes of first and second subarrays
+			int i = 0, j = 0;
+
+			// Initial index of merged subarray array
+			int k = l;
+			while (i < n1 && j < n2) {
+
+				if (algVisualizer.stopSort())
+					break;
+				if (L[i] <= R[j]) {
+					arr[k] = L[i];
+					i++;
+
+					arrDisplay.addSwappedIndexes(k, k + i);
+					publish(arr.clone());
+					sleep();
+				} else {
+					arr[k] = R[j];
+					j++;
+
+					arrDisplay.addSwappedIndexes(k, k + j);
+					publish(arr.clone());
+					sleep();
+				}
+				k++;
+			}
+
+			/* Copy remaining elements of L[] if any */
+			while (i < n1) {
+
+				if (algVisualizer.stopSort())
+					break;
+
+				arr[k] = L[i];
+
+				arrDisplay.addSwappedIndexes(k, k + i);
 				publish(arr.clone());
 				sleep();
-			} else {
-				// Find sizes of two subarrays to be merged
-				int n1 = m - l + 1;
-				int n2 = r - m;
+				i++;
+				k++;
+			}
 
-				// Create temp arrays
-				int L[] = new int[n1];
-				int R[] = new int[n2];
+			/* Copy remaining elements of R[] if any */
+			while (j < n2) {
 
-				// Copy data to temp arrays
-				for (int i = 0; i < n1; ++i)
-					L[i] = arr[l + i];
-				for (int j = 0; j < n2; ++j)
-					R[j] = arr[m + 1 + j];
+				if (algVisualizer.stopSort())
+					break;
 
-				// Merge the temp arrays
+				arr[k] = R[j];
 
-				// Initial indexes of first and second subarrays
-				int i = 0, j = 0;
-
-				// Initial index of merged subarray array
-				int k = l;
-				while (i < n1 && j < n2) {
-					
-					if (algVisualizer.stopSort()) {
-						publish(arr.clone());
-						sleep();
-						break;
-					}
-					if (L[i] <= R[j]) {
-						arr[k] = L[i];
-						i++;
-						
-						arrDisplay.addSwappedIndexes(k, k + i);
-						publish(arr.clone());
-						sleep();
-					} else {
-						arr[k] = R[j];
-						j++;
-						
-						arrDisplay.addSwappedIndexes(k, k + j);
-						publish(arr.clone());
-						sleep();
-					}
-					k++;
-				}
-
-				/* Copy remaining elements of L[] if any */
-				while (i < n1) {
-					
-					if (algVisualizer.stopSort()) {
-						publish(arr.clone());
-						sleep();
-						break;
-					} else {
-						arr[k] = L[i];
-						
-						arrDisplay.addSwappedIndexes(k, k + i);
-						publish(arr.clone());
-						sleep();
-						i++;
-						k++;
-					}
-				}
-
-				/* Copy remaining elements of R[] if any */
-				while (j < n2) {
-					
-					if (algVisualizer.stopSort()) {
-						publish(arr.clone());
-						sleep();
-						break;
-					} else {
-						arr[k] = R[j];
-						
-						arrDisplay.addSwappedIndexes(k, k + j);
-						publish(arr.clone());
-						sleep();
-						j++;
-						k++;
-					}
-				}
+				arrDisplay.addSwappedIndexes(k, k + j);
+				publish(arr.clone());
+				sleep();
+				j++;
+				k++;
 			}
 		}
 	}
 
 	private void quickSort(int low, int high) {
-		if (algVisualizer.getSort().equals("Quick Sort")) {
-			System.out.println("quicksort" + arrDisplay.getFramesPainted());
+		if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) {
+			if (low < high) {
+				// pi is partitioning index, arr[pi] is now at right place
+				int pi = partition(low, high);
 
-			if (algVisualizer.stopSort()) {
+				// Recursively sort elements before
+				// partition and after partition
+				quickSort(low, pi - 1);
+				quickSort(pi + 1, high);
+			}
+			// don't think there is another way to know whether or not
+			// the array is sorted besides this
+			if (isSorted() && !algVisualizer.stopSort()) {
+				arrDisplay.setComplete(true);
 				publish(arr.clone());
 				sleep();
-			} else {
-				if (low < high) {
-					/*
-					 * pi is partitioning index, arr[pi] is now at right place
-					 */
-					int pi = partition(low, high);
-
-					// Recursively sort elements before
-					// partition and after partition
-					quickSort(low, pi - 1);
-					quickSort(pi + 1, high);
-				}
-				// don't think there is another way to know whether or not
-				// the array is sorted besides this
-				if (isSorted() && !algVisualizer.stopSort()) {
-					arrDisplay.setComplete(true);
-					publish(arr.clone());
-					sleep();
-				}
 			}
 		}
 	}
 
 	private int partition(int low, int high) {
-		if (algVisualizer.getSort().equals("Quick Sort")) {
-			System.out.println("partition" + arrDisplay.getFramesPainted());
-			if (algVisualizer.stopSort()) {
-				publish(arr.clone());
-				sleep();
-			} else {
-				
-				int pivot = arr[high];
-				int i = (low - 1); // index of smaller element
-				
-				for (int j = low; j < high; j++) {
-					
-					if (algVisualizer.stopSort()) {
+		if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) {
+			int pivot = arr[high];
+			int i = (low - 1); // index of smaller element
+
+			for (int j = low; j < high; j++) {
+				if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) {
+
+					// If current element is smaller than the pivot
+					if (arr[j] < pivot) {
+						i++;
+
+						// swap arr[i] and arr[j]
+						int temp = arr[i];
+						arr[i] = arr[j];
+						arr[j] = temp;
+
+						arrDisplay.addSwappedIndexes(i, j);
 						publish(arr.clone());
 						sleep();
-					} else {
-
-						// If current element is smaller than the pivot
-						if (arr[j] < pivot) {
-							i++;
-
-							// swap arr[i] and arr[j]
-							int temp = arr[i];
-							arr[i] = arr[j];
-							arr[j] = temp;
-
-							arrDisplay.addSwappedIndexes(i, j);
-							publish(arr.clone());
-							sleep();
-						}
 					}
 				}
-				if (!algVisualizer.stopSort()) {
-					// swap arr[i+1] and arr[high] (or pivot)
-					int temp = arr[i + 1];
-					arr[i + 1] = arr[high];
-					arr[high] = temp;
-
-					arrDisplay.addSwappedIndexes(i + 1, high);
-					publish(arr.clone());
-					sleep();
-				}
-				return i + 1;
 			}
+			if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) {
+				// swap arr[i+1] and arr[high] (or pivot)
+				int temp = arr[i + 1];
+				arr[i + 1] = arr[high];
+				arr[high] = temp;
+
+				arrDisplay.addSwappedIndexes(i + 1, high);
+				publish(arr.clone());
+				sleep();
+			}
+			return i + 1;
 		}
 		return 0;
 	}
 
 	private void bogoSort() {
 		while (!arrDisplay.isComplete()) { // until the array is sorted
-			
+
 			if (!algVisualizer.stopSort()) { // if a reset has not been done
 
 				// shuffle the array and paint it
