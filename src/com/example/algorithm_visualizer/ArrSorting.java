@@ -61,10 +61,11 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	private void bubbleSort() {
 
 		for (int i = 0; i < n - 1; i++) {
-
+			if (algVisualizer.stopSort()) {
+				break;
+			}
 			for (int j = 0; j < n - i - 1; j++) {
 				if (algVisualizer.stopSort()) {
-					publish(arr.clone()); // is this causing overload?
 					break;
 				} else if (arr[j] > arr[j + 1]) {
 					// swap arr[j] and arr[j+1]
