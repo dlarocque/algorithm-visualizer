@@ -2,6 +2,8 @@
 
 A program for visualizing sorting algorithms.
 
+This is my freshman year summer project! :)
+
 ## Set up
 
 You can either download the source code and run the application through your IDE or download the runnable JAR "AlgorithmVisualizer.jar" and run that.
