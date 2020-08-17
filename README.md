@@ -4,26 +4,36 @@ A program for visualizing sorting algorithms.
 
 ## Set up
 
-Clone the project onto your local machine and run it through your preferred IDE or through the command line.
+You can either download the source code and run the application through your IDE or download the runnable JAR "AlgorithmVisualizer.jar" and run that.
 
 ## How to use 
 
-Once the app is running, a frame will appear, containing buttons with the names of different sorting algorithms.
+On startup, the application will open a Frame containing an unsorted array of integers and buttons to reset, change the size of the array and select the sorting algorithm to visualize.
 
-To see one of the sorting algorithms listed by the buttons, simply click on the one you wish to see be used to sort an unsorted array.
+![Startup](https://github.com/dlarocque/AlgorithmVisualizer/blob/master/images/Startup.PNG)
 
-Once the array is sorted after several seconds, a pop up pane will appear to inform you that the sorting is complete, press 'OK' to return back to the menu.
+To change the size of the array being sorted, simply press the drop down menu that initially shows '10' as the array size.
+The only available options are 10,50,100,200,400,800.
+
+![Startup](https://github.com/dlarocque/AlgorithmVisualizer/blob/master/images/SizeChanger.png)
+
+![Startup](https://github.com/dlarocque/AlgorithmVisualizer/blob/master/images/LargeArray.png)
+
+To begin sorting the array, simply click the algorithm you want to see visualized.
+You can press the 'Reset' button to re-shuffle the array and stop sorting so that you are able to see another algorithm.
+
+![Startup](https://github.com/dlarocque/AlgorithmVisualizer/blob/master/images/QuickSort.png)
+
+To see the sorting process slower, you can choose a larger array.
 
 ## Future updates
 
-- Fix problem where if 'OK' button is not pressed on the pop up pane, the user cannot return to the menu without restarting the program by adding a message on the frame telling the user to press a key to return to the menu.
+- Add stats such as index swaps, accesses, and time elapsed.
+- Make the window resizable for different resolutions.
+- Make the sorting time depend on the systems capabilities to remove lag and delay between swapped indexes and the sorting.
 
-- Add several more sorting algorithms
+## Known Bugs
 
-- Add stats on the top of the screen, or at the end of the sorting such as index swaps, time elapsed.
-
-- Replace buttons with custom images.
-
-- Make the app runnable through a .jar file
-
+When a system has poor perfomance issues, there is some delay between the red and cyan bars displaying the swapped indexes and the sorting. 
+This is caused by the program not giving enough time to repaint the array, and sending in another chunk, putting the sorting out of sync with the list of swapped indexes.
 
