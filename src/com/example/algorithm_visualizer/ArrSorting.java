@@ -10,12 +10,16 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	private AlgVisualizer algVisualizer;
 	private ArrDisplay arrDisplay;
 	private final int SLEEP_TIME = 60;
+	private Integer arrComparisons;
+	private Double timeElapsed;
 
 	public ArrSorting(AlgVisualizer algVisualizer, Integer[] arr, ArrDisplay arrDisplay) {
 		this.algVisualizer = algVisualizer;
 		this.arr = arr;
 		this.arrDisplay = arrDisplay;
-		n = arr.length;
+		this.n = this.arr.length;
+		this.setArrComparisons(0);
+		this.setTimeElapsed(0.0);
 	}
 
 	@Override
@@ -55,9 +59,8 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
+	} 
 
-	// Sending massive amount of chunks after a reset?
 	private void bubbleSort() {
 
 		for (int i = 0; i < n - 1; i++) {
@@ -67,19 +70,24 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 			for (int j = 0; j < n - i - 1; j++) {
 				if (algVisualizer.stopSort()) {
 					break;
-				} else if (arr[j] > arr[j + 1]) {
-					// swap arr[j] and arr[j+1]
-					int temp = arr[j];
-					arr[j] = arr[j + 1];
-					arr[j + 1] = temp;
+				} else {
+					this.arrComparisons++;
+					if (arr[j] > arr[j + 1]) {
+						
+						// swap arr[j] and arr[j+1]
+						int temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
 
-					arrDisplay.addSwappedIndexes(j, j + 1);
-					publish(arr.clone());
-					sleep();
+						arrDisplay.addSwappedIndexes(j, j + 1);
+						publish(arr.clone());
+						sleep();
+					}
 				}
 			}
 		}
 		if (!algVisualizer.stopSort()) {
+			System.out.println(arrComparisons);
 			arrDisplay.setComplete(true);
 			publish(arr.clone());
 			sleep();
@@ -343,4 +351,13 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 		}
 		return isSorted;
 	}
+
+	public void setTimeElapsed(Double timeElapsed) {
+		this.timeElapsed = timeElapsed;
+	}
+
+	public void setArrComparisons(Integer arrAccesses) {
+		this.arrComparisons = arrAccesses;
+	}
+
 }

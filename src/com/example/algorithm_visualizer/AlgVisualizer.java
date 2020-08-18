@@ -17,6 +17,8 @@ public class AlgVisualizer implements ActionListener {
 	private JFrame frame = new JFrame("Algorithm Visualizer");
 	private JPanel arrPanel;
 	private ArrDisplay arrDisplay;
+	private JButton performanceButton;
+	private JOptionPane performancePane;
 	private JPanel buttonPanel;
 	private JButton bubbleButton;
 	private JButton insertionButton;
@@ -52,9 +54,9 @@ public class AlgVisualizer implements ActionListener {
 
 		arrDisplay = new ArrDisplay(this, arr);
 		arrDisplay.setPreferredSize(new Dimension(CONTENT_WIDTH, ARR_DISPLAY_HEIGHT));
-
-		arrSort = new ArrSorting(this, arr, arrDisplay);
-
+		
+		arrSort = new ArrSorting(this, this.arr, this.arrDisplay);
+		
 		resetButton = new JButton("Reset");
 		resetButton.addActionListener(this);
 		resetButton.setBackground(Color.WHITE);
@@ -86,12 +88,14 @@ public class AlgVisualizer implements ActionListener {
 		sizeChanger = new JComboBox<String>(SIZE_OPTIONS);
 		sizeChanger.addActionListener(this);
 		sizeChanger.setBackground(Color.WHITE);
+		
+		performanceButton = new JButton("Performance");
+		performanceButton.addActionListener(this);
+		performanceButton.setBackground(Color.WHITE);
+		performanceButton.setEnabled(false);
 	}
 
 	public void setFrame() {
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
 
 		buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.DARK_GRAY);
@@ -103,12 +107,16 @@ public class AlgVisualizer implements ActionListener {
 		buttonPanel.add(quickButton);
 		buttonPanel.add(bogoButton);
 		buttonPanel.add(sizeChanger);
+		buttonPanel.add(performanceButton);
 		buttonPanel.setVisible(true);
 
 		arrPanel = new JPanel();
 		arrPanel.add(arrDisplay);
 		arrPanel.setVisible(true);
-
+		
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 		frame.add(buttonPanel, BorderLayout.PAGE_START);
 		frame.add(arrPanel, BorderLayout.PAGE_END);
 		frame.pack();
@@ -123,7 +131,7 @@ public class AlgVisualizer implements ActionListener {
 		doMergeSort = false;
 		doQuickSort = false;
 		doBogoSort = false;
-
+		
 		if (event.getSource() == bubbleButton) {
 			doBubbleSort = true;
 			arrSort.execute();
@@ -154,6 +162,8 @@ public class AlgVisualizer implements ActionListener {
 			// Clear and paint the new array
 			reset();
 			arrSort.execute();
+		} else if (event.getSource() == performanceButton) {
+			//open JOptionPane
 		}
 	}
 
@@ -168,7 +178,7 @@ public class AlgVisualizer implements ActionListener {
 	}
 
 	public void resetSwingWorker(AlgVisualizer alg, Integer[] arr, ArrDisplay displayArr) {
-		arrSort = new ArrSorting(this, arr, displayArr);
+		arrSort = new ArrSorting(this, arr, displayArr); // need to reset arrAccesses and timeElapsed
 	}
 
 	public Integer[] shuffleArr(Integer[] arr) {
@@ -259,7 +269,7 @@ public class AlgVisualizer implements ActionListener {
 		mergeButton.setEnabled(toSet);
 		quickButton.setEnabled(toSet);
 		bogoButton.setEnabled(toSet);
-
+		performanceButton.setEnabled(!toSet);
 		stopSort = toSet;
 	}
 
@@ -270,5 +280,5 @@ public class AlgVisualizer implements ActionListener {
 	public void setN(Integer n) {
 		this.n = n;
 	}
-
+	
 }

@@ -15,9 +15,9 @@ public class ArrDisplay extends JComponent {
 	private int swappedIndex2;
 	private boolean isComplete;
 
-	public ArrDisplay(AlgVisualizer alg, Integer[] arr) {
-		this.algVisualizer = alg;
-		this.arr = arr;
+	public ArrDisplay(AlgVisualizer algVisualizer, Integer[] arr) {
+		this.algVisualizer = algVisualizer;
+		this.setArr(arr);
 		swappedIndexes = new ArrayList<Integer[]>();
 	}
 
@@ -27,7 +27,7 @@ public class ArrDisplay extends JComponent {
 		Graphics2D graphics2d = (Graphics2D) g;
 		graphics2d.setColor(Color.DARK_GRAY);
 		graphics2d.fillRect(0, 0, algVisualizer.getWidth(), algVisualizer.getArrDispHeight());
-
+				
 		if (algVisualizer.getSort().equals("Not Sorting") || isComplete) {
 			swappedIndex1 = -1;
 			swappedIndex2 = -1;
