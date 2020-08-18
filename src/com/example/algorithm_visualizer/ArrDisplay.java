@@ -79,6 +79,7 @@ public class ArrDisplay extends JComponent {
 	}
 
 	public void setComplete(boolean complete) {
+		algVisualizer.getStatsButton().setEnabled(complete);
 		this.isComplete = complete;
 	}
 

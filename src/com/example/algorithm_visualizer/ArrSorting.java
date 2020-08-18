@@ -10,16 +10,12 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	private AlgVisualizer algVisualizer;
 	private ArrDisplay arrDisplay;
 	private final int SLEEP_TIME = 60;
-	private Integer arrComparisons;
-	private Double timeElapsed;
 
 	public ArrSorting(AlgVisualizer algVisualizer, Integer[] arr, ArrDisplay arrDisplay) {
 		this.algVisualizer = algVisualizer;
 		this.arr = arr;
 		this.arrDisplay = arrDisplay;
 		this.n = this.arr.length;
-		this.setArrComparisons(0);
-		this.setTimeElapsed(0.0);
 	}
 
 	@Override
@@ -38,8 +34,6 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 			mergeSort(0, arr.length - 1);
 		} else if (algVisualizer.getSort().equals("Quick Sort")) {
 			quickSort(0, arr.length - 1);
-		} else if (algVisualizer.getSort().equals("Bogo Sort")) {
-			bogoSort();
 		}
 		return null;
 	}
@@ -71,7 +65,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 				if (algVisualizer.stopSort()) {
 					break;
 				} else {
-					this.arrComparisons++;
+					algVisualizer.setIndexComparisons(algVisualizer.getIndexComparisons() + 1);
 					if (arr[j] > arr[j + 1]) {
 						
 						// swap arr[j] and arr[j+1]
@@ -87,7 +81,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 			}
 		}
 		if (!algVisualizer.stopSort()) {
-			System.out.println(arrComparisons);
+			System.out.println(algVisualizer.getIndexComparisons());
 			arrDisplay.setComplete(true);
 			publish(arr.clone());
 			sleep();
@@ -323,26 +317,6 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 		return 0;
 	}
 
-	private void bogoSort() {
-		while (!arrDisplay.isComplete()) { // until the array is sorted
-
-			if (!algVisualizer.stopSort()) { // if a reset has not been done
-
-				// shuffle the array and paint it
-				arr = algVisualizer.shuffleArr(arr);
-
-				arrDisplay.addSwappedIndexes(-1, -1);
-				publish(arr.clone());
-				sleep();
-			} else { // a reset has been done, draw one more time and stop shuffling
-
-				publish(arr.clone());
-				sleep();
-				break;
-			}
-		}
-	}
-
 	private boolean isSorted() {
 		boolean isSorted = true;
 		for (int i = 0; i < arr.length - 1; i++) {
@@ -350,14 +324,6 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 				isSorted = false;
 		}
 		return isSorted;
-	}
-
-	public void setTimeElapsed(Double timeElapsed) {
-		this.timeElapsed = timeElapsed;
-	}
-
-	public void setArrComparisons(Integer arrAccesses) {
-		this.arrComparisons = arrAccesses;
 	}
 
 }

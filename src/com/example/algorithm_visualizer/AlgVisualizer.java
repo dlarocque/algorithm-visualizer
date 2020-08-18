@@ -17,15 +17,14 @@ public class AlgVisualizer implements ActionListener {
 	private JFrame frame = new JFrame("Algorithm Visualizer");
 	private JPanel arrPanel;
 	private ArrDisplay arrDisplay;
-	private JButton performanceButton;
-	private JOptionPane performancePane;
+	private JButton statsButton;
+	private JOptionPane statsPane;
 	private JPanel buttonPanel;
 	private JButton bubbleButton;
 	private JButton insertionButton;
 	private JButton selectionButton;
 	private JButton mergeButton;
 	private JButton quickButton;
-	private JButton bogoButton;
 	private JButton resetButton;
 	private JComboBox<String> sizeChanger;
 	final String[] SIZE_OPTIONS = { "10", "50", "100", "200", "400", "800" };
@@ -35,8 +34,9 @@ public class AlgVisualizer implements ActionListener {
 	private boolean doSelectionSort;
 	private boolean doMergeSort;
 	private boolean doQuickSort;
-	private boolean doBogoSort;
 	private boolean stopSort;
+	private Integer indexComparisons;
+	private Double timeElapsed;
 
 	public static void main(String[] args) {
 		AlgVisualizer algVisualizer = new AlgVisualizer();
@@ -81,18 +81,14 @@ public class AlgVisualizer implements ActionListener {
 		quickButton.addActionListener(this);
 		quickButton.setBackground(Color.WHITE);
 
-		bogoButton = new JButton("Bogo Sort");
-		bogoButton.addActionListener(this);
-		bogoButton.setBackground(Color.WHITE);
-
 		sizeChanger = new JComboBox<String>(SIZE_OPTIONS);
 		sizeChanger.addActionListener(this);
 		sizeChanger.setBackground(Color.WHITE);
 		
-		performanceButton = new JButton("Performance");
-		performanceButton.addActionListener(this);
-		performanceButton.setBackground(Color.WHITE);
-		performanceButton.setEnabled(false);
+		statsButton = new JButton("Performance");
+		statsButton.addActionListener(this);
+		statsButton.setBackground(Color.WHITE);
+		statsButton.setEnabled(false);
 	}
 
 	public void setFrame() {
@@ -105,9 +101,8 @@ public class AlgVisualizer implements ActionListener {
 		buttonPanel.add(insertionButton);
 		buttonPanel.add(mergeButton);
 		buttonPanel.add(quickButton);
-		buttonPanel.add(bogoButton);
 		buttonPanel.add(sizeChanger);
-		buttonPanel.add(performanceButton);
+		buttonPanel.add(statsButton);
 		buttonPanel.setVisible(true);
 
 		arrPanel = new JPanel();
@@ -130,7 +125,6 @@ public class AlgVisualizer implements ActionListener {
 		doInsertionSort = false;
 		doMergeSort = false;
 		doQuickSort = false;
-		doBogoSort = false;
 		
 		if (event.getSource() == bubbleButton) {
 			doBubbleSort = true;
@@ -147,9 +141,6 @@ public class AlgVisualizer implements ActionListener {
 		} else if (event.getSource() == quickButton) {
 			doQuickSort = true;
 			arrSort.execute();
-		} else if (event.getSource() == bogoButton) {
-			doBogoSort = true;
-			arrSort.execute();
 		} else if (event.getSource() == resetButton) {
 			reset();
 			arrSort.execute();
@@ -162,8 +153,10 @@ public class AlgVisualizer implements ActionListener {
 			// Clear and paint the new array
 			reset();
 			arrSort.execute();
-		} else if (event.getSource() == performanceButton) {
+		} else if (event.getSource() == statsButton) {
 			//open JOptionPane
+			String statsMessage = String.format("Index Comparisons : %d  Time Elapsed : %f", indexComparisons, timeElapsed);
+			JOptionPane.showMessageDialog(frame, statsMessage, "Performance", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 
@@ -235,8 +228,6 @@ public class AlgVisualizer implements ActionListener {
 			doMergeSort = true;
 		} else if (sort.equals("Quick Sort")) {
 			doQuickSort = true;
-		} else if (sort.equals("Bogo Sort")) {
-			doBogoSort = true;
 		}
 	}
 
@@ -252,8 +243,6 @@ public class AlgVisualizer implements ActionListener {
 			sort = "Merge Sort";
 		if (doQuickSort)
 			sort = "Quick Sort";
-		if (doBogoSort)
-			sort = "Bogo Sort";
 		return sort;
 	}
 
@@ -268,8 +257,6 @@ public class AlgVisualizer implements ActionListener {
 		insertionButton.setEnabled(toSet);
 		mergeButton.setEnabled(toSet);
 		quickButton.setEnabled(toSet);
-		bogoButton.setEnabled(toSet);
-		performanceButton.setEnabled(!toSet);
 		stopSort = toSet;
 	}
 
@@ -277,8 +264,27 @@ public class AlgVisualizer implements ActionListener {
 		return n;
 	}
 
-	public void setN(Integer n) {
+	public void setN(int n) {
 		this.n = n;
 	}
 	
+	public JButton getStatsButton() {
+		return statsButton;
+	}
+	
+	public Integer getIndexComparisons() {
+		return indexComparisons;
+	}
+	
+	public void setIndexComparisons(int indexComparisons) {
+		this.indexComparisons = indexComparisons;
+	}
+	
+	public Double getArrAccesses() {
+		return timeElapsed;
+	}
+	
+	public void setArrAccesses (double timeElapsed) {
+		this.timeElapsed = timeElapsed;
+	}	
 }
