@@ -1,4 +1,4 @@
-package com.example.algorithm_visualizer;
+package com.example.algorithmvisualizer;
 
 import java.util.*;
 import javax.swing.SwingWorker;
