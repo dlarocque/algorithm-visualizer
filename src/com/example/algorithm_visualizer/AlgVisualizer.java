@@ -18,7 +18,6 @@ public class AlgVisualizer implements ActionListener {
 	private JPanel arrPanel;
 	private ArrDisplay arrDisplay;
 	private JButton performanceButton;
-	private JOptionPane performancePane;
 	private JPanel buttonPanel;
 	private JButton bubbleButton;
 	private JButton insertionButton;
@@ -27,7 +26,7 @@ public class AlgVisualizer implements ActionListener {
 	private JButton quickButton;
 	private JButton resetButton;
 	private JComboBox<String> sizeChanger;
-	final String[] SIZE_OPTIONS = { "10", "50", "100", "200", "400", "800" };
+	private final String[] SIZE_OPTIONS = { "10", "50", "100", "200", "400", "800" };
 	private SwingWorker<Void, Integer[]> arrSort;
 	private boolean doBubbleSort;
 	private boolean doInsertionSort;
@@ -36,7 +35,8 @@ public class AlgVisualizer implements ActionListener {
 	private boolean doQuickSort;
 	private boolean stopSort;
 	private Integer indexComparisons;
-	private Double timeElapsed;
+	private long startTime;
+	private long endTime;
 
 	public static void main(String[] args) {
 		AlgVisualizer algVisualizer = new AlgVisualizer();
@@ -51,6 +51,8 @@ public class AlgVisualizer implements ActionListener {
 		arr = new Integer[n];
 		arr = fillArr(arr);
 		arr = shuffleArr(arr);
+		
+		indexComparisons = 0;
 
 		arrDisplay = new ArrDisplay(this, arr);
 		arrDisplay.setPreferredSize(new Dimension(CONTENT_WIDTH, ARR_DISPLAY_HEIGHT));
@@ -155,7 +157,10 @@ public class AlgVisualizer implements ActionListener {
 			arrSort.execute();
 		} else if (event.getSource() == performanceButton) {
 			//open JOptionPane
-			String statsMessage = String.format("Index Comparisons : %d  Time Elapsed : %f", indexComparisons, timeElapsed);
+			int numSwaps = arrDisplay.getSwappedIndexes().size();
+			long timeElapsed = endTime - startTime;
+			long realTimeElapsed = timeElapsed - (60 * numSwaps);
+			String statsMessage = String.format("Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms  Sorting Time : %dms", indexComparisons, numSwaps, timeElapsed, realTimeElapsed);
 			JOptionPane.showMessageDialog(frame, statsMessage, "Performance", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
@@ -167,11 +172,18 @@ public class AlgVisualizer implements ActionListener {
 		arrDisplay.setFramesPainted(0);
 		arrDisplay.setComplete(false);
 		arrDisplay.setArr(arr);
+		indexComparisons = 0;
+		resetTime();
 		resetSwingWorker(this, arr, arrDisplay);
 	}
 
 	public void resetSwingWorker(AlgVisualizer alg, Integer[] arr, ArrDisplay displayArr) {
 		arrSort = new ArrSorting(this, arr, displayArr); // need to reset arrAccesses and timeElapsed
+	}
+	
+	public void resetTime(){
+		startTime = 0;
+		endTime = 0;
 	}
 
 	public Integer[] shuffleArr(Integer[] arr) {
@@ -279,12 +291,20 @@ public class AlgVisualizer implements ActionListener {
 	public void setIndexComparisons(int indexComparisons) {
 		this.indexComparisons = indexComparisons;
 	}
-	
-	public Double getArrAccesses() {
-		return timeElapsed;
+
+	public long getStartTime() {
+		return startTime;
 	}
-	
-	public void setArrAccesses (double timeElapsed) {
-		this.timeElapsed = timeElapsed;
+
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
+
+	public long getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(long endTime) {
+		this.endTime = endTime;
 	}	
 }

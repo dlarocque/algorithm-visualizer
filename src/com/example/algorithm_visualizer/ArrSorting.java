@@ -24,7 +24,10 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 			publish(arr.clone());
 			sleep();
 			algVisualizer.resetSwingWorker(algVisualizer, arr, arrDisplay);
-		} else if (algVisualizer.getSort().equals("Bubble Sort")) {
+		} else {
+			algVisualizer.setStartTime(System.currentTimeMillis());
+		}
+		if (algVisualizer.getSort().equals("Bubble Sort")) {
 			bubbleSort();
 		} else if (algVisualizer.getSort().equals("Insertion Sort")) {
 			insertionSort();
@@ -35,6 +38,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 		} else if (algVisualizer.getSort().equals("Quick Sort")) {
 			quickSort(0, arr.length - 1);
 		}
+		algVisualizer.setEndTime(System.currentTimeMillis());
 		return null;
 	}
 
@@ -53,10 +57,9 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	} 
+	}
 
 	private void bubbleSort() {
-
 		for (int i = 0; i < n - 1; i++) {
 			if (algVisualizer.stopSort()) {
 				break;
@@ -65,9 +68,11 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 				if (algVisualizer.stopSort()) {
 					break;
 				} else {
+
 					algVisualizer.setIndexComparisons(algVisualizer.getIndexComparisons() + 1);
-					if (arr[j] > arr[j + 1]) {
-						
+
+					if (arr[j] > arr[j + 1]) { // comparison
+
 						// swap arr[j] and arr[j+1]
 						int temp = arr[j];
 						arr[j] = arr[j + 1];
@@ -81,7 +86,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 			}
 		}
 		if (!algVisualizer.stopSort()) {
-			System.out.println(algVisualizer.getIndexComparisons());
+			algVisualizer.setEndTime(System.currentTimeMillis());
 			arrDisplay.setComplete(true);
 			publish(arr.clone());
 			sleep();
@@ -100,7 +105,10 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 			int min_idx = i;
 
 			for (int j = i + 1; j < n; j++) {
-				if (arr[j] < arr[min_idx])
+
+				algVisualizer.setIndexComparisons(algVisualizer.getIndexComparisons() + 1);
+
+				if (arr[j] < arr[min_idx]) // comparison
 					min_idx = j;
 			}
 			int temp = arr[min_idx];
@@ -131,13 +139,15 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 			int key = arr[i];
 			int j = i - 1;
 
-			while (j >= 0 && arr[j] > key) {
-
+			while (j >= 0 && arr[j] > key) { // compare arr[j] and arr[i]
 				if (algVisualizer.stopSort()) {
 					publish(arr.clone());
 					sleep();
 					break;
 				}
+
+				algVisualizer.setIndexComparisons(algVisualizer.getIndexComparisons() + 1);
+
 				arr[j + 1] = arr[j];
 				j = j - 1;
 
@@ -145,6 +155,9 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 				publish(arr.clone());
 				sleep();
 			}
+
+			algVisualizer.setIndexComparisons(algVisualizer.getIndexComparisons() + 1);
+
 			arr[j + 1] = key;
 		}
 		if (!algVisualizer.stopSort()) {
@@ -208,7 +221,10 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 
 				if (algVisualizer.stopSort())
 					break;
-				if (L[i] <= R[j]) {
+
+				algVisualizer.setIndexComparisons(algVisualizer.getIndexComparisons() + 1);
+
+				if (L[i] <= R[j]) { // comparison
 					arr[k] = L[i];
 					i++;
 
@@ -287,8 +303,11 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 			for (int j = low; j < high; j++) {
 				if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) {
 
+					algVisualizer.setIndexComparisons(algVisualizer.getIndexComparisons() + 1);
+
 					// If current element is smaller than the pivot
-					if (arr[j] < pivot) {
+					if (arr[j] < pivot) { // comparison
+
 						i++;
 
 						// swap arr[i] and arr[j]
