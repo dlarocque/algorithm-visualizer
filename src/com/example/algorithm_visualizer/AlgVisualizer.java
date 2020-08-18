@@ -17,8 +17,8 @@ public class AlgVisualizer implements ActionListener {
 	private JFrame frame = new JFrame("Algorithm Visualizer");
 	private JPanel arrPanel;
 	private ArrDisplay arrDisplay;
-	private JButton statsButton;
-	private JOptionPane statsPane;
+	private JButton performanceButton;
+	private JOptionPane performancePane;
 	private JPanel buttonPanel;
 	private JButton bubbleButton;
 	private JButton insertionButton;
@@ -85,10 +85,10 @@ public class AlgVisualizer implements ActionListener {
 		sizeChanger.addActionListener(this);
 		sizeChanger.setBackground(Color.WHITE);
 		
-		statsButton = new JButton("Performance");
-		statsButton.addActionListener(this);
-		statsButton.setBackground(Color.WHITE);
-		statsButton.setEnabled(false);
+		performanceButton = new JButton("Performance");
+		performanceButton.addActionListener(this);
+		performanceButton.setBackground(Color.WHITE);
+		performanceButton.setEnabled(false);
 	}
 
 	public void setFrame() {
@@ -102,7 +102,7 @@ public class AlgVisualizer implements ActionListener {
 		buttonPanel.add(mergeButton);
 		buttonPanel.add(quickButton);
 		buttonPanel.add(sizeChanger);
-		buttonPanel.add(statsButton);
+		buttonPanel.add(performanceButton);
 		buttonPanel.setVisible(true);
 
 		arrPanel = new JPanel();
@@ -153,7 +153,7 @@ public class AlgVisualizer implements ActionListener {
 			// Clear and paint the new array
 			reset();
 			arrSort.execute();
-		} else if (event.getSource() == statsButton) {
+		} else if (event.getSource() == performanceButton) {
 			//open JOptionPane
 			String statsMessage = String.format("Index Comparisons : %d  Time Elapsed : %f", indexComparisons, timeElapsed);
 			JOptionPane.showMessageDialog(frame, statsMessage, "Performance", JOptionPane.PLAIN_MESSAGE);
@@ -269,7 +269,7 @@ public class AlgVisualizer implements ActionListener {
 	}
 	
 	public JButton getStatsButton() {
-		return statsButton;
+		return performanceButton;
 	}
 	
 	public Integer getIndexComparisons() {

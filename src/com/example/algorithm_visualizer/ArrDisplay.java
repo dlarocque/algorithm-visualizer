@@ -44,7 +44,7 @@ public class ArrDisplay extends JComponent {
 			if (i == swappedIndex1 && !algVisualizer.stopSort()) {
 				graphics2d.setColor(Color.RED);
 			} else if (i == swappedIndex2 && !algVisualizer.stopSort()) {
-				graphics2d.setColor(Color.CYAN);
+				graphics2d.setColor(Color.BLUE);
 			} else if (isComplete) {
 				graphics2d.setColor(Color.GREEN);
 			} else {
