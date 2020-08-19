@@ -1,3 +1,16 @@
+/*
+ * An application that visualizes sorting algorithms through bar graphs.
+ * 
+ * Author : Daniel La Rocque
+ * 
+ * Date started : April 28th, 2020
+ * 
+ * This project is licensed under the MIT License.
+ * See LICENSE.txt for more details
+ * 
+ * Instructions on how to use the application are included in README.md
+ */
+
 package com.example.algorithmvisualizer;
 
 import java.awt.BorderLayout;
@@ -13,37 +26,54 @@ public class AlgVisualizer implements ActionListener {
 	private final int CONTENT_WIDTH = 800;
 	private final int CONTENT_HEIGHT = 860;
 	private final int ARR_DISPLAY_HEIGHT = 800;
-	private Integer[] arr;
-	private JFrame frame = new JFrame("Algorithm Visualizer");
-	private JPanel arrPanel;
-	private ArrDisplay arrDisplay;
-	private JButton performanceButton;
-	private JPanel buttonPanel;
-	private JButton bubbleButton;
-	private JButton insertionButton;
-	private JButton selectionButton;
-	private JButton mergeButton;
-	private JButton quickButton;
-	private JButton resetButton;
-	private JComboBox<String> sizeChanger;
-	private final String[] SIZE_OPTIONS = { "10", "50", "100", "200", "400", "800" };
-	private SwingWorker<Void, Integer[]> arrSort;
+	private final String[] SIZE_OPTIONS = { "10", "50", "100", "200", "400", "800" }; // array size options
+	private Integer indexComparisons;
+	private long startTime; // start time of a sort
+	private long endTime; // end time of a sort
 	private boolean doBubbleSort;
 	private boolean doInsertionSort;
 	private boolean doSelectionSort;
 	private boolean doMergeSort;
 	private boolean doQuickSort;
-	private boolean stopSort;
-	private Integer indexComparisons;
-	private long startTime;
-	private long endTime;
+	private boolean stopSort; // True if sorting is stopped
+	private Integer[] arr; // array that is going to be sorted
+	private JFrame frame;
+	private JPanel arrPanel;
+	private ArrDisplay arrDisplay;
+	private JPanel buttonPanel;
+	private JButton resetButton;
+	private JButton bubbleButton;
+	private JButton insertionButton;
+	private JButton selectionButton;
+	private JButton mergeButton;
+	private JButton quickButton;
+	private JButton performanceButton;
+	private JComboBox<String> sizeChanger;
+	private SwingWorker<Void, Integer[]> arrSort;
 
+	/*
+	 * In main(), we initialize an AlgVisualizer object, all instance variables, set
+	 * up the frame / window that the application will run inside, and make it
+	 * visible. By the end, a window containing what is meant to be shown on
+	 * application start up will open on the users screen, waiting for input.
+	 */
 	public static void main(String[] args) {
 		AlgVisualizer algVisualizer = new AlgVisualizer();
 		algVisualizer.initializeVars();
 		algVisualizer.setFrame();
 	}
 
+	public AlgVisualizer() {
+		// empty constructor, variables are initialized in main method.
+	}
+
+	/*
+	 * This method initializes all of this classes instance variables. The array is
+	 * initialized, filled, and shuffled. The arrDisplay object that paints the
+	 * array in bar graph form is initialized and passed the array. All buttons are
+	 * initialized and include an action listener.
+	 * 
+	 */
 	public void initializeVars() {
 
 		setN(10);
@@ -51,14 +81,27 @@ public class AlgVisualizer implements ActionListener {
 		arr = new Integer[n];
 		arr = fillArr(arr);
 		arr = shuffleArr(arr);
-		
+
 		indexComparisons = 0;
+
+		// Initialize objects that will display and sort the array
 
 		arrDisplay = new ArrDisplay(this, arr);
 		arrDisplay.setPreferredSize(new Dimension(CONTENT_WIDTH, ARR_DISPLAY_HEIGHT));
-		
+
 		arrSort = new ArrSorting(this, this.arr, this.arrDisplay);
-		
+
+		// Panels in the frame that will hold all components.
+		// JPanels use the flowLayout to manage their components automatically.
+
+		buttonPanel = new JPanel();
+		buttonPanel.setBackground(Color.DARK_GRAY);
+
+		arrPanel = new JPanel();
+		arrPanel.add(arrDisplay);
+
+		// Initialize all components and add action listeners
+
 		resetButton = new JButton("Reset");
 		resetButton.addActionListener(this);
 		resetButton.setBackground(Color.WHITE);
@@ -83,20 +126,24 @@ public class AlgVisualizer implements ActionListener {
 		quickButton.addActionListener(this);
 		quickButton.setBackground(Color.WHITE);
 
-		sizeChanger = new JComboBox<String>(SIZE_OPTIONS);
+		sizeChanger = new JComboBox<String>(SIZE_OPTIONS); // Pass the String containing all of the size options
 		sizeChanger.addActionListener(this);
 		sizeChanger.setBackground(Color.WHITE);
-		
+
 		performanceButton = new JButton("Performance");
 		performanceButton.addActionListener(this);
 		performanceButton.setBackground(Color.WHITE);
-		performanceButton.setEnabled(false);
+		performanceButton.setEnabled(false); // This button is not available until a sort is complete
 	}
 
+	/*
+	 * setFrame() will add all the components that were initialized in the
+	 * initializeVars() method to JPanels, which will then also be added to the main
+	 * JFrame. The frame is initialized and made visible.
+	 */
 	public void setFrame() {
 
-		buttonPanel = new JPanel();
-		buttonPanel.setBackground(Color.DARK_GRAY);
+		// Add JButtons / components to button panel
 		buttonPanel.add(resetButton);
 		buttonPanel.add(bubbleButton);
 		buttonPanel.add(selectionButton);
@@ -105,29 +152,38 @@ public class AlgVisualizer implements ActionListener {
 		buttonPanel.add(quickButton);
 		buttonPanel.add(sizeChanger);
 		buttonPanel.add(performanceButton);
-		buttonPanel.setVisible(true);
 
-		arrPanel = new JPanel();
-		arrPanel.add(arrDisplay);
-		arrPanel.setVisible(true);
-		
-		frame.setVisible(true);
+		// Initialize and make the frame visible
+		frame = new JFrame("Algorithm Visualizer");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		frame.add(buttonPanel, BorderLayout.PAGE_START);
-		frame.add(arrPanel, BorderLayout.PAGE_END);
+		frame.setResizable(false); // Cannot be resizable, causes visual issues
+		frame.add(buttonPanel, BorderLayout.PAGE_START); // Button panel added to the top of the frame
+		frame.add(arrPanel, BorderLayout.PAGE_END); // Array display is added to the bottom of the frame
 		frame.pack();
-		frame.setLocationRelativeTo(null);
+		frame.setLocationRelativeTo(null); // center of the screen
+		frame.setVisible(true);
+
 	}
 
+	/*
+	 * When an action is performed on a component on the JFrame that has had this
+	 * classes actionListener added to it, this method will decide what to do based
+	 * on what component was clicked on. When a sorting button is clicked, its
+	 * respective boolean do(..)Sort will be set to true, and arrSort().execute.
+	 * This will call the doInBackground() method in the arrSort object, where it
+	 * will use the do(..)Sort variable to discover which sorting algorithm to use,
+	 * or if there is simply a reset.
+	 */
 	public void actionPerformed(ActionEvent event) {
+		// Any time an action is performed, sorting is stopped
 		setStopSort(false);
 		doBubbleSort = false;
 		doSelectionSort = false;
 		doInsertionSort = false;
 		doMergeSort = false;
 		doQuickSort = false;
-		
+
+		// Find the source of the action
 		if (event.getSource() == bubbleButton) {
 			doBubbleSort = true;
 			arrSort.execute();
@@ -147,24 +203,37 @@ public class AlgVisualizer implements ActionListener {
 			reset();
 			arrSort.execute();
 		} else if (event.getSource() == sizeChanger) {
-			// Create a new array of the size selected
+			// Find what size was selected, and set n to that value
 			String selectedSize = (String) sizeChanger.getSelectedItem();
 			setN(Integer.valueOf(selectedSize));
+
+			// Create the new array of length n, and it will be shuffled in reset()
 			arr = new Integer[n];
 			arr = fillArr(arr);
-			// Clear and paint the new array
+
+			// reset and paint the new array
 			reset();
 			arrSort.execute();
 		} else if (event.getSource() == performanceButton) {
-			//open JOptionPane
 			int numSwaps = arrDisplay.getSwappedIndexes().size();
-			long timeElapsed = endTime - startTime;
-			long realTimeElapsed = timeElapsed - (60 * numSwaps);
-			String statsMessage = String.format("Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms  Sorting Time : %dms", indexComparisons, numSwaps, timeElapsed, realTimeElapsed);
+			long visualizationTime = endTime - startTime; // net time
+			long sortingTime = visualizationTime - (60 * numSwaps + 1); // - 60 seconds of sleep time between each swap
+			String statsMessage = String.format(
+					"Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms  Sorting Time : %dms",
+					indexComparisons, numSwaps, visualizationTime, sortingTime);
 			JOptionPane.showMessageDialog(frame, statsMessage, "Performance", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 
+	/*
+	 * Reset method is called whenever the user presses the reset button, or when a
+	 * new size of array is chosen from the size changer. This method stops sorting,
+	 * re-shuffles the array, clears all swapped indexes, frames painted, tracked
+	 * time, and comparisons. It must also reset the swingWorker so that the user is
+	 * able to see another sort. Since sort.execute() can only be called once for
+	 * SwingWorker, we simply re-instantiate it so that we are able to call it
+	 * again.
+	 */
 	public void reset() {
 		setStopSort(true);
 		arr = shuffleArr(arr);
@@ -177,11 +246,14 @@ public class AlgVisualizer implements ActionListener {
 		resetSwingWorker(this, arr, arrDisplay);
 	}
 
+	// Re-instantiates the SwingWorker so that execute() can be called again.
 	public void resetSwingWorker(AlgVisualizer alg, Integer[] arr, ArrDisplay displayArr) {
-		arrSort = new ArrSorting(this, arr, displayArr); // need to reset arrAccesses and timeElapsed
+		arrSort = new ArrSorting(this, arr, displayArr);
 	}
-	
-	public void resetTime(){
+
+	// Reset the timer on the previous sort that was done, used in the reset()
+	// method
+	public void resetTime() {
 		startTime = 0;
 		endTime = 0;
 	}
@@ -243,6 +315,10 @@ public class AlgVisualizer implements ActionListener {
 		}
 	}
 
+	/*
+	 * getSort() returns a string containing the sorting algorithm that is currently
+	 * being used to sort the array.
+	 */
 	public String getSort() {
 		String sort = "Not Sorting";
 		if (doBubbleSort)
@@ -258,12 +334,21 @@ public class AlgVisualizer implements ActionListener {
 		return sort;
 	}
 
+	/*
+	 * Returns the boolean value representing the status of the application. If
+	 * there is currently a sorting algorithm being used, it will return false.
+	 */
 	public boolean stopSort() {
 		return stopSort;
 	}
 
+	/*
+	 * Since the availability of the buttons is based on the stopSort variable, we
+	 * control them from this setter method. If we want to stop sorting, we enable
+	 * all of the sorting buttons again, if we are starting a sorting algorithm,
+	 * disable them.
+	 */
 	public void setStopSort(boolean toSet) {
-		// The availability of the sort buttons depends on the status of stopSort
 		bubbleButton.setEnabled(toSet);
 		selectionButton.setEnabled(toSet);
 		insertionButton.setEnabled(toSet);
@@ -279,15 +364,15 @@ public class AlgVisualizer implements ActionListener {
 	public void setN(int n) {
 		this.n = n;
 	}
-	
-	public JButton getStatsButton() {
+
+	public JButton getPerformanceButton() {
 		return performanceButton;
 	}
-	
+
 	public Integer getIndexComparisons() {
 		return indexComparisons;
 	}
-	
+
 	public void setIndexComparisons(int indexComparisons) {
 		this.indexComparisons = indexComparisons;
 	}
@@ -306,5 +391,5 @@ public class AlgVisualizer implements ActionListener {
 
 	public void setEndTime(long endTime) {
 		this.endTime = endTime;
-	}	
+	}
 }
