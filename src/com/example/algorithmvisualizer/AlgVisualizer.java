@@ -22,10 +22,10 @@ import java.awt.event.*;
 
 public class AlgVisualizer implements ActionListener {
 
-	private final int CONTENT_WIDTH = 800;
-	private final int CONTENT_HEIGHT = 860;
-	private final int ARR_DISPLAY_HEIGHT = 800;
-	private final String[] SIZE_OPTIONS = { "10", "50", "100", "200", "400", "800" }; // array size options
+	private final int CONTENT_WIDTH = 900;
+	private final int CONTENT_HEIGHT = 960;
+	private final int ARR_DISPLAY_HEIGHT = 900;
+	private final String[] SIZE_OPTIONS = { "10", "50", "100", "300", "450", "900" }; // array size options
 	private int n;
 	private int numSwaps;
 	private int delay;
@@ -50,6 +50,7 @@ public class AlgVisualizer implements ActionListener {
 	private JButton mergeButton;
 	private JButton quickButton;
 	private JComboBox<String> sizeChanger;
+	private JSlider FPSslider;
 	private JLabel performanceLabel;
 	private SwingWorker<Void, Integer[]> arrSort;
 
@@ -135,6 +136,8 @@ public class AlgVisualizer implements ActionListener {
 		sizeChanger = new JComboBox<String>(SIZE_OPTIONS); // Pass the String containing all of the size options
 		sizeChanger.addActionListener(this);
 		sizeChanger.setBackground(Color.WHITE);
+		
+		FPSslider = new JSlider(JSlider.HORIZONTAL, 0, 30, 15);
 
 		// Initialize the performance label and center it
 
@@ -157,6 +160,7 @@ public class AlgVisualizer implements ActionListener {
 		buttonPanel.add(mergeButton);
 		buttonPanel.add(quickButton);
 		buttonPanel.add(sizeChanger);
+		buttonPanel.add(FPSslider);
 
 		// Initialize and make the frame visible
 		frame = new JFrame("Algorithm Visualizer");
@@ -438,5 +442,13 @@ public class AlgVisualizer implements ActionListener {
 
 	public void setDelay(int delay) {
 		this.delay = delay;
+	}
+
+	public JSlider getFPSslider() {
+		return FPSslider;
+	}
+
+	public void setFPSslider(JSlider fPSslider) {
+		FPSslider = fPSslider;
 	}
 }
