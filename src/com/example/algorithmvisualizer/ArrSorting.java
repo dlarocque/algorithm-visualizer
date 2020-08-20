@@ -18,12 +18,11 @@ import javax.swing.SwingWorker;
 
 public class ArrSorting extends SwingWorker<Void, Integer[]> {
 
-	private Integer delay = 10;
 	private int n;
 	private Integer[] arr;
 	private AlgVisualizer algVisualizer;
 	private ArrDisplay arrDisplay;
-	private int numChunk;
+	private int numChunks;
 
 	public ArrSorting(AlgVisualizer algVisualizer, Integer[] arr, ArrDisplay arrDisplay) {
 		this.algVisualizer = algVisualizer;
@@ -87,8 +86,8 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	protected void process(List<Integer[]> chunks) {
 		while (chunks.size() > 0) {
 			// Paint each cloned array and update number of chunks
-			numChunk++;
-			arrDisplay.setNumChunk(this.numChunk);
+			numChunks++;
+			arrDisplay.setNumChunk(this.numChunks);
 			arrDisplay.setArr(chunks.get(0));
 			arrDisplay.repaint();
 			chunks.remove(0);
@@ -101,7 +100,9 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	 */
 	private void sleep() {
 		try {
-			Thread.sleep(delay);
+			Thread.sleep(algVisualizer.getDelay());
+			if (!algVisualizer.stopSort())
+				algVisualizer.setTotalDelay(algVisualizer.getTotalDelay() + algVisualizer.getDelay());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

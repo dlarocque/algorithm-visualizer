@@ -18,18 +18,29 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.event.*;
 
-public class AlgVisualizer implements ActionListener {
+public class AlgVisualizer implements ActionListener, ChangeListener {
 
+	private final int CONTENT_WIDTH = 900;
+	private final int CONTENT_HEIGHT = 960;
+	private final int ARR_DISPLAY_HEIGHT = 900;
+	private final int FPS_MIN = 1;
+	private final int FPS_INIT = 10;
+	private final int FPS_MAX = 100;
+	private final String[] SIZE_OPTIONS = { "10", "50", "100", "300", "450", "900" }; // array size options
 	private int n;
-	private final int CONTENT_WIDTH = 800;
-	private final int CONTENT_HEIGHT = 860;
-	private final int ARR_DISPLAY_HEIGHT = 800;
-	private final String[] SIZE_OPTIONS = { "10", "50", "100", "200", "400", "800" }; // array size options
+	private int numSwaps;
+	private int delay;
+	private long totalDelay;
 	private Integer indexComparisons;
 	private long startTime; // start time of a sort
 	private long endTime; // end time of a sort
+	private long visualizationTime;
+	private long sortingTime;
 	private boolean doBubbleSort;
 	private boolean doInsertionSort;
 	private boolean doSelectionSort;
@@ -47,8 +58,9 @@ public class AlgVisualizer implements ActionListener {
 	private JButton selectionButton;
 	private JButton mergeButton;
 	private JButton quickButton;
-	private JButton performanceButton;
 	private JComboBox<String> sizeChanger;
+	private JSlider FPSslider;
+	private JLabel performanceLabel;
 	private SwingWorker<Void, Integer[]> arrSort;
 
 	/*
@@ -83,6 +95,11 @@ public class AlgVisualizer implements ActionListener {
 		arr = shuffleArr(arr);
 
 		indexComparisons = 0;
+		startTime = 0;
+		endTime = 0;
+		visualizationTime = 0;
+		sortingTime = 0;
+		setDelay(1000 / FPS_INIT);
 
 		// Initialize objects that will display and sort the array
 
@@ -131,10 +148,13 @@ public class AlgVisualizer implements ActionListener {
 		sizeChanger.addActionListener(this);
 		sizeChanger.setBackground(Color.WHITE);
 
-		performanceButton = new JButton("Performance");
-		performanceButton.addActionListener(this);
-		performanceButton.setBackground(Color.WHITE);
-		performanceButton.setEnabled(false); // This button is not available until a sort is complete
+		FPSslider = new JSlider(JSlider.HORIZONTAL, FPS_MIN, FPS_MAX, FPS_INIT);
+		FPSslider.addChangeListener(this);
+		FPSslider.setBackground(Color.DARK_GRAY);
+		// Initialize the performance label and center it
+
+		performanceLabel = new JLabel();
+		performanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
 	}
 
 	/*
@@ -152,7 +172,7 @@ public class AlgVisualizer implements ActionListener {
 		buttonPanel.add(mergeButton);
 		buttonPanel.add(quickButton);
 		buttonPanel.add(sizeChanger);
-		buttonPanel.add(performanceButton);
+		buttonPanel.add(FPSslider);
 
 		// Initialize and make the frame visible
 		frame = new JFrame("Algorithm Visualizer");
@@ -160,6 +180,7 @@ public class AlgVisualizer implements ActionListener {
 		frame.setResizable(false); // Cannot be resizable, causes visual issues
 		frame.add(buttonPanel, BorderLayout.PAGE_START); // Button panel added to the top of the frame
 		frame.add(arrPanel, BorderLayout.PAGE_END); // Array display is added to the bottom of the frame
+		frame.add(performanceLabel);
 		frame.pack();
 		frame.setLocationRelativeTo(null); // center of the screen
 		frame.setVisible(true);
@@ -215,14 +236,16 @@ public class AlgVisualizer implements ActionListener {
 			// reset and paint the new array
 			reset();
 			arrSort.execute();
-		} else if (event.getSource() == performanceButton) {
-			int numSwaps = arrDisplay.getSwappedIndexes().size();
-			long visualizationTime = endTime - startTime; // net time
-			long sortingTime = visualizationTime - (60 * numSwaps + 1); // - NEED TO FIX
-			String statsMessage = String.format(
-					"Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms  Sorting Time : %dms",
-					indexComparisons, numSwaps, visualizationTime, sortingTime);
-			JOptionPane.showMessageDialog(frame, statsMessage, "Performance", JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		JSlider source = (JSlider) e.getSource();
+		if (!source.getValueIsAdjusting()) {
+			int fps = (int) source.getValue();
+			delay = 1000 / fps; // ms
+			setDelay(delay);
 		}
 	}
 
@@ -239,7 +262,6 @@ public class AlgVisualizer implements ActionListener {
 		setStopSort(true);
 		arr = shuffleArr(arr);
 		arrDisplay.clearSwappedIndexes();
-		arrDisplay.setNumChunk(0);
 		arrDisplay.setComplete(false);
 		arrDisplay.setArr(arr);
 		indexComparisons = 0;
@@ -257,6 +279,9 @@ public class AlgVisualizer implements ActionListener {
 	public void resetTime() {
 		startTime = 0;
 		endTime = 0;
+		visualizationTime = 0;
+		sortingTime = 0;
+		totalDelay = 0;
 	}
 
 	public Integer[] shuffleArr(Integer[] arr) {
@@ -272,6 +297,40 @@ public class AlgVisualizer implements ActionListener {
 			arr[i] = i + 1;
 		}
 		return arr;
+	}
+
+	/*
+	 * updatePerformance will be called every time the array is repainted. This
+	 * makes it slower / not real time when there is a high delay.
+	 * 
+	 * We get the values for each performance statistic we want to track (number of
+	 * swaps, number of comparisons, visualization time, sorting time), format them
+	 * into a string that will then be assigned to the JLabel's text.
+	 * 
+	 * frame.pack() makes sure that our new text will fit in the frame, and will
+	 * adjust if it does not.
+	 */
+	public void updatePerformance() {
+		numSwaps = arrDisplay.getSwappedIndexes().size();
+		System.out.println("total delay " + totalDelay);
+		if (!getSort().equals("Not Sorting") && arrDisplay.getNumChunks() == 1) {
+			visualizationTime = System.currentTimeMillis() - startTime;
+			sortingTime = visualizationTime - totalDelay;
+		} else if (arrDisplay.getNumChunks() > 1) {
+			visualizationTime = System.currentTimeMillis() - startTime;
+			sortingTime = visualizationTime - totalDelay;
+		}
+		if(stopSort) {
+			resetTime();
+		}
+
+		String performance = String.format(
+				"Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms  Sorting Time : %dms",
+				indexComparisons, numSwaps, visualizationTime, sortingTime);
+
+		performanceLabel.setText(performance);
+
+		frame.pack();
 	}
 
 	public Integer[] getArr() {
@@ -366,10 +425,6 @@ public class AlgVisualizer implements ActionListener {
 		this.n = n;
 	}
 
-	public JButton getPerformanceButton() {
-		return performanceButton;
-	}
-
 	public Integer getIndexComparisons() {
 		return indexComparisons;
 	}
@@ -392,5 +447,45 @@ public class AlgVisualizer implements ActionListener {
 
 	public void setEndTime(long endTime) {
 		this.endTime = endTime;
+	}
+
+	public JLabel getPerformanceLabel() {
+		return performanceLabel;
+	}
+
+	public void setPerformanceLabel(JLabel performanceLabel) {
+		this.performanceLabel = performanceLabel;
+	}
+
+	public int getNumSwaps() {
+		return numSwaps;
+	}
+
+	public void setNumSwaps(int numSwaps) {
+		this.numSwaps = numSwaps;
+	}
+
+	public int getDelay() {
+		return delay;
+	}
+
+	public void setDelay(int delay) {
+		this.delay = delay;
+	}
+
+	public JSlider getFPSslider() {
+		return FPSslider;
+	}
+
+	public void setFPSslider(JSlider fPSslider) {
+		FPSslider = fPSslider;
+	}
+
+	public long getTotalDelay() {
+		return totalDelay;
+	}
+
+	public void setTotalDelay(long totalDelay) {
+		this.totalDelay = totalDelay;
 	}
 }
