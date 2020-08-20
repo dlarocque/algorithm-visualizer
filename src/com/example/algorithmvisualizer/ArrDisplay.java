@@ -22,7 +22,7 @@ public class ArrDisplay extends JComponent {
 	private static final long serialVersionUID = 1L;
 	private int swappedIndex1;
 	private int swappedIndex2;
-	private int numChunk; // amount of frames painted since the array was shuffled
+	private int numChunks; // amount of frames painted since the array was shuffled
 	private boolean isComplete; // if the array is sorted
 	private ArrayList<Integer[]> swappedIndexes;
 	private Integer[] arr;
@@ -61,8 +61,9 @@ public class ArrDisplay extends JComponent {
 			swappedIndex1 = -1;
 			swappedIndex2 = -1;
 		} else if (!algVisualizer.stopSort()) {
-			swappedIndex1 = swappedIndexes.get(numChunk - 1)[0];
-			swappedIndex2 = swappedIndexes.get(numChunk - 1)[1];
+			// exclude the first chunk as its used to draw the first array, not related to the sorting
+			swappedIndex1 = swappedIndexes.get(numChunks - 1)[0];	// index out of bounds exception?
+			swappedIndex2 = swappedIndexes.get(numChunks - 1)[1];
 		}
 
 		// Iterate through the array and drawn every index
@@ -89,6 +90,7 @@ public class ArrDisplay extends JComponent {
 			// Draw the current indexes bar
 			graphics2d.fillRect(x, y, width, height);
 		}
+		algVisualizer.updatePerformance();
 	}
 
 	public ArrayList<Integer[]> getSwappedIndexes() {
@@ -104,12 +106,12 @@ public class ArrDisplay extends JComponent {
 		swappedIndexes = new ArrayList<Integer[]>();
 	}
 
-	public void setNumChunk(int numChunk) {
-		this.numChunk = numChunk;
+	public void setNumChunk(int numChunks) {
+		this.numChunks = numChunks;
 	}
 
-	public int getNumChunk() {
-		return numChunk;
+	public int getNumChunks() {
+		return numChunks;
 	}
 
 	public boolean isComplete() {
@@ -117,10 +119,6 @@ public class ArrDisplay extends JComponent {
 	}
 
 	public void setComplete(boolean complete) {
-		// Performance Button's availability is based on whether or not the array is
-		// sorted.
-		algVisualizer.getPerformanceButton().setEnabled(complete);
-
 		this.isComplete = complete;
 	}
 

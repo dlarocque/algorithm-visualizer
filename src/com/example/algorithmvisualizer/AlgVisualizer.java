@@ -22,11 +22,13 @@ import java.awt.event.*;
 
 public class AlgVisualizer implements ActionListener {
 
-	private int n;
 	private final int CONTENT_WIDTH = 800;
 	private final int CONTENT_HEIGHT = 860;
 	private final int ARR_DISPLAY_HEIGHT = 800;
 	private final String[] SIZE_OPTIONS = { "10", "50", "100", "200", "400", "800" }; // array size options
+	private int n;
+	private int numSwaps;
+	private int delay;
 	private Integer indexComparisons;
 	private long startTime; // start time of a sort
 	private long endTime; // end time of a sort
@@ -47,8 +49,8 @@ public class AlgVisualizer implements ActionListener {
 	private JButton selectionButton;
 	private JButton mergeButton;
 	private JButton quickButton;
-	private JButton performanceButton;
 	private JComboBox<String> sizeChanger;
+	private JLabel performanceLabel;
 	private SwingWorker<Void, Integer[]> arrSort;
 
 	/*
@@ -83,6 +85,9 @@ public class AlgVisualizer implements ActionListener {
 		arr = shuffleArr(arr);
 
 		indexComparisons = 0;
+		startTime = 0;
+		endTime = 0;
+		setDelay(2);
 
 		// Initialize objects that will display and sort the array
 
@@ -131,10 +136,10 @@ public class AlgVisualizer implements ActionListener {
 		sizeChanger.addActionListener(this);
 		sizeChanger.setBackground(Color.WHITE);
 
-		performanceButton = new JButton("Performance");
-		performanceButton.addActionListener(this);
-		performanceButton.setBackground(Color.WHITE);
-		performanceButton.setEnabled(false); // This button is not available until a sort is complete
+		// Initialize the performance label and center it
+
+		performanceLabel = new JLabel();
+		performanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
 	}
 
 	/*
@@ -152,7 +157,6 @@ public class AlgVisualizer implements ActionListener {
 		buttonPanel.add(mergeButton);
 		buttonPanel.add(quickButton);
 		buttonPanel.add(sizeChanger);
-		buttonPanel.add(performanceButton);
 
 		// Initialize and make the frame visible
 		frame = new JFrame("Algorithm Visualizer");
@@ -160,6 +164,7 @@ public class AlgVisualizer implements ActionListener {
 		frame.setResizable(false); // Cannot be resizable, causes visual issues
 		frame.add(buttonPanel, BorderLayout.PAGE_START); // Button panel added to the top of the frame
 		frame.add(arrPanel, BorderLayout.PAGE_END); // Array display is added to the bottom of the frame
+		frame.add(performanceLabel);
 		frame.pack();
 		frame.setLocationRelativeTo(null); // center of the screen
 		frame.setVisible(true);
@@ -215,14 +220,6 @@ public class AlgVisualizer implements ActionListener {
 			// reset and paint the new array
 			reset();
 			arrSort.execute();
-		} else if (event.getSource() == performanceButton) {
-			int numSwaps = arrDisplay.getSwappedIndexes().size();
-			long visualizationTime = endTime - startTime; // net time
-			long sortingTime = visualizationTime - (60 * numSwaps + 1); // - NEED TO FIX
-			String statsMessage = String.format(
-					"Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms  Sorting Time : %dms",
-					indexComparisons, numSwaps, visualizationTime, sortingTime);
-			JOptionPane.showMessageDialog(frame, statsMessage, "Performance", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 
@@ -239,7 +236,6 @@ public class AlgVisualizer implements ActionListener {
 		setStopSort(true);
 		arr = shuffleArr(arr);
 		arrDisplay.clearSwappedIndexes();
-		arrDisplay.setNumChunk(0);
 		arrDisplay.setComplete(false);
 		arrDisplay.setArr(arr);
 		indexComparisons = 0;
@@ -272,6 +268,36 @@ public class AlgVisualizer implements ActionListener {
 			arr[i] = i + 1;
 		}
 		return arr;
+	}
+
+	/*
+	 * updatePerformance will be called every time the array is repainted. This
+	 * makes it slower / not real time when there is a high delay.
+	 * 
+	 * We get the values for each performance statistic we want to track (number of
+	 * swaps, number of comparisons, visualization time, sorting time), format them
+	 * into a string that will then be assigned to the JLabel's text.
+	 * 
+	 * frame.pack() makes sure that our new text will fit in the frame, and will
+	 * adjust if it does not.
+	 */
+	public void updatePerformance() {
+		numSwaps = arrDisplay.getSwappedIndexes().size();
+
+		long visualizationTime = 0;
+		long sortingTime = 0;
+		if (!getSort().equals("Not Sorting")) {
+			visualizationTime = System.currentTimeMillis() - startTime;
+			sortingTime = visualizationTime - (delay * (arrDisplay.getNumChunks() - 1));
+		}
+
+		String performance = String.format(
+				"Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms  Sorting Time : %dms",
+				indexComparisons, numSwaps, visualizationTime, sortingTime);
+
+		performanceLabel.setText(performance);
+
+		frame.pack();
 	}
 
 	public Integer[] getArr() {
@@ -366,10 +392,6 @@ public class AlgVisualizer implements ActionListener {
 		this.n = n;
 	}
 
-	public JButton getPerformanceButton() {
-		return performanceButton;
-	}
-
 	public Integer getIndexComparisons() {
 		return indexComparisons;
 	}
@@ -392,5 +414,29 @@ public class AlgVisualizer implements ActionListener {
 
 	public void setEndTime(long endTime) {
 		this.endTime = endTime;
+	}
+
+	public JLabel getPerformanceLabel() {
+		return performanceLabel;
+	}
+
+	public void setPerformanceLabel(JLabel performanceLabel) {
+		this.performanceLabel = performanceLabel;
+	}
+
+	public int getNumSwaps() {
+		return numSwaps;
+	}
+
+	public void setNumSwaps(int numSwaps) {
+		this.numSwaps = numSwaps;
+	}
+
+	public int getDelay() {
+		return delay;
+	}
+
+	public void setDelay(int delay) {
+		this.delay = delay;
 	}
 }
