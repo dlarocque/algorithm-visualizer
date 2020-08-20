@@ -18,11 +18,12 @@ import javax.swing.SwingWorker;
 
 public class ArrSorting extends SwingWorker<Void, Integer[]> {
 
-	private final int SLEEP_TIME = 60; // sleep time between frames drawn (ms)
+	private Integer delay = 10;
 	private int n;
 	private Integer[] arr;
 	private AlgVisualizer algVisualizer;
 	private ArrDisplay arrDisplay;
+	private int numChunk;
 
 	public ArrSorting(AlgVisualizer algVisualizer, Integer[] arr, ArrDisplay arrDisplay) {
 		this.algVisualizer = algVisualizer;
@@ -37,7 +38,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	 * determine what buttons was clicked, helping determine what action to do next.
 	 * If a reset was done, redraw the new shuffled array, and reset this object so
 	 * that it is able to sort the next time execute() is called. If a sorting
-	 * algorithm was clicked, simply perform that sorting algortihm. Make sure to
+	 * algorithm was clicked, simply perform that sorting algorithm. Make sure to
 	 * set the start and end times for the performance window at the end of sorting.
 	 */
 	@Override
@@ -65,29 +66,42 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	}
 
 	/*
-	 * This method is called by the publish(arr.clone()) method in the sorting
-	 * algorithms. It takes in a chunk of the array that was sent as a parameter,
-	 * and repaints it using the overridden paintComponent(). ISSUE : If an array
-	 * clone is sent to this method as a chunk before the repaint() method is
-	 * complete, the visualization can come out of sync. See issue #23 at
-	 * https://github.com/dlarocque/AlgorithmVisualizer/issues/23
+	 * This method accepts a clone of the array that was sent to it as a parameter
+	 * from the sorting algorithms. If this method isn't finished executing by the
+	 * time that another publish(Arr.clone()) is made, it will send in the array
+	 * clone at the end of the list of chunks.
+	 * 
+	 * Since the repaint() method can not keep up with the amount of chunks sent in
+	 * from the sorting algorithms when there is very low delay time (Repaint time
+	 * depends on the system), it will only draw a fraction of the array clones sent
+	 * to it.
+	 * 
+	 * To make sure that the colored bars representing the swapped indexes are in
+	 * sync with the array being painted, we track the amount of chunks sent, and
+	 * send it to arrDisplay, so that whenever repaint() has the opportunity to
+	 * execute, the chunk number of the array clone that is being drawn will be
+	 * represented by numChunk, which will be used to get the swappedIndexes from
+	 * the list. ( numChunk are swappedIndexes.size() are always equal. )
 	 */
 	@Override
 	protected void process(List<Integer[]> chunks) {
-		if (chunks.size() > 1) {
-			// If chunks > 1, Red bars will be out of sync
-			System.out.println("OVERLOAD" + chunks.size());
+		while (chunks.size() > 0) {
+			// Paint each cloned array and update number of chunks
+			numChunk++;
+			arrDisplay.setNumChunk(this.numChunk);
+			arrDisplay.setArr(chunks.get(0));
+			arrDisplay.repaint();
+			chunks.remove(0);
 		}
-		arrDisplay.repaint();
 	}
 
 	/*
-	 * Amount of time this thread will sleep for, waiting for the repaint() method
-	 * to draw the previous clone of the array.
+	 * The amount of time this thread waits after sending a chunk to be drawn in the
+	 * Event Dispatch Thread
 	 */
 	private void sleep() {
 		try {
-			Thread.sleep(SLEEP_TIME);
+			Thread.sleep(delay);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -116,17 +130,18 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 						// Add the pair of indexes that were swapped to the list.
 						arrDisplay.addSwappedIndexes(j, j + 1);
 						// Repaint the new array.
-						publish();
+						publish(arr.clone());
 						sleep();
 					}
 				}
 			}
 		}
-		// If sorting hasn't been stopped, set end time, complete and draw one more time.
+		// If sorting hasn't been stopped, set end time, complete and draw one more
+		// time.
 		if (!algVisualizer.stopSort()) {
 			algVisualizer.setEndTime(System.currentTimeMillis());
 			arrDisplay.setComplete(true);
-			publish();
+			publish(arr.clone());
 			sleep();
 		}
 	}
@@ -154,13 +169,13 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 			// Add a pair of swapped indexes
 			arrDisplay.addSwappedIndexes(min_idx, i);
 			// Repaint the new array.
-			publish();
+			publish(arr.clone());
 			sleep();
 		}
 		// If sorting hasn't been stopped, set complete and draw one more time.
 		if (!algVisualizer.stopSort()) {
 			arrDisplay.setComplete(true);
-			publish();
+			publish(arr.clone());
 			sleep();
 		}
 	}
@@ -178,7 +193,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 
 			while (j >= 0 && arr[j] > key) { // compare arr[j] and arr[i]
 				if (algVisualizer.stopSort()) {
-					publish();
+					publish(arr.clone());
 					sleep();
 					break;
 				}
@@ -190,7 +205,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 				// Add a pair of swapped indexes
 				arrDisplay.addSwappedIndexes(j, j + 1);
 				// Repaint the array
-				publish();
+				publish(arr.clone());
 				sleep();
 			}
 			// Add a pair of swapped indexes
@@ -201,7 +216,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 		// If sorting hasn't been stopped, set complete and draw one more time.
 		if (!algVisualizer.stopSort()) {
 			arrDisplay.setComplete(true);
-			publish();
+			publish(arr.clone());
 			sleep();
 		}
 	}
@@ -222,7 +237,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 			// If sorting is done and a reset has not been done, repaint one more time
 			if (isSorted() && !algVisualizer.stopSort()) {
 				arrDisplay.setComplete(true);
-				publish();
+				publish(arr.clone());
 				sleep();
 
 			}
@@ -268,7 +283,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 					// Add a pair of swapped indexes
 					arrDisplay.addSwappedIndexes(k, k + i);
 					// Repaint the array
-					publish();
+					publish(arr.clone());
 					sleep();
 				} else {
 					arr[k] = R[j];
@@ -276,7 +291,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 					// Add a pair of swapped indexes
 					arrDisplay.addSwappedIndexes(k, k + j);
 					// Repaint the arrays
-					publish();
+					publish(arr.clone());
 					sleep();
 				}
 				k++;
@@ -292,7 +307,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 				// Add a pair of swapped indexes
 				arrDisplay.addSwappedIndexes(k, k + i);
 				// Repaint the array
-				publish();
+				publish(arr.clone());
 				sleep();
 				i++;
 				k++;
@@ -307,7 +322,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 				arr[k] = R[j];
 				// Add a pair of swapped indexes
 				arrDisplay.addSwappedIndexes(k, k + j);
-				publish();
+				publish(arr.clone());
 				sleep();
 				j++;
 				k++;
@@ -316,7 +331,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	}
 
 	private void quickSort(int low, int high) {
-		if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) {  // Needed because of recursion
+		if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) { // Needed because of recursion
 			if (low < high) {
 				// pi is partitioning index, arr[pi] is now at right place
 				int pi = partition(low, high);
@@ -330,7 +345,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 			// the array is sorted besides this
 			if (isSorted() && !algVisualizer.stopSort()) {
 				arrDisplay.setComplete(true);
-				publish();
+				publish(arr.clone());
 				sleep();
 			}
 		}
@@ -342,7 +357,8 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 			int i = (low - 1); // index of smaller element
 
 			for (int j = low; j < high; j++) {
-				if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) { // Needed because of recursion
+				if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) { // Needed because of
+																									// recursion
 					// Add a comparison
 					algVisualizer.setIndexComparisons(algVisualizer.getIndexComparisons() + 1);
 
@@ -363,7 +379,8 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 					}
 				}
 			}
-			if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) { // Needed because of recursion
+			if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) { // Needed because of
+																								// recursion
 				// swap arr[i+1] and arr[high] (or pivot)
 				int temp = arr[i + 1];
 				arr[i + 1] = arr[high];

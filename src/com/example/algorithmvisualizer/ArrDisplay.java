@@ -22,15 +22,14 @@ public class ArrDisplay extends JComponent {
 	private static final long serialVersionUID = 1L;
 	private int swappedIndex1;
 	private int swappedIndex2;
-	private int framesPainted; // amount of frames painted since the array was shuffled
+	private int numChunk; // amount of frames painted since the array was shuffled
 	private boolean isComplete; // if the array is sorted
 	private ArrayList<Integer[]> swappedIndexes;
 	private Integer[] arr;
 	private AlgVisualizer algVisualizer;
 
-	public ArrDisplay(AlgVisualizer algVisualizer, Integer[] arr) {
+	public ArrDisplay(AlgVisualizer algVisualizer) {
 		this.algVisualizer = algVisualizer;
-		this.arr = arr;
 		swappedIndexes = new ArrayList<Integer[]>();
 	}
 
@@ -39,12 +38,15 @@ public class ArrDisplay extends JComponent {
 	 * visualization of the array in bar graph form. This method is called through
 	 * the use of the repaint() method that is called in the SwingWorkers publish()
 	 * method. We use loops to iterate through the array and draw every index,
-	 * filling the arrPanel. A list of arrays contains pairs of swapped indexes that
-	 * are drawn in red & blue. We iterate through this list every frame by keeping
-	 * track of the amount of frames drawn. ISSUE : If the number of framesPainted
-	 * is out of sync with the List of pairs of swappedIndexes, the coloured bars
-	 * will be out of sync with the actual indexes that are being swapped, giving
-	 * the effect of a very noticeable delay.
+	 * filling the arrPanel.
+	 * 
+	 * Since this method can take some time to execute, it may only be able to draw
+	 * a fraction of the total frames at lower delay times.
+	 * 
+	 * There is a list of swappedIndexes that contains each pair of indexes that
+	 * were swapped during sorting. Since we always draw the most recent chunk,
+	 * numChunks will always represent the number of the array clone we're drawing,
+	 * so using that to get the correct index in swappedIndexes will work.
 	 */
 	@Override
 	public void paintComponent(Graphics g) {
@@ -59,8 +61,8 @@ public class ArrDisplay extends JComponent {
 			swappedIndex1 = -1;
 			swappedIndex2 = -1;
 		} else if (!algVisualizer.stopSort()) {
-			swappedIndex1 = swappedIndexes.get(framesPainted)[0];
-			swappedIndex2 = swappedIndexes.get(framesPainted++)[1];
+			swappedIndex1 = swappedIndexes.get(numChunk - 1)[0];
+			swappedIndex2 = swappedIndexes.get(numChunk - 1)[1];
 		}
 
 		// Iterate through the array and drawn every index
@@ -102,12 +104,12 @@ public class ArrDisplay extends JComponent {
 		swappedIndexes = new ArrayList<Integer[]>();
 	}
 
-	public void setFramesPainted(int framesPainted) {
-		this.framesPainted = framesPainted;
+	public void setNumChunk(int numChunk) {
+		this.numChunk = numChunk;
 	}
 
-	public int getFramesPainted() {
-		return framesPainted;
+	public int getNumChunk() {
+		return numChunk;
 	}
 
 	public boolean isComplete() {

@@ -86,7 +86,8 @@ public class AlgVisualizer implements ActionListener {
 
 		// Initialize objects that will display and sort the array
 
-		arrDisplay = new ArrDisplay(this, arr);
+		arrDisplay = new ArrDisplay(this);
+		arrDisplay.setArr(arr);
 		arrDisplay.setPreferredSize(new Dimension(CONTENT_WIDTH, ARR_DISPLAY_HEIGHT));
 
 		arrSort = new ArrSorting(this, this.arr, this.arrDisplay);
@@ -217,7 +218,7 @@ public class AlgVisualizer implements ActionListener {
 		} else if (event.getSource() == performanceButton) {
 			int numSwaps = arrDisplay.getSwappedIndexes().size();
 			long visualizationTime = endTime - startTime; // net time
-			long sortingTime = visualizationTime - (60 * numSwaps + 1); // - 60 seconds of sleep time between each swap
+			long sortingTime = visualizationTime - (60 * numSwaps + 1); // - NEED TO FIX
 			String statsMessage = String.format(
 					"Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms  Sorting Time : %dms",
 					indexComparisons, numSwaps, visualizationTime, sortingTime);
@@ -238,7 +239,7 @@ public class AlgVisualizer implements ActionListener {
 		setStopSort(true);
 		arr = shuffleArr(arr);
 		arrDisplay.clearSwappedIndexes();
-		arrDisplay.setFramesPainted(0);
+		arrDisplay.setNumChunk(0);
 		arrDisplay.setComplete(false);
 		arrDisplay.setArr(arr);
 		indexComparisons = 0;
