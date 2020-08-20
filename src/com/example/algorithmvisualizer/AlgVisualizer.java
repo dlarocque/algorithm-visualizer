@@ -18,13 +18,19 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.event.*;
 
-public class AlgVisualizer implements ActionListener {
+public class AlgVisualizer implements ActionListener, ChangeListener {
 
 	private final int CONTENT_WIDTH = 900;
 	private final int CONTENT_HEIGHT = 960;
 	private final int ARR_DISPLAY_HEIGHT = 900;
+	private final int FPS_MIN = 1;
+	private final int FPS_INIT = 10;
+	private final int FPS_MAX = 100;
 	private final String[] SIZE_OPTIONS = { "10", "50", "100", "300", "450", "900" }; // array size options
 	private int n;
 	private int numSwaps;
@@ -32,6 +38,8 @@ public class AlgVisualizer implements ActionListener {
 	private Integer indexComparisons;
 	private long startTime; // start time of a sort
 	private long endTime; // end time of a sort
+	private long visualizationTime;
+	private long sortingTime;
 	private boolean doBubbleSort;
 	private boolean doInsertionSort;
 	private boolean doSelectionSort;
@@ -88,7 +96,9 @@ public class AlgVisualizer implements ActionListener {
 		indexComparisons = 0;
 		startTime = 0;
 		endTime = 0;
-		setDelay(2);
+		visualizationTime = 0;
+		sortingTime = 0;
+		setDelay(1000 / FPS_INIT);
 
 		// Initialize objects that will display and sort the array
 
@@ -136,9 +146,10 @@ public class AlgVisualizer implements ActionListener {
 		sizeChanger = new JComboBox<String>(SIZE_OPTIONS); // Pass the String containing all of the size options
 		sizeChanger.addActionListener(this);
 		sizeChanger.setBackground(Color.WHITE);
-		
-		FPSslider = new JSlider(JSlider.HORIZONTAL, 0, 30, 15);
 
+		FPSslider = new JSlider(JSlider.HORIZONTAL, FPS_MIN, FPS_MAX, FPS_INIT);
+		FPSslider.addChangeListener(this);
+		FPSslider.setBackground(Color.DARK_GRAY);
 		// Initialize the performance label and center it
 
 		performanceLabel = new JLabel();
@@ -227,6 +238,16 @@ public class AlgVisualizer implements ActionListener {
 		}
 	}
 
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		JSlider source = (JSlider) e.getSource();
+		if (!source.getValueIsAdjusting()) {
+			int fps = (int) source.getValue();
+			delay = 1000 / fps; // ms
+			setDelay(delay);
+		}
+	}
+
 	/*
 	 * Reset method is called whenever the user presses the reset button, or when a
 	 * new size of array is chosen from the size changer. This method stops sorting,
@@ -257,6 +278,8 @@ public class AlgVisualizer implements ActionListener {
 	public void resetTime() {
 		startTime = 0;
 		endTime = 0;
+		visualizationTime = 0;
+		sortingTime = 0;
 	}
 
 	public Integer[] shuffleArr(Integer[] arr) {
@@ -288,11 +311,12 @@ public class AlgVisualizer implements ActionListener {
 	public void updatePerformance() {
 		numSwaps = arrDisplay.getSwappedIndexes().size();
 
-		long visualizationTime = 0;
-		long sortingTime = 0;
-		if (!getSort().equals("Not Sorting")) {
+		if (!getSort().equals("Not Sorting") && arrDisplay.getNumChunks() == 1) {
 			visualizationTime = System.currentTimeMillis() - startTime;
 			sortingTime = visualizationTime - (delay * (arrDisplay.getNumChunks() - 1));
+		} else if (arrDisplay.getNumChunks() > 1) {
+			visualizationTime = System.currentTimeMillis() - startTime;
+			sortingTime = sortingTime + (System.currentTimeMillis() - sortingTime);
 		}
 
 		String performance = String.format(
