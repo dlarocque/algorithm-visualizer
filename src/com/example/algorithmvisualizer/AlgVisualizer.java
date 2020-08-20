@@ -35,6 +35,7 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	private int n;
 	private int numSwaps;
 	private int delay;
+	private long totalDelay;
 	private Integer indexComparisons;
 	private long startTime; // start time of a sort
 	private long endTime; // end time of a sort
@@ -280,6 +281,7 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		endTime = 0;
 		visualizationTime = 0;
 		sortingTime = 0;
+		totalDelay = 0;
 	}
 
 	public Integer[] shuffleArr(Integer[] arr) {
@@ -310,13 +312,16 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	 */
 	public void updatePerformance() {
 		numSwaps = arrDisplay.getSwappedIndexes().size();
-
+		System.out.println("total delay " + totalDelay);
 		if (!getSort().equals("Not Sorting") && arrDisplay.getNumChunks() == 1) {
 			visualizationTime = System.currentTimeMillis() - startTime;
-			sortingTime = visualizationTime - (delay * (arrDisplay.getNumChunks() - 1));
+			sortingTime = visualizationTime - totalDelay;
 		} else if (arrDisplay.getNumChunks() > 1) {
 			visualizationTime = System.currentTimeMillis() - startTime;
-			sortingTime = sortingTime + (System.currentTimeMillis() - sortingTime);
+			sortingTime = visualizationTime - totalDelay;
+		}
+		if(stopSort) {
+			resetTime();
 		}
 
 		String performance = String.format(
@@ -474,5 +479,13 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 
 	public void setFPSslider(JSlider fPSslider) {
 		FPSslider = fPSslider;
+	}
+
+	public long getTotalDelay() {
+		return totalDelay;
+	}
+
+	public void setTotalDelay(long totalDelay) {
+		this.totalDelay = totalDelay;
 	}
 }

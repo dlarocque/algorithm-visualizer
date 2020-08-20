@@ -101,6 +101,8 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	private void sleep() {
 		try {
 			Thread.sleep(algVisualizer.getDelay());
+			if (!algVisualizer.stopSort())
+				algVisualizer.setTotalDelay(algVisualizer.getTotalDelay() + algVisualizer.getDelay());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
