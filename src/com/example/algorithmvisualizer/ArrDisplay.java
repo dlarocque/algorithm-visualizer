@@ -57,11 +57,10 @@ public class ArrDisplay extends JComponent {
 			swappedIndex1 = -1;
 			swappedIndex2 = -1;
 		} else if (!algVisualizer.stopSort()) {
-			// exclude the first chunk as its used to draw the first array, not related to the sorting
-			swappedIndex1 = swappedIndexes.get(numChunks)[0];	// index out of bounds exception?
+			swappedIndex1 = swappedIndexes.get(numChunks)[0];
 			swappedIndex2 = swappedIndexes.get(numChunks)[1];
 		}
-		// Iterate through the array and drawn every index
+		// Iterate through the array and draw every index
 		for (int i = 0; i < arr.length; i++) {
 			int width = (int) (algVisualizer.getWidth() / (double) arr.length);
 			int height = arr[i] * (algVisualizer.getArrDispHeight() / arr.length);

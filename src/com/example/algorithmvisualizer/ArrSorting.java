@@ -103,6 +103,20 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 		}
 	}
 
+	/*
+	 * All of the sorting algorithms below are constantly checking in the loops to
+	 * see if sorting has been stopped by a reset. If sorting has been stopped, the
+	 * if statement will be true and the sorting method will be terminated.
+	 * 
+	 * After every index comparison, we add +1 to the total number of index
+	 * comparisons.
+	 * 
+	 * After every index swap, we add the pair of indexes swapped to the list in
+	 * arrDisplay for them to be drawn. We then call publish() and send a clone of
+	 * the array as a chunk to the process(List<> Chunks) method above, where it
+	 * will be painted in the frame.
+	 */
+
 	private void bubbleSort() {
 		for (int i = 0; i < n - 1; i++) {
 			if (algVisualizer.stopSort())

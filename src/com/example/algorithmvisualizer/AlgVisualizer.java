@@ -247,7 +247,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	}
 
 	// Reset the timer on the previous sort that was done, used in the reset()
-	// method
 	public void resetTime() {
 		startTime = 0;
 		visualizationTime = 0;
