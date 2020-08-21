@@ -50,33 +50,23 @@ public class ArrDisplay extends JComponent {
 	 */
 	@Override
 	public void paintComponent(Graphics g) {
-		// Takes ~ 40ms to draw ( depending on the system )
 		Graphics2D graphics2d = (Graphics2D) g;
-		// Draw the DARK_GREY background
 		graphics2d.setColor(Color.DARK_GRAY);
 		graphics2d.fillRect(0, 0, algVisualizer.getWidth(), algVisualizer.getArrDispHeight());
-
-		// Find the values of the swappedIndexes and update framesPainted
 		if (algVisualizer.getSort().equals("Not Sorting") || isComplete) {
 			swappedIndex1 = -1;
 			swappedIndex2 = -1;
 		} else if (!algVisualizer.stopSort()) {
 			// exclude the first chunk as its used to draw the first array, not related to the sorting
-			swappedIndex1 = swappedIndexes.get(numChunks - 1)[0];	// index out of bounds exception?
-			swappedIndex2 = swappedIndexes.get(numChunks - 1)[1];
+			swappedIndex1 = swappedIndexes.get(numChunks)[0];	// index out of bounds exception?
+			swappedIndex2 = swappedIndexes.get(numChunks)[1];
 		}
-
 		// Iterate through the array and drawn every index
 		for (int i = 0; i < arr.length; i++) {
-
-			// Dimensions of the bars are calculated to make sure they take up the entire
-			// Panel
 			int width = (int) (algVisualizer.getWidth() / (double) arr.length);
 			int height = arr[i] * (algVisualizer.getArrDispHeight() / arr.length);
 			int x = i * width;
 			int y = algVisualizer.getArrDispHeight() - height;
-
-			// Determine the colour of the bar we are currently drawing
 			if (i == swappedIndex1 && !algVisualizer.stopSort()) {
 				graphics2d.setColor(Color.RED);
 			} else if (i == swappedIndex2 && !algVisualizer.stopSort()) {
@@ -86,7 +76,6 @@ public class ArrDisplay extends JComponent {
 			} else {
 				graphics2d.setColor(Color.WHITE);
 			}
-
 			// Draw the current indexes bar
 			graphics2d.fillRect(x, y, width, height);
 		}

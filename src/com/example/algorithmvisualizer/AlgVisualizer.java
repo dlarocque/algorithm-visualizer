@@ -26,9 +26,8 @@ import java.awt.event.*;
 public class AlgVisualizer implements ActionListener, ChangeListener {
 
 	private final int CONTENT_WIDTH = 900;
-	private final int CONTENT_HEIGHT = 960;
 	private final int ARR_DISPLAY_HEIGHT = 900;
-	private final int FPS_MIN = 1;
+	private final int FPS_MIN = 2;
 	private final int FPS_INIT = 10;
 	private final int FPS_MAX = 100;
 	private final String[] SIZE_OPTIONS = { "10", "50", "100", "300", "450", "900" }; // array size options
@@ -38,7 +37,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	private long totalDelay;
 	private Integer indexComparisons;
 	private long startTime; // start time of a sort
-	private long endTime; // end time of a sort
 	private long visualizationTime;
 	private long sortingTime;
 	private boolean doBubbleSort;
@@ -74,11 +72,7 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		algVisualizer.initializeVars();
 		algVisualizer.setFrame();
 	}
-
-	public AlgVisualizer() {
-		// empty constructor, variables are initialized in main method.
-	}
-
+	
 	/*
 	 * This method initializes all of this classes instance variables. The array is
 	 * initialized, filled, and shuffled. The arrDisplay object that paints the
@@ -88,21 +82,13 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	 */
 	public void initializeVars() {
 
-		setN(10);
-
-		arr = new Integer[n];
-		arr = fillArr(arr);
-		arr = shuffleArr(arr);
+		n = Integer.parseInt(SIZE_OPTIONS[0]);
+		arr = initArr();
 
 		indexComparisons = 0;
-		startTime = 0;
-		endTime = 0;
-		visualizationTime = 0;
-		sortingTime = 0;
 		setDelay(1000 / FPS_INIT);
 
 		// Initialize objects that will display and sort the array
-
 		arrDisplay = new ArrDisplay(this);
 		arrDisplay.setArr(arr);
 		arrDisplay.setPreferredSize(new Dimension(CONTENT_WIDTH, ARR_DISPLAY_HEIGHT));
@@ -111,7 +97,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 
 		// Panels in the frame that will hold all components.
 		// JPanels use the flowLayout to manage their components automatically.
-
 		buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.DARK_GRAY);
 
@@ -119,7 +104,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		arrPanel.add(arrDisplay);
 
 		// Initialize all components and add action listeners
-
 		resetButton = new JButton("Reset");
 		resetButton.addActionListener(this);
 		resetButton.setBackground(Color.WHITE);
@@ -152,7 +136,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		FPSslider.addChangeListener(this);
 		FPSslider.setBackground(Color.DARK_GRAY);
 		// Initialize the performance label and center it
-
 		performanceLabel = new JLabel();
 		performanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
 	}
@@ -163,7 +146,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	 * JFrame. The frame is initialized and made visible.
 	 */
 	public void setFrame() {
-
 		// Add JButtons / components to button panel
 		buttonPanel.add(resetButton);
 		buttonPanel.add(bubbleButton);
@@ -173,7 +155,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		buttonPanel.add(quickButton);
 		buttonPanel.add(sizeChanger);
 		buttonPanel.add(FPSslider);
-
 		// Initialize and make the frame visible
 		frame = new JFrame("Algorithm Visualizer");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -184,7 +165,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		frame.pack();
 		frame.setLocationRelativeTo(null); // center of the screen
 		frame.setVisible(true);
-
 	}
 
 	/*
@@ -204,7 +184,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		doInsertionSort = false;
 		doMergeSort = false;
 		doQuickSort = false;
-
 		// Find the source of the action
 		if (event.getSource() == bubbleButton) {
 			doBubbleSort = true;
@@ -227,12 +206,7 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		} else if (event.getSource() == sizeChanger) {
 			// Find what size was selected, and set n to that value
 			String selectedSize = (String) sizeChanger.getSelectedItem();
-			setN(Integer.valueOf(selectedSize));
-
-			// Create the new array of length n, and it will be shuffled in reset()
-			arr = new Integer[n];
-			arr = fillArr(arr);
-
+			n = Integer.valueOf(selectedSize);
 			// reset and paint the new array
 			reset();
 			arrSort.execute();
@@ -258,12 +232,12 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	 * SwingWorker, we simply re-instantiate it so that we are able to call it
 	 * again.
 	 */
+	
 	public void reset() {
 		setStopSort(true);
-		arr = shuffleArr(arr);
+		arr = initArr();
 		arrDisplay.clearSwappedIndexes();
 		arrDisplay.setComplete(false);
-		arrDisplay.setArr(arr);
 		indexComparisons = 0;
 		resetTime();
 		resetSwingWorker(this, arr, arrDisplay);
@@ -278,10 +252,16 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	// method
 	public void resetTime() {
 		startTime = 0;
-		endTime = 0;
 		visualizationTime = 0;
 		sortingTime = 0;
 		totalDelay = 0;
+	}
+	
+	public Integer[] initArr() {
+		Integer[] arr = new Integer[n];
+		arr = fillArr(arr);
+		arr = shuffleArr(arr);
+		return arr;
 	}
 
 	public Integer[] shuffleArr(Integer[] arr) {
@@ -312,24 +292,20 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	 */
 	public void updatePerformance() {
 		numSwaps = arrDisplay.getSwappedIndexes().size();
-		System.out.println("total delay " + totalDelay);
-		if (!getSort().equals("Not Sorting") && arrDisplay.getNumChunks() == 1) {
+		if (!getSort().equals("Not Sorting") && arrDisplay.getNumChunks() == 0) {
 			visualizationTime = System.currentTimeMillis() - startTime;
 			sortingTime = visualizationTime - totalDelay;
-		} else if (arrDisplay.getNumChunks() > 1) {
+		} else if (arrDisplay.getNumChunks() > 1 && !arrDisplay.isComplete()) {
 			visualizationTime = System.currentTimeMillis() - startTime;
 			sortingTime = visualizationTime - totalDelay;
 		}
 		if(stopSort) {
 			resetTime();
 		}
-
 		String performance = String.format(
 				"Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms  Sorting Time : %dms",
 				indexComparisons, numSwaps, visualizationTime, sortingTime);
-
 		performanceLabel.setText(performance);
-
 		frame.pack();
 	}
 
@@ -339,10 +315,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 
 	public int getArrDispHeight() {
 		return ARR_DISPLAY_HEIGHT;
-	}
-
-	public int getHeight() {
-		return CONTENT_HEIGHT;
 	}
 
 	public int getWidth() {
@@ -417,14 +389,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		stopSort = toSet;
 	}
 
-	public int getN() {
-		return n;
-	}
-
-	public void setN(int n) {
-		this.n = n;
-	}
-
 	public Integer getIndexComparisons() {
 		return indexComparisons;
 	}
@@ -433,28 +397,8 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		this.indexComparisons = indexComparisons;
 	}
 
-	public long getStartTime() {
-		return startTime;
-	}
-
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
-	}
-
-	public long getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(long endTime) {
-		this.endTime = endTime;
-	}
-
-	public JLabel getPerformanceLabel() {
-		return performanceLabel;
-	}
-
-	public void setPerformanceLabel(JLabel performanceLabel) {
-		this.performanceLabel = performanceLabel;
 	}
 
 	public int getNumSwaps() {
@@ -471,14 +415,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 
 	public void setDelay(int delay) {
 		this.delay = delay;
-	}
-
-	public JSlider getFPSslider() {
-		return FPSslider;
-	}
-
-	public void setFPSslider(JSlider fPSslider) {
-		FPSslider = fPSslider;
 	}
 
 	public long getTotalDelay() {
