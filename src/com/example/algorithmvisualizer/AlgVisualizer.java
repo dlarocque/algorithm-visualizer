@@ -216,11 +216,9 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		JSlider source = (JSlider) e.getSource();
-		if (!source.getValueIsAdjusting()) {
 			int fps = (int) source.getValue();
 			delay = 1000 / fps; // ms
 			setDelay(delay);
-		}
 	}
 
 	/*
