@@ -46,7 +46,7 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 		if (algVisualizer.stopSort()) {
 			publish(arr.clone());
 			sleep();
-			algVisualizer.resetSwingWorker(algVisualizer, arr, arrDisplay);
+			algVisualizer.setSwingWorker(new ArrSorting(algVisualizer, arr, arrDisplay));
 		} else {
 			algVisualizer.setStartTime(System.currentTimeMillis());
 			if (algVisualizer.getSort().equals("Bubble Sort")) {
