@@ -230,7 +230,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	 * SwingWorker, we simply re-instantiate it so that we are able to call it
 	 * again.
 	 */
-	
 	public void reset() {
 		setStopSort(true);
 		arr = initArr();
