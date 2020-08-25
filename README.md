@@ -10,11 +10,17 @@ This is my freshman year summer project!  Trying to get a better understanding o
 
 *You must have a JDK installed on your system [Download JDK](https://www.oracle.com/java/technologies/javase-downloads.html)*
 
+*Having 1080p resolution is recommended, but lower and higher resolutions are accepted.*
+
+-----------------------------------------------
+
 - Clone he project onto your system 'https://github.com/dlarocque/AlgorithmVisualizer'.
 - Download the .zip file from https://github.com/dlarocque/AlgorithmVisualizer and extract its contents.
 
 *OR*
 - Download the Executable JAR file 'AlgVisualizer.jar'.
+
+
 
 ## Running
 
@@ -61,9 +67,6 @@ _The Performance Label_ between the array and the buttons displays all of the st
 #### Notes
 
 The time to visualize the sorting of one of the algorithms is not a good representation of its real sorting time.  This is because the arr is updated every time there is an index swap, this makes it so that sorting algorithms with fewer swaps are visualized much faster.  This is the reasoning behind including a 'Sorting Time' stat along with 'Visualzation Time' in the Performance label.
-
-The main window is not resizable due to the way that the bar graph is drawn.  For example, if the width of the content pane is changed from 800 to 822, with an array N = 10, the drawing will not fill the entire window.  Initially, the value of an index in the array was represented by an 80 inch wide bar, now it would be 82 and leaving a 2 pixel wide empty space in the frame.
-This is [Issue #15](https://github.com/dlarocque/AlgorithmVisualizer/issues/15)
 
 ## Authors
 
