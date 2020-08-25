@@ -54,7 +54,7 @@ public class ArrDisplay extends JComponent {
 	public void paintComponent(Graphics g) {
 		Graphics2D graphics2d = (Graphics2D) g;
 		graphics2d.setColor(Color.DARK_GRAY);
-		graphics2d.fillRect(0, 0, frame.getWidth(), frame.getArrDisplayHeight());
+		graphics2d.fillRect(0, 0, frame.getArrDisplayWidth(), frame.getArrDisplayHeight());
 		if (algVisualizer.getSort().equals("Not Sorting") || isComplete) {
 			swappedIndex1 = -1;
 			swappedIndex2 = -1;
@@ -65,7 +65,7 @@ public class ArrDisplay extends JComponent {
 		}
 		// Iterate through the array and drawn every index
 		for (int i = 0; i < arr.length; i++) {
-			int width = (int) (frame.getWidth() / (double) arr.length);
+			int width = (int) (frame.getArrDisplayWidth() / (double) arr.length);
 			int height = arr[i] * (frame.getArrDisplayHeight() / arr.length);
 			int x = i * width;
 			int y = frame.getArrDisplayHeight() - height;

@@ -3,6 +3,8 @@ package com.example.algorithmvisualizer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -17,8 +19,10 @@ import javax.swing.SwingConstants;
 public class ContentWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private int contentWidth = 900;
-	private int arrDisplayHeight = 900;
+	private int arrDisplayHeight;
+	private int arrDisplayWidth;
+	private int contentWidth;
+	private int contentHeight;
 	private AlgVisualizer algVisualizer;
 	private JPanel arrPanel;
 	private ArrDisplay arrDisplay;
@@ -34,21 +38,44 @@ public class ContentWindow extends JFrame {
 	private JLabel performanceLabel;
 
 	public ContentWindow(AlgVisualizer algVisualizer) {
-		super("Algorithm Visualizer");	// Set the name of the frame
+		super("Algorithm Visualizer"); // Set the name of the frame
 		this.algVisualizer = algVisualizer;
 		initComponents(); // initialize the components of the frame
-		setFrame();		  // Set up the frame and add all of the initialized components
+		setFrame(); // Set up the frame and add all of the initialized components
 	}
 
 	/*
-	 * Initializes all of the components that will be in this frame.
-	 * Add the action / change listeners and set their colors.
+	 * Initializes all of the components that will be in this frame. Add the action
+	 * / change listeners and set their colors.
 	 */
 	public void initComponents() {
 
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double screenWidth = screenSize.getWidth();
+		double screenHeight = screenSize.getHeight();
+		String[] sizeOptions;
+		
+		if (screenHeight > 1080.0) { // 4k
+			arrDisplayHeight = 1000;
+			contentWidth = arrDisplayHeight;
+			sizeOptions = new String[] { "10", "50", "100", "250", "500", "1000" };
+		} else if (screenHeight < 1080.0) { // too small for original dimensions
+			arrDisplayHeight = 500;
+			contentWidth = arrDisplayHeight + 400;
+			sizeOptions = new String[] { "10", "50", "100", "250", "500" };
+		} else { // Original dimensions
+			arrDisplayHeight = 900;
+			contentWidth = arrDisplayHeight;
+			sizeOptions = new String[] { "10", "50", "100", "300", "450", "900" };
+		}
+
+		contentHeight = arrDisplayHeight + 110;
+		arrDisplayWidth = arrDisplayHeight;
+		algVisualizer.setSizeOptions(sizeOptions);
+
 		arrDisplay = new ArrDisplay(algVisualizer, this);
 		arrDisplay.setArr(algVisualizer.getArr());
-		arrDisplay.setPreferredSize(new Dimension(contentWidth, arrDisplayHeight));
+		arrDisplay.setPreferredSize(new Dimension(arrDisplayWidth, arrDisplayHeight));
 
 		// Panels in the frame that will hold all components.
 		// JPanels use the flowLayout to manage their components automatically.
@@ -56,7 +83,9 @@ public class ContentWindow extends JFrame {
 		buttonPanel.setBackground(Color.DARK_GRAY);
 
 		arrPanel = new JPanel();
+		arrPanel.setBackground(Color.DARK_GRAY);
 		arrPanel.add(arrDisplay);
+		arrDisplay.setAlignmentX(0);
 
 		// Initialize all components and add action listeners
 		resetButton = new JButton("Reset");
@@ -92,7 +121,8 @@ public class ContentWindow extends JFrame {
 				algVisualizer.getInitFPS());
 		FPSslider.addChangeListener(algVisualizer);
 		FPSslider.setBackground(Color.DARK_GRAY);
-
+		//FPSslider.setPreferredSize(new Dimension(75,25));
+		
 		performanceLabel = new JLabel();
 		performanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
 	}
@@ -110,7 +140,8 @@ public class ContentWindow extends JFrame {
 		buttonPanel.add(sizeChanger);
 		buttonPanel.add(FPSslider);
 		// Initialize and make the frame visible
-		setPreferredSize(new Dimension(contentWidth, arrDisplayHeight + 105)); // 105 is the height of the performance label and the button panel
+		setPreferredSize(new Dimension(contentWidth, contentHeight)); // 105 is the height of the performance label and
+																		// the button panel
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false); // Cannot be resizable, causes visual issues
 		add(buttonPanel, BorderLayout.PAGE_START); // Button panel added to the top of the frame
@@ -138,13 +169,22 @@ public class ContentWindow extends JFrame {
 		return arrDisplay;
 	}
 
-	public int getWidth() {
+	public int getContentWidth() {
 		return contentWidth;
 	}
-
+	
+	public int getContentHeight() {
+		return contentWidth;
+	}
+	
+	public int getArrDisplayWidth() {
+		return arrDisplayHeight;
+	}
+	
 	public int getArrDisplayHeight() {
 		return arrDisplayHeight;
 	}
+	
 
 	public JButton getBubbleButton() {
 		return bubbleButton;
