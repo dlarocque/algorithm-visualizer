@@ -27,9 +27,11 @@ public class ArrDisplay extends JComponent {
 	private ArrayList<Integer[]> swappedIndexes;
 	private Integer[] arr;
 	private AlgVisualizer algVisualizer;
+	private ContentWindow frame;
 
-	public ArrDisplay(AlgVisualizer algVisualizer) {
+	public ArrDisplay(AlgVisualizer algVisualizer, ContentWindow frame) {
 		this.algVisualizer = algVisualizer;
+		this.frame = frame;
 		swappedIndexes = new ArrayList<Integer[]>();
 	}
 
@@ -52,7 +54,7 @@ public class ArrDisplay extends JComponent {
 	public void paintComponent(Graphics g) {
 		Graphics2D graphics2d = (Graphics2D) g;
 		graphics2d.setColor(Color.DARK_GRAY);
-		graphics2d.fillRect(0, 0, algVisualizer.getWidth(), algVisualizer.getArrDispHeight());
+		graphics2d.fillRect(0, 0, frame.getArrDisplayWidth(), frame.getArrDisplayHeight());
 		if (algVisualizer.getSort().equals("Not Sorting") || isComplete) {
 			swappedIndex1 = -1;
 			swappedIndex2 = -1;
@@ -62,10 +64,10 @@ public class ArrDisplay extends JComponent {
 		}
 		// Iterate through the array and draw every index
 		for (int i = 0; i < arr.length; i++) {
-			int width = (int) (algVisualizer.getWidth() / (double) arr.length);
-			int height = arr[i] * (algVisualizer.getArrDispHeight() / arr.length);
+			int width = (int) (frame.getArrDisplayWidth() / (double) arr.length);
+			int height = arr[i] * (frame.getArrDisplayHeight() / arr.length);
 			int x = i * width;
-			int y = algVisualizer.getArrDispHeight() - height;
+			int y = frame.getArrDisplayHeight() - height;
 			if (i == swappedIndex1 && !algVisualizer.stopSort()) {
 				graphics2d.setColor(Color.RED);
 			} else if (i == swappedIndex2 && !algVisualizer.stopSort()) {
