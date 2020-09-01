@@ -50,20 +50,18 @@ public class ContentWindow extends JFrame {
 	 */
 	public void initComponents() {
 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double screenWidth = screenSize.getWidth();
-		double screenHeight = screenSize.getHeight();
+		double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		String[] sizeOptions;
 		
 		if (screenHeight > 1080.0) { // 4k
-			arrDisplayHeight = 1000;
+			arrDisplayHeight = 2000;
 			contentWidth = arrDisplayHeight;
 			sizeOptions = new String[] { "10", "50", "100", "250", "500", "1000" };
 		} else if (screenHeight < 1080.0) { // too small for original dimensions
 			arrDisplayHeight = 500;
 			contentWidth = arrDisplayHeight + 400;
 			sizeOptions = new String[] { "10", "50", "100", "250", "500" };
-		} else { // Original dimensions
+		} else { // Original dimensions (1080p)
 			arrDisplayHeight = 900;
 			contentWidth = arrDisplayHeight;
 			sizeOptions = new String[] { "10", "50", "100", "300", "450", "900" };
@@ -83,8 +81,9 @@ public class ContentWindow extends JFrame {
 		buttonPanel.setBackground(Color.DARK_GRAY);
 
 		arrPanel = new JPanel();
-		arrPanel.setBackground(Color.DARK_GRAY);
+		arrPanel.setBackground(Color.RED);
 		arrPanel.add(arrDisplay);
+		//arrPanel.setPreferredSize(new Dimension(arrDisplayWidth, arrDisplayHeight));
 		arrDisplay.setAlignmentX(0);
 
 		// Initialize all components and add action listeners
@@ -174,11 +173,11 @@ public class ContentWindow extends JFrame {
 	}
 	
 	public int getContentHeight() {
-		return contentWidth;
+		return contentHeight;
 	}
 	
 	public int getArrDisplayWidth() {
-		return arrDisplayHeight;
+		return arrDisplayWidth;
 	}
 	
 	public int getArrDisplayHeight() {

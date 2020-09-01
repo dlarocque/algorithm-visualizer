@@ -65,7 +65,7 @@ public class ArrDisplay extends JComponent {
 		// Iterate through the array and draw every index
 		for (int i = 0; i < arr.length; i++) {
 			int width = (int) (frame.getArrDisplayWidth() / (double) arr.length);
-			int height = arr[i] * (frame.getArrDisplayHeight() / arr.length);
+			int height = arr[i] * ((int) (frame.getArrDisplayHeight() / (double) arr.length));
 			int x = i * width;
 			int y = frame.getArrDisplayHeight() - height;
 			if (i == swappedIndex1 && !algVisualizer.stopSort()) {
