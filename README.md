@@ -14,7 +14,7 @@ This is my freshman year summer project!  Trying to get a better understanding o
 
 -----------------------------------------------
 
-- Clone he project onto your system 'https://github.com/dlarocque/AlgorithmVisualizer'.
+- Clone the project onto your system 'https://github.com/dlarocque/AlgorithmVisualizer'.
 - Download the .zip file from https://github.com/dlarocque/AlgorithmVisualizer and extract its contents.
 
 *OR*
@@ -38,13 +38,13 @@ This is my freshman year summer project!  Trying to get a better understanding o
 
 ### _Running through Terminal_
 
-- Go to `C:/.../AlgorithmVisualizer/src` and enter
+- Go to `C:/.../AlgorithmVisualizer-master/src` and enter
 
-`javac AlgVisualizer.java`
+`javac -d bin com\example\algorithmvisualizer\*.java`
 
-- This will compile the program into a binary file, where you can now find by going to `C:/.../AlgorithmVisualizer/bin`
+- This will compile the program into a binary file, where you can now find by going to `C:/.../AlgorithmVisualizer-master/src/bin`
 
-- If there are no issues, you can now go to  `C:/.../AlgorithmVisualizer/bin` and run the program with
+- If there are no issues, you can now go to  `C:/.../AlgorithmVisualizer-master/src/bin` and run the program by entering
 
 `java com.example.algorithmvisualizer.AlgVisualizer`
 
