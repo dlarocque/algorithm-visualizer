@@ -2,7 +2,7 @@
 
 A program for visualizing sorting algorithms.
 
-This is my freshman year summer project!  Trying to get a better understanding of sorting algorithms before my Data Structures and Algorithms class this fall while applying new things i've learned such as Swing, git, and multi-threading.
+This is my freshman year summer project!  Trying to get a better understanding of sorting algorithms before my Data Structures and Algorithms class this fall while applying new things i've learned such as Swing, Git, Maven, and multi-threading.
 
 ## Installation
 
