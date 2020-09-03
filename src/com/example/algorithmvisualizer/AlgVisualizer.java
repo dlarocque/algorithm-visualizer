@@ -44,17 +44,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	private ContentWindow frame;
 	private SwingWorker<Void, Integer[]> arrSort;
 
-	public static void main(String[] args) {
-		AlgVisualizer algVisualizer = new AlgVisualizer();
-		algVisualizer.setN(Integer.parseInt(algVisualizer.getSizeOptions()[0]));
-		algVisualizer.setArr(algVisualizer.initArr());
-		algVisualizer.setFrame(new ContentWindow(algVisualizer));
-		// Seems very messy
-		algVisualizer.setIndexComparisons(0);
-		algVisualizer.setDelay(1000 / algVisualizer.getInitFPS());
-		algVisualizer.setSwingWorker(
-				new ArrSorting(algVisualizer, algVisualizer.arr, algVisualizer.getFrame().getArrDisplay()));
-	}
 
 	/*
 	 * When an action is performed on a component on the JFrame that has had this
