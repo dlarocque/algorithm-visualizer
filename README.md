@@ -10,6 +10,8 @@ This is my freshman year summer project!  Trying to get a better understanding o
 
 *You must have a JDK installed on your system [Download JDK](https://www.oracle.com/java/technologies/javase-downloads.html)*
 
+*Have Apache Maven version 3.6.3 or later installed on your computer*
+
 *Having 1080p resolution is recommended, but lower and higher resolutions are accepted.*
 
 -----------------------------------------------
@@ -24,29 +26,17 @@ This is my freshman year summer project!  Trying to get a better understanding o
 
 ## Running
 
-*First, make sure your PATH and JAVA_HOME Environment variables are set correctly.*
+*These instructions are directed towards Linux users*
 
-### _Running the Executable JAR_
+- Go to `C:/.../AlgorithmVisualizer-master` and enter
 
-- You can simply go through your file system and find the AlgVisualizer.jar you downloaded.  Simply open it, and the program will start
+`mvn clean install`
 
-*OR*
+To compile the program.
 
-- Through the terminal, you can go to `C:/.../AlgorithmVisualizer` and enter
+Once the program is built successfully, enter the following :
 
-`AlgorithmVisualizer.jar`
-
-### _Running through Terminal_
-
-- Go to `C:/.../AlgorithmVisualizer-master/src` and enter
-
-`javac -d bin com\example\algorithmvisualizer\*.java`
-
-- This will compile the program into a binary file, where you can now find by going to `C:/.../AlgorithmVisualizer-master/src/bin`
-
-- If there are no issues, you can now go to  `C:/.../AlgorithmVisualizer-master/src/bin` and run the program by entering
-
-`java com.example.algorithmvisualizer.AlgVisualizer`
+`mvn exec:java -Dexec.mainClass=com.example.algorithmvisualizer.AlgVisualizer`
 
 ## How to use 
 
