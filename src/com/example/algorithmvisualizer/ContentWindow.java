@@ -81,7 +81,7 @@ public class ContentWindow extends JFrame {
 		buttonPanel.setBackground(Color.DARK_GRAY);
 
 		arrPanel = new JPanel();
-		arrPanel.setBackground(Color.RED);
+		arrPanel.setBackground(Color.DARK_GRAY);
 		arrPanel.add(arrDisplay);
 		//arrPanel.setPreferredSize(new Dimension(arrDisplayWidth, arrDisplayHeight));
 		arrDisplay.setAlignmentX(0);
