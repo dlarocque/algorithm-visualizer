@@ -3,6 +3,7 @@ package com.example.algorithmvisualizer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 
 import javax.swing.JButton;
@@ -46,7 +47,7 @@ public class ContentWindow extends JFrame {
 
 	/*
 	 * Initializes all of the components that will be in this frame. Add the action
-	 * / change listeners and set their colors.
+	 * change listeners and set their colors.
 	 */
 	public void initComponents() {
 
@@ -59,7 +60,7 @@ public class ContentWindow extends JFrame {
 			sizeOptions = new String[] { "10", "50", "100", "250", "500", "1000" };
 		} else if (screenHeight < 1080.0) { // too small for original dimensions
 			arrDisplayHeight = 500;
-			contentWidth = arrDisplayHeight + 400;
+			contentWidth = arrDisplayHeight + 500;
 			sizeOptions = new String[] { "10", "50", "100", "250", "500" };
 		} else { // Original dimensions (1080p)
 			arrDisplayHeight = 900;
@@ -81,10 +82,9 @@ public class ContentWindow extends JFrame {
 		buttonPanel.setBackground(Color.DARK_GRAY);
 
 		arrPanel = new JPanel();
+		arrPanel.setLayout(new GridBagLayout());
 		arrPanel.setBackground(Color.DARK_GRAY);
 		arrPanel.add(arrDisplay);
-		//arrPanel.setPreferredSize(new Dimension(arrDisplayWidth, arrDisplayHeight));
-		arrDisplay.setAlignmentX(0);
 
 		// Initialize all components and add action listeners
 		resetButton = new JButton("Reset");
