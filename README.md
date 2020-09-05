@@ -36,7 +36,7 @@ To compile the program.
 
 Once the program is built successfully, enter the following :
 
-`mvn exec:java -Dexec.mainClass=com.example.algorithmvisualizer.AlgVisualizer`
+`mvn exec:java -Dexec.mainClass=com.example.algorithmvisualizer.Main`
 
 ## How to use 
 
