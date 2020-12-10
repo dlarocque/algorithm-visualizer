@@ -60,7 +60,7 @@ The time to visualize the sorting of one of the algorithms is not a good represe
 
 ## Authors
 
-- Daniel La Rocque    [dlarocque](https://github.com/dlarocque)
+- [dlarocque](https://github.com/dlarocque)
 
 ## License
 
