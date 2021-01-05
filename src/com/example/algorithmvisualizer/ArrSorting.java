@@ -96,8 +96,9 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	private void sleep() {
 		try {
 			Thread.sleep(algVisualizer.getDelay());
-			if (!algVisualizer.stopSort())
-				algVisualizer.setTotalDelay(algVisualizer.getTotalDelay() + algVisualizer.getDelay());
+			if (!algVisualizer.stopSort()) {
+                algVisualizer.setTotalDelay(algVisualizer.getTotalDelay() + algVisualizer.getDelay());
+            }
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -222,66 +223,80 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 		}
 	}
 
-	// Merges two subarrays of arr[].
-	// First subarray is arr[l..m]
-	// Second subarray is arr[m+1..r]
 	private void merge(int l, int m, int r) {
 		if (algVisualizer.getSort().equals("Merge Sort") && !algVisualizer.stopSort()) { // Needed because of recursion
-			// Find sizes of two subarrays to be merged
-			int n1 = m - l + 1;
+			
+            int n1 = m - l + 1;
 			int n2 = r - m;
-			// Create temp arrays
-			int L[] = new int[n1];
+			
+            int L[] = new int[n1];
 			int R[] = new int[n2];
-			// Copy data to temp arrays
-			for (int i = 0; i < n1; ++i)
+			
+            for (int i = 0; i < n1; ++i) {
 				L[i] = arr[l + i];
-			for (int j = 0; j < n2; ++j)
+            }
+			for (int j = 0; j < n2; ++j) {
 				R[j] = arr[m + 1 + j];
-			// Merge the temp arrays
-			// Initial indexes of first and second subarrays
+            }
+			
 			int i = 0, j = 0;
-			// Initial index of merged subarray array
 			int k = l;
 			while (i < n1 && j < n2) {
-				if (algVisualizer.stopSort())
+				
+                if (algVisualizer.stopSort()) { // necessary to check this within every loop?
 					break;
+                }
+
 				algVisualizer.setIndexComparisons(algVisualizer.getIndexComparisons() + 1);
-				if (L[i] <= R[j]) {
+				
+                if (L[i] <= R[j]) {
 					arr[k] = L[i];
 					i++;
-					arrDisplay.addSwappedIndexes(k, k + i);
+				
+                    arrDisplay.addSwappedIndexes(k, k + i);
 					publish(arr.clone());
 					sleep();
-				} else {
+				
+                } else {
 					arr[k] = R[j];
 					j++;
-					arrDisplay.addSwappedIndexes(k, k + j);
+				
+                    arrDisplay.addSwappedIndexes(k, k + j);
 					publish(arr.clone());
 					sleep();
-				}
+                }
 				k++;
 			}
-			/* Copy remaining elements of L[] if any */
-			while (i < n1) {
-				if (algVisualizer.stopSort())
+			
+            while (i < n1) {
+				
+                if (algVisualizer.stopSort()) {
 					break;
+                }
+
 				arr[k] = L[i];
-				arrDisplay.addSwappedIndexes(k, k + i);
+				
+                arrDisplay.addSwappedIndexes(k, k + i);
 				publish(arr.clone());
 				sleep();
-				i++;
+				
+                i++;
 				k++;
 			}
-			/* Copy remaining elements of R[] if any */
-			while (j < n2) {
-				if (algVisualizer.stopSort())
+			
+            while (j < n2) {
+				
+                if (algVisualizer.stopSort()) {
 					break;
+                }
+
 				arr[k] = R[j];
-				arrDisplay.addSwappedIndexes(k, k + j);
+				
+                arrDisplay.addSwappedIndexes(k, k + j);
 				publish(arr.clone());
 				sleep();
-				j++;
+				
+                j++;
 				k++;
 			}
 		}
@@ -290,42 +305,45 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	private void quickSort(int low, int high) {
 		if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) { // Needed because of recursion
 			if (low < high) {
-				// pi is partitioning index, arr[pi] is now at right place
-				int pi = partition(low, high);
+				
+                int pi = partition(low, high);
 
-				// Recursively sort elements before
-				// partition and after partition
 				quickSort(low, pi - 1);
 				quickSort(pi + 1, high);
 			}
 			if (isSorted() && !algVisualizer.stopSort()) {
-				arrDisplay.setComplete(true);
-				publish(arr.clone());
+                arrDisplay.setComplete(true);
+                publish(arr.clone());
 				sleep();
 			}
 		}
 	}
-
+    
+    // quicksort
 	private int partition(int low, int high) {
 		if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) { // Needed because of recursion
-			int pivot = arr[high];
-			int i = (low - 1); // index of smaller element
-			for (int j = low; j < high; j++) {
-				if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) {
+			
+            int pivot = arr[high];
+			int i = (low - 1);
+			
+            for (int j = low; j < high; j++) {
+			
+                if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) {
 					algVisualizer.setIndexComparisons(algVisualizer.getIndexComparisons() + 1);
-					// If current element is smaller than the pivot
-					if (arr[j] < pivot) {
+				
+                    if (arr[j] < pivot) {
 						i++;
-						// swap arr[i] and arr[j]
 						int temp = arr[i];
 						arr[i] = arr[j];
 						arr[j] = temp;
-						arrDisplay.addSwappedIndexes(i, j);
+						
+                        arrDisplay.addSwappedIndexes(i, j);
 						publish(arr.clone());
 						sleep();
 					}
 				}
 			}
+
 			if (algVisualizer.getSort().equals("Quick Sort") && !algVisualizer.stopSort()) {
 				// swap arr[i+1] and arr[high] (or pivot)
 				int temp = arr[i + 1];
@@ -346,9 +364,11 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 	 */
 	private boolean isSorted() {
 		boolean isSorted = true;
-		for (int i = 0; i < arr.length - 1; i++) {
-			if (arr[i] > arr[i + 1])
+		
+        for (int i = 0; i < arr.length - 1; i++) {
+			if (arr[i] > arr[i + 1]) {
 				isSorted = false;
+            }
 		}
 		return isSorted;
 	}

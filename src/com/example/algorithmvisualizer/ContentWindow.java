@@ -1,18 +1,7 @@
 package com.example.algorithmvisualizer;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.Toolkit;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.SwingConstants;
+import java.awt.*;
+import javax.swing.*;
 
 /*
  * ContentWindow is a JFrame that holds the array display, buttons, size changers, etc...
@@ -41,8 +30,8 @@ public class ContentWindow extends JFrame {
 	public ContentWindow(AlgVisualizer algVisualizer) {
 		super("Algorithm Visualizer"); // Set the name of the frame
 		this.algVisualizer = algVisualizer;
-		initComponents(); // initialize the components of the frame
-		setFrame(); // Set up the frame and add all of the initialized components
+		initComponents(); 
+        setFrame();
 	}
 
 	/*
@@ -87,31 +76,10 @@ public class ContentWindow extends JFrame {
 		arrPanel.add(arrDisplay);
 
 		// Initialize all components and add action listeners
-		resetButton = new JButton("Reset");
-		resetButton.addActionListener(algVisualizer);
-		resetButton.setBackground(Color.WHITE);
+        
+        initJButtons();
 
-		bubbleButton = new JButton("Bubble Sort");
-		bubbleButton.addActionListener(algVisualizer);
-		bubbleButton.setBackground(Color.WHITE);
-
-		selectionButton = new JButton("Selection Sort");
-		selectionButton.addActionListener(algVisualizer);
-		selectionButton.setBackground(Color.WHITE);
-
-		insertionButton = new JButton("Insertion Sort");
-		insertionButton.addActionListener(algVisualizer);
-		insertionButton.setBackground(Color.WHITE);
-
-		mergeButton = new JButton("Merge Sort");
-		mergeButton.addActionListener(algVisualizer);
-		mergeButton.setBackground(Color.WHITE);
-
-		quickButton = new JButton("Quick Sort");
-		quickButton.addActionListener(algVisualizer);
-		quickButton.setBackground(Color.WHITE);
-
-		sizeChanger = new JComboBox<String>(algVisualizer.getSizeOptions()); // Pass the String containing all of the
+        sizeChanger = new JComboBox<String>(algVisualizer.getSizeOptions()); // Pass the String containing all of the
 																				// size options
 		sizeChanger.addActionListener(algVisualizer);
 		sizeChanger.setBackground(Color.WHITE);
@@ -125,6 +93,24 @@ public class ContentWindow extends JFrame {
 		performanceLabel = new JLabel();
 		performanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
 	}
+
+    // initialize the buttons for the frame
+    private void initJButtons() {
+        resetButton = initJButton("Reset");
+        bubbleButton = initJButton("Bubble Sort");
+        selectionButton = initJButton("Selection Sort");
+        insertionButton = initJButton("Insertion Sort");
+        mergeButton = initJButton("Merge Sort");
+        quickButton = initJButton("Quick Sort");
+    }
+
+    // only used to initialize the buttons in the frame
+    private JButton initJButton(String buttonName) {
+        JButton newButton = new JButton(buttonName);
+        newButton.addActionListener(algVisualizer);
+        setBackground(Color.WHITE);
+        return newButton;
+    }
 
 	/*
 	 * Sets up the frame and adds all of the components to this frame
