@@ -53,7 +53,7 @@ public class ContentWindow extends JFrame {
 			sizeOptions = new String[] { "10", "50", "100", "250", "500" };
 		} else { // Original dimensions (1080p)
 			arrDisplayHeight = 900;
-			contentWidth = arrDisplayHeight;
+			contentWidth = arrDisplayHeight + 20;
 			sizeOptions = new String[] { "10", "50", "100", "300", "450", "900" };
 		}
 
