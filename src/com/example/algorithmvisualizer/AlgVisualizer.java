@@ -179,23 +179,28 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	 */
 	public void updatePerformance() {
 		numSwaps = frame.getArrDisplay().getSwappedIndexes().size();
-    
-        // updates the sorting times based on whether or not we are currently visualizing a sort
-        if (!getSort().equals("Not Sorting") && frame.getArrDisplay().getNumChunks() == 0) {
-			
-            visualizationTime = System.currentTimeMillis() - startTime;	
-            sortingTime = visualizationTime - totalDelay;
-		
-        } else if (frame.getArrDisplay().getNumChunks() > 1 && !frame.getArrDisplay().isComplete()) { 
-            
-            visualizationTime = System.currentTimeMillis() - startTime;
-			sortingTime = visualizationTime - totalDelay; // visualizationTime < totalDelay makes negative time
-		
-        }
-
+ 
 		if (stopSort) {
 			resetTime();
-		}
+		} else {
+
+            // updates the sorting times based on whether or not we are currently visualizing a sort
+            //if (!getSort().equals("Not Sorting") && frame.getArrDisplay().getNumChunks() == 0) {
+			
+            //    visualizationTime = System.currentTimeMillis() - startTime;	
+            //    sortingTime = visualizationTime - totalDelay;
+		
+            //} else if (frame.getArrDisplay().getNumChunks() > 1 && !frame.getArrDisplay().isComplete()) { 
+            
+            //    visualizationTime = System.currentTimeMillis() - startTime;
+			//    sortingTime = visualizationTime - totalDelay; // visualizationTime < totalDelay makes negative time
+		
+            //}
+            if(!frame.getArrDisplay().isComplete() && !getSort().equals("Not Sorting") && (frame.getArrDisplay().getNumChunks() == 0 || frame.getArrDisplay().getNumChunks() > 1)) {
+                visualizationTime = System.currentTimeMillis() - startTime;
+                sortingTime = visualizationTime - totalDelay; // why does totalDelay become > visulizationTime?
+            }
+        }
 
 		String performance = String.format(
 				"Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms  Sorting Time : %dms",
