@@ -92,16 +92,27 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 		}
 	}
 
-	// The amount of time this thread waits after sending a chunk to be drawn
-	private void sleep() {
+	/*
+     * sleep()
+     *
+     * This method is called when a sorting algorithm is being
+     * visualized and the algorithm needs to sleep to slow down
+     * the visualization of sorting.
+     */
+    private void sleep() {
 		try {
-			Thread.sleep(algVisualizer.getDelay());
-			if (!algVisualizer.stopSort()) {
+			
+            if (!algVisualizer.stopSort()) {
                 algVisualizer.setTotalDelay(algVisualizer.getTotalDelay() + algVisualizer.getDelay());
             }
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+            
+            Thread.sleep(algVisualizer.getDelay());
+			
+    		} catch (InterruptedException e) {
+			
+                e.printStackTrace();
+		
+            }
 	}
 
 	/*
@@ -120,32 +131,37 @@ public class ArrSorting extends SwingWorker<Void, Integer[]> {
 
 	private void bubbleSort() {
 		for (int i = 0; i < n - 1; i++) {
-			if (algVisualizer.stopSort())
+			
+            if (algVisualizer.stopSort())
 				break;
-			for (int j = 0; j < n - i - 1; j++) {
-				if (algVisualizer.stopSort()) {
+			
+            for (int j = 0; j < n - i - 1; j++) {
+				
+                if (algVisualizer.stopSort()) {
 					break;
 				} else {
-					algVisualizer.setIndexComparisons(algVisualizer.getIndexComparisons() + 1);
-					if (arr[j] > arr[j + 1]) {
-						// swap arr[j] and arr[j+1]
-						int temp = arr[j];
+					
+                    algVisualizer.setIndexComparisons(algVisualizer.getIndexComparisons() + 1);
+					
+                    if (arr[j] > arr[j + 1]) {
+						
+                        int temp = arr[j];
 						arr[j] = arr[j + 1];
 						arr[j + 1] = temp;
-						// Add the pair of indexes that were swapped to the list.
-						arrDisplay.addSwappedIndexes(j, j + 1);
-						publish(arr.clone());
-						sleep();
-					}
+						
+                        arrDisplay.addSwappedIndexes(j, j + 1);
+                        publish(arr.clone());
+					    sleep();
+                    }
 				}
 			}
 		}
 		// Sorting complete, loop done
 		if (!algVisualizer.stopSort()) {
 			arrDisplay.setComplete(true);
-			publish(arr.clone());
-			sleep();
-		}
+            publish(arr.clone());
+		    sleep();
+        }
 	}
 
 	private void selectionSort() {

@@ -198,6 +198,7 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
             //}
             if(!frame.getArrDisplay().isComplete() && !getSort().equals("Not Sorting") && (frame.getArrDisplay().getNumChunks() == 0 || frame.getArrDisplay().getNumChunks() > 1)) {
                 visualizationTime = System.currentTimeMillis() - startTime;
+                System.out.println("visualizationTime "  + visualizationTime + " totalDelay " + totalDelay);
                 sortingTime = visualizationTime - totalDelay; // why does totalDelay become > visulizationTime?
             }
         }
