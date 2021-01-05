@@ -19,11 +19,6 @@ This is my freshman year summer project!  Trying to get a better understanding o
 - Clone the project onto your system 'https://github.com/dlarocque/AlgorithmVisualizer'.
 - Download the .zip file from https://github.com/dlarocque/AlgorithmVisualizer and extract its contents.
 
-*OR*
-- Download the Executable JAR file 'AlgVisualizer.jar'.
-
-
-
 ## Running
 
 *These instructions are directed towards Linux users*
