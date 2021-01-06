@@ -30,7 +30,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	private Integer indexComparisons;
 	private long startTime;             // start time of a sort
 	private long visualizationTime;
-	private long sortingTime;
 	private boolean doBubbleSort;
 	private boolean doInsertionSort;
 	private boolean doSelectionSort;
@@ -137,7 +136,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	public void resetTime() {
 		startTime = 0;
 		visualizationTime = 0;
-		sortingTime = 0;
 	}
 
 	public Integer[] initArr() {
