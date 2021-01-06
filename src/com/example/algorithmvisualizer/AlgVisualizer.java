@@ -27,7 +27,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	private int n;
 	private int numSwaps;
 	private int delay;
-	private long totalDelay;
 	private Integer indexComparisons;
 	private long startTime;             // start time of a sort
 	private long visualizationTime;
@@ -139,7 +138,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		startTime = 0;
 		visualizationTime = 0;
 		sortingTime = 0;
-		totalDelay = 0;
 	}
 
 	public Integer[] initArr() {
@@ -183,29 +181,14 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		if (stopSort) {
 			resetTime();
 		} else {
-
-            // updates the sorting times based on whether or not we are currently visualizing a sort
-            //if (!getSort().equals("Not Sorting") && frame.getArrDisplay().getNumChunks() == 0) {
-			
-            //    visualizationTime = System.currentTimeMillis() - startTime;	
-            //    sortingTime = visualizationTime - totalDelay;
-		
-            //} else if (frame.getArrDisplay().getNumChunks() > 1 && !frame.getArrDisplay().isComplete()) { 
-            
-            //    visualizationTime = System.currentTimeMillis() - startTime;
-			//    sortingTime = visualizationTime - totalDelay; // visualizationTime < totalDelay makes negative time
-		
-            //}
             if(!frame.getArrDisplay().isComplete() && !getSort().equals("Not Sorting") && (frame.getArrDisplay().getNumChunks() == 0 || frame.getArrDisplay().getNumChunks() > 1)) {
                 visualizationTime = System.currentTimeMillis() - startTime;
-                System.out.println("visualizationTime "  + visualizationTime + " totalDelay " + totalDelay);
-                sortingTime = visualizationTime - totalDelay; // why does totalDelay become > visulizationTime?
             }
         }
 
 		String performance = String.format(
-				"Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms  Sorting Time : %dms",
-				indexComparisons, numSwaps, visualizationTime, sortingTime);
+				"Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms",
+				indexComparisons, numSwaps, visualizationTime);
 		frame.getPerformanceLabel().setText(performance);
 		frame.pack();
 	}
@@ -317,14 +300,6 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 
 	public void setDelay(int delay) {
 		this.delay = delay;
-	}
-
-	public long getTotalDelay() {
-		return totalDelay;
-	}
-
-	public void setTotalDelay(long totalDelay) {
-		this.totalDelay = totalDelay;
 	}
 
 	public String[] getSizeOptions() {
