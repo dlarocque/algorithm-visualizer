@@ -8,16 +8,18 @@ This is my freshman year summer project!  Trying to get a better understanding o
 
 ### Prerequisite
 
-*You must have a JDK installed on your system [Download JDK](https://www.oracle.com/java/technologies/javase-downloads.html)*
+*You must have the JDK installed on your system [Download JDK](https://www.oracle.com/java/technologies/javase-downloads.html)*
 
-*Have Apache Maven version 3.6.3 or later installed on your computer*
-
-*Having 1080p resolution is recommended, but lower and higher resolutions are accepted.*
+*Have Apache Maven version 3.6.3 or later installed on your computer* (If you want to modify source code)
 
 -----------------------------------------------
 
-- Clone the project onto your system 'https://github.com/dlarocque/AlgorithmVisualizer'.
-- Download the .zip file from https://github.com/dlarocque/AlgorithmVisualizer and extract its contents.
+- Clone the project onto your system 'https://github.com/dlarocque/AlgorithmVisualizer'
+- Download the .zip file from https://github.com/dlarocque/AlgorithmVisualizer and extract its contents
+
+*OR*
+
+- Download the AlgorithmVisualizer.jar executable JAR file
 
 ## Running
 
@@ -33,9 +35,13 @@ Once the program is built successfully, enter the following :
 
 `mvn exec:java -Dexec.mainClass=com.example.algorithmvisualizer.Main`
 
+Can also build and run simultaneously with : 
+
+`mvn install exec:java -Dexec.mainClass=com.example.algorithmvisualizer.Main`
+
 ## How to use 
 
-On startup, the application will open up a frame containing buttons and an unsorted array in bar form.  There is a Reset button, a button for each sorting algorithm, a drop down size changer, an FPS slider, and a label showing the sorting performance.
+On startup, the application will open up a frame containing buttons and an unsorted array in bar form.  There is a Reset button, a button for each sorting algorithm, a drop down size changer, an FPS slider, and a label showing statistics.
 
 ![Startup](https://github.com/dlarocque/AlgorithmVisualizer/blob/master/images/Startup.PNG)
 
