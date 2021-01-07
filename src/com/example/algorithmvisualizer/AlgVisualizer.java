@@ -20,7 +20,7 @@ import javax.swing.event.*;
 
 public class AlgVisualizer implements ActionListener, ChangeListener {
 
-	private final int FPS_MIN = 2;  
+	private final int FPS_MIN = 2;
 	private final int FPS_INIT = 10;
 	private final int FPS_MAX = 100;
 	private String[] sizeOptions = { "10", "50", "100", "300", "450", "900" }; // array size options
@@ -28,31 +28,29 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	private int numSwaps;
 	private int delay;
 	private Integer indexComparisons;
-	private long startTime;             // start time of a sort
+	private long startTime; // start time of a sort
 	private long visualizationTime;
 	private boolean doBubbleSort;
 	private boolean doInsertionSort;
 	private boolean doSelectionSort;
 	private boolean doMergeSort;
 	private boolean doQuickSort;
-	private boolean stopSort;          // True if sorting is stopped
-	private Integer[] arr;             // array that is going to be sorted
+	private boolean stopSort; // True if sorting is stopped
+	private Integer[] arr; // array that is going to be sorted
 	private ContentWindow frame;
 	private SwingWorker<Void, Integer[]> arrSort;
 
-
 	/*
 	 * actionPerformed(ActionEvent event)
-     *
-     * When an action is performed on a component on the JFrame that has had this
+	 *
+	 * When an action is performed on a component on the JFrame that has had this
 	 * classes actionListener added to it, this method will decide what to do based
 	 * on the event.
-     * 
-     * When a sorting button is clicked, its
-	 * respective boolean do(..)Sort will be set to true, and arrSort().execute.
-	 * This will call the doInBackground() method in the arrSort object, where it
-	 * will use the do(..)Sort variable to discover which sorting algorithm to use,
-	 * or if there is simply a reset.
+	 * 
+	 * When a sorting button is clicked, its respective boolean do(..)Sort will be
+	 * set to true, and arrSort().execute. This will call the doInBackground()
+	 * method in the arrSort object, where it will use the do(..)Sort variable to
+	 * discover which sorting algorithm to use, or if there is simply a reset.
 	 */
 	public void actionPerformed(ActionEvent event) {
 		// Any time an action is performed, sorting is stopped
@@ -64,7 +62,7 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		doQuickSort = false;
 
 		// Find the source of the action
-        // Is there a better way to do this?
+		// Is there a better way to do this?
 		if (event.getSource() == frame.getBubbleButton()) {
 			doBubbleSort = true;
 			arrSort.execute();
@@ -93,34 +91,34 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 		}
 	}
 
-    /*
-     * stateChanged(ChangeEvent e)
-     *
-     * This method is called when the FPS slider
-     * is shifted to change the FPS of sorting.
-     *
-     * We change the amount of delay occuring in the 
-     * sorting to what the value of the slider was moved to.
-     */
+	/*
+	 * stateChanged(ChangeEvent e)
+	 *
+	 * This method is called when the FPS slider is shifted to change the FPS of
+	 * sorting.
+	 *
+	 * We change the amount of delay occuring in the sorting to what the value of
+	 * the slider was moved to.
+	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		JSlider source = (JSlider) e.getSource();
-			int fps = (int) source.getValue();
-			delay = 1000 / fps; // ms
-			setDelay(delay);
+		int fps = (int) source.getValue();
+		delay = 1000 / fps; // ms
+		setDelay(delay);
 	}
 
-	/* 
-     * reset()
-     *
+	/*
+	 * reset()
+	 *
 	 * Reset method is called whenever the user presses the reset button, or when a
-	 * new size of array is chosen from the size changer. 
-     *
-     * This method stops sorting, re-shuffles the array, clears all swapped indexes, frames painted, tracked
-	 * time, and comparisons. It must also reset the swingWorker so that the user is
-	 * able to see another sort. Since sort.execute() can only be called once for
-	 * SwingWorker, we simply re-instantiate it so that we are able to call it
-	 * again.
+	 * new size of array is chosen from the size changer.
+	 *
+	 * This method stops sorting, re-shuffles the array, clears all swapped indexes,
+	 * frames painted, tracked time, and comparisons. It must also reset the
+	 * swingWorker so that the user is able to see another sort. Since
+	 * sort.execute() can only be called once for SwingWorker, we simply
+	 * re-instantiate it so that we are able to call it again.
 	 */
 	public void reset() {
 		setStopSort(true);
@@ -162,9 +160,9 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 
 	/*
 	 * updatePerformance()
-     *
-     * This method will be called every time that the frame is updated in order to 
-     * update our performance statistics.
+	 *
+	 * This method will be called every time that the frame is updated in order to
+	 * update our performance statistics.
 	 * 
 	 * Finds the values for each performance statistic being tracked (number of
 	 * swaps, number of comparisons, visualization time, sorting time), formats them
@@ -175,17 +173,17 @@ public class AlgVisualizer implements ActionListener, ChangeListener {
 	 */
 	public void updatePerformance() {
 		numSwaps = frame.getArrDisplay().getSwappedIndexes().size();
- 
+
 		if (stopSort) {
 			resetTime();
 		} else {
-            if(!frame.getArrDisplay().isComplete() && !getSort().equals("Not Sorting") && (frame.getArrDisplay().getNumChunks() == 0 || frame.getArrDisplay().getNumChunks() > 1)) {
-                visualizationTime = System.currentTimeMillis() - startTime;
-            }
-        }
+			if (!frame.getArrDisplay().isComplete() && !getSort().equals("Not Sorting")
+					&& (frame.getArrDisplay().getNumChunks() == 0 || frame.getArrDisplay().getNumChunks() > 1)) {
+				visualizationTime = System.currentTimeMillis() - startTime;
+			}
+		}
 
-		String performance = String.format(
-				"Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms",
+		String performance = String.format("Index Comparisons : %d  Index Swaps : %d  Visualization Time : %dms",
 				indexComparisons, numSwaps, visualizationTime);
 		frame.getPerformanceLabel().setText(performance);
 		frame.pack();

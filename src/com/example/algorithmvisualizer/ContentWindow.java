@@ -30,8 +30,8 @@ public class ContentWindow extends JFrame {
 	public ContentWindow(AlgVisualizer algVisualizer) {
 		super("Algorithm Visualizer"); // Set the name of the frame
 		this.algVisualizer = algVisualizer;
-		initComponents(); 
-        setFrame();
+		initComponents();
+		setFrame();
 	}
 
 	/*
@@ -42,7 +42,7 @@ public class ContentWindow extends JFrame {
 
 		double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		String[] sizeOptions;
-		
+
 		if (screenHeight > 1080.0) { // 4k
 			arrDisplayHeight = 2000;
 			contentWidth = arrDisplayHeight;
@@ -76,10 +76,10 @@ public class ContentWindow extends JFrame {
 		arrPanel.add(arrDisplay);
 
 		// Initialize all components and add action listeners
-        
-        initJButtons();
 
-        sizeChanger = new JComboBox<String>(algVisualizer.getSizeOptions()); // Pass the String containing all of the
+		initJButtons();
+
+		sizeChanger = new JComboBox<String>(algVisualizer.getSizeOptions()); // Pass the String containing all of the
 																				// size options
 		sizeChanger.addActionListener(algVisualizer);
 		sizeChanger.setBackground(Color.WHITE);
@@ -88,29 +88,29 @@ public class ContentWindow extends JFrame {
 				algVisualizer.getInitFPS());
 		FPSslider.addChangeListener(algVisualizer);
 		FPSslider.setBackground(Color.DARK_GRAY);
-		//FPSslider.setPreferredSize(new Dimension(75,25));
-		
+		// FPSslider.setPreferredSize(new Dimension(75,25));
+
 		performanceLabel = new JLabel();
 		performanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
 	}
 
-    // initialize the buttons for the frame
-    private void initJButtons() {
-        resetButton = initJButton("Reset");
-        bubbleButton = initJButton("Bubble Sort");
-        selectionButton = initJButton("Selection Sort");
-        insertionButton = initJButton("Insertion Sort");
-        mergeButton = initJButton("Merge Sort");
-        quickButton = initJButton("Quick Sort");
-    }
+	// initialize the buttons for the frame
+	private void initJButtons() {
+		resetButton = initJButton("Reset");
+		bubbleButton = initJButton("Bubble Sort");
+		selectionButton = initJButton("Selection Sort");
+		insertionButton = initJButton("Insertion Sort");
+		mergeButton = initJButton("Merge Sort");
+		quickButton = initJButton("Quick Sort");
+	}
 
-    // only used to initialize the buttons in the frame
-    private JButton initJButton(String buttonName) {
-        JButton newButton = new JButton(buttonName);
-        newButton.addActionListener(algVisualizer);
-        setBackground(Color.WHITE);
-        return newButton;
-    }
+	// only used to initialize the buttons in the frame
+	private JButton initJButton(String buttonName) {
+		JButton newButton = new JButton(buttonName);
+		newButton.addActionListener(algVisualizer);
+		setBackground(Color.WHITE);
+		return newButton;
+	}
 
 	/*
 	 * Sets up the frame and adds all of the components to this frame
@@ -157,19 +157,18 @@ public class ContentWindow extends JFrame {
 	public int getContentWidth() {
 		return contentWidth;
 	}
-	
+
 	public int getContentHeight() {
 		return contentHeight;
 	}
-	
+
 	public int getArrDisplayWidth() {
 		return arrDisplayWidth;
 	}
-	
+
 	public int getArrDisplayHeight() {
 		return arrDisplayHeight;
 	}
-	
 
 	public JButton getBubbleButton() {
 		return bubbleButton;
