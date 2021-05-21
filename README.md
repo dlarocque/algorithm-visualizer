@@ -4,6 +4,12 @@ A program for visualizing sorting algorithms.
 
 This is my freshman year summer project!  Trying to get a better understanding of sorting algorithms before my Data Structures and Algorithms class this fall while applying new things i've learned such as Swing, Git, Maven, and multi-threading.
 
+Despite this type of project being unoriginal, the code itself is original.
+
+<!-- ![Startup](https://github.com/dlarocque/AlgorithmVisualizer/blob/master/images/Startup.PNG) -->
+
+[![AlgorithmVisualizer](https://github.com/dlarocque/AlgorithmVisualizer/blob/master/images/Startup.PNG)](https://www.youtube.com/watch?v=WDOpFcnzuaQ "AlgorithmVisualizer")
+
 ## Installation
 
 ### Prerequisite
@@ -14,36 +20,25 @@ This is my freshman year summer project!  Trying to get a better understanding o
 
 -----------------------------------------------
 
-- Clone the project onto your system 'https://github.com/dlarocque/AlgorithmVisualizer'
-- Download the .zip file from https://github.com/dlarocque/AlgorithmVisualizer and extract its contents
+#### Clone
 
-*OR*
+`git clone https://github.com/dlarocque/AlgorithmVisualizer`
 
-- Download the AlgorithmVisualizer.jar executable JAR file
+#### Download ZIP
+
+Download the .zip file from https://github.com/dlarocque/AlgorithmVisualizer and extract its contents
 
 ## Running
 
-*These instructions are directed towards Linux users*
+*For Linux/macOS users*
 
-- Go to `C:/.../AlgorithmVisualizer-master` and enter
-
-`mvn clean install`
-
-To compile the program.
-
-Once the program is built successfully, enter the following :
-
-`mvn exec:java -Dexec.mainClass=com.example.algorithmvisualizer.Main`
-
-Can also build and run simultaneously with : 
+From the root of the project, build and execute simultaneously:
 
 `mvn install exec:java -Dexec.mainClass=com.example.algorithmvisualizer.Main`
 
 ## How to use 
 
 On startup, the application will open up a frame containing buttons and an unsorted array in bar form.  There is a Reset button, a button for each sorting algorithm, a drop down size changer, an FPS slider, and a label showing statistics.
-
-![Startup](https://github.com/dlarocque/AlgorithmVisualizer/blob/master/images/Startup.PNG)
 
 _The Reset Button_ will re-shuffle the array and stop any sorting that is being done, while keeping the size set to the array.
 
