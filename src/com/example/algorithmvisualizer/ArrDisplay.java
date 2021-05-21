@@ -10,7 +10,6 @@
  * 
  * Instructions on how to use the application are included in README.md
  */
-
 package com.example.algorithmvisualizer;
 
 import java.awt.*;
@@ -19,23 +18,23 @@ import java.util.ArrayList;
 
 public class ArrDisplay extends JComponent {
 
-	private static final long serialVersionUID = 1L;
-	private int swappedIndex1;
-	private int swappedIndex2;
-	private int numChunks; // amount of frames painted since the array was shuffled
-	private boolean isComplete; // if the array is sorted
-	private ArrayList<Integer[]> swappedIndexes;
-	private Integer[] arr;
-	private AlgVisualizer algVisualizer;
-	private ContentWindow frame;
+    private static final long serialVersionUID = 1L;
+    private int swappedIndex1;
+    private int swappedIndex2;
+    private int numChunks; // amount of frames painted since the array was shuffled
+    private boolean isComplete; // if the array is sorted
+    private ArrayList<Integer[]> swappedIndexes;
+    private Integer[] arr;
+    private AlgVisualizer algVisualizer;
+    private ContentWindow frame;
 
-	public ArrDisplay(AlgVisualizer algVisualizer, ContentWindow frame) {
-		this.algVisualizer = algVisualizer;
-		this.frame = frame;
-		swappedIndexes = new ArrayList<Integer[]>();
-	}
+    public ArrDisplay(AlgVisualizer algVisualizer, ContentWindow frame) {
+        this.algVisualizer = algVisualizer;
+        this.frame = frame;
+        swappedIndexes = new ArrayList<Integer[]>();
+    }
 
-	/*
+    /*
 	 * We override the paintComponent method to allow us to render our own
 	 * visualization of the array in bar graph form. This method is called through
 	 * the use of the repaint() method that is called in the SwingWorkers publish()
@@ -49,74 +48,76 @@ public class ArrDisplay extends JComponent {
 	 * were swapped during sorting. Since we always draw the most recent chunk,
 	 * numChunks will always represent the number of the array clone we're drawing,
 	 * so using that to get the correct index in swappedIndexes will work.
-	 */
-	@Override
-	public void paintComponent(Graphics g) {
-		Graphics2D graphics2d = (Graphics2D) g;
-		graphics2d.setColor(Color.DARK_GRAY);
-		graphics2d.fillRect(0, 0, frame.getArrDisplayWidth(), frame.getArrDisplayHeight());
-		if (algVisualizer.getSort().equals("Not Sorting") || isComplete) {
-			swappedIndex1 = -1;
-			swappedIndex2 = -1;
-		} else if (!algVisualizer.stopSort()) {
-			swappedIndex1 = swappedIndexes.get(numChunks)[0];
-			swappedIndex2 = swappedIndexes.get(numChunks)[1];
-		}
-		// Iterate through the array and draw every index
-		for (int i = 0; i < arr.length; i++) {
-			int width = (int) (frame.getArrDisplayWidth() / (double) arr.length);
-			int height = arr[i] * ((int) (frame.getArrDisplayHeight() / arr.length));
-			int x = i * width;
-			int y = frame.getArrDisplayHeight() - height;
-			if (i == swappedIndex1 && !algVisualizer.stopSort()) {
-				graphics2d.setColor(Color.RED);
-			} else if (i == swappedIndex2 && !algVisualizer.stopSort()) {
-				graphics2d.setColor(Color.BLUE);
-			} else if (isComplete) {
-				graphics2d.setColor(Color.GREEN);
-			} else {
-				graphics2d.setColor(Color.WHITE);
-			}
-			// Draw the current indexes bar
-			graphics2d.fillRect(x, y, width, height);
-		}
-		algVisualizer.updatePerformance();
-	}
+     */
+    @Override
+    public void paintComponent(Graphics g) {
+        Graphics2D graphics2d = (Graphics2D) g;
+        graphics2d.setColor(Color.DARK_GRAY);
+        graphics2d.fillRect(0, 0, frame.getArrDisplayWidth(), frame.getArrDisplayHeight());
 
-	public ArrayList<Integer[]> getSwappedIndexes() {
-		return swappedIndexes;
-	}
+        if (algVisualizer.getSort().equals("Not Sorting") || isComplete) {
+            swappedIndex1 = -1;
+            swappedIndex2 = -1;
+        } else if (!algVisualizer.stopSort()) {
+            swappedIndex1 = swappedIndexes.get(numChunks)[0];
+            swappedIndex2 = swappedIndexes.get(numChunks)[1];
+        }
+        // Iterate through the array and draw every index
+        for (int i = 0; i < arr.length; i++) {
+            int width = (int) (frame.getArrDisplayWidth() / (double) arr.length);
+            int height = arr[i] * ((int) (frame.getArrDisplayHeight() / arr.length));
+            int x = i * width;
+            int y = frame.getArrDisplayHeight() - height;
 
-	// Add a pair of swapped indexes to the end of the list
-	public void addSwappedIndexes(int swappedIndex1, int swappedIndex2) {
-		swappedIndexes.add(new Integer[] { swappedIndex1, swappedIndex2 });
-	}
+            if (i == swappedIndex1 && !algVisualizer.stopSort()) {
+                graphics2d.setColor(Color.RED);
+            } else if (i == swappedIndex2 && !algVisualizer.stopSort()) {
+                graphics2d.setColor(Color.BLUE);
+            } else if (isComplete) {
+                graphics2d.setColor(Color.GREEN);
+            } else {
+                graphics2d.setColor(Color.WHITE);
+            }
+            // Draw the current indexes bar
+            graphics2d.fillRect(x, y, width, height);
+        }
+        algVisualizer.updatePerformance();
+    }
 
-	public void clearSwappedIndexes() {
-		swappedIndexes = new ArrayList<Integer[]>();
-	}
+    public ArrayList<Integer[]> getSwappedIndexes() {
+        return swappedIndexes;
+    }
 
-	public void setNumChunk(int numChunks) {
-		this.numChunks = numChunks;
-	}
+    // Add a pair of swapped indexes to the end of the list
+    public void addSwappedIndexes(int swappedIndex1, int swappedIndex2) {
+        swappedIndexes.add(new Integer[]{swappedIndex1, swappedIndex2});
+    }
 
-	public int getNumChunks() {
-		return numChunks;
-	}
+    public void clearSwappedIndexes() {
+        swappedIndexes = new ArrayList<Integer[]>();
+    }
 
-	public boolean isComplete() {
-		return isComplete;
-	}
+    public void setNumChunk(int numChunks) {
+        this.numChunks = numChunks;
+    }
 
-	public void setComplete(boolean complete) {
-		this.isComplete = complete;
-	}
+    public int getNumChunks() {
+        return numChunks;
+    }
 
-	public Integer[] getArr() {
-		return arr;
-	}
+    public boolean isComplete() {
+        return isComplete;
+    }
 
-	public void setArr(Integer[] arr) {
-		this.arr = arr;
-	}
+    public void setComplete(boolean complete) {
+        this.isComplete = complete;
+    }
+
+    public Integer[] getArr() {
+        return arr;
+    }
+
+    public void setArr(Integer[] arr) {
+        this.arr = arr;
+    }
 }
