@@ -1,4 +1,4 @@
-# AlgorithmVisualizer
+# algorithm-visualizer
 
 A program for visualizing sorting algorithms.
 
