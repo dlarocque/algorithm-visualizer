@@ -6,6 +6,8 @@ This is my freshman year summer project!  Trying to get a better understanding o
 
 Despite this type of project being unoriginal, the code itself is original.
 
+For a small demo of the project, you can check out <a src="https://dlarocque.github.io/2021/04/29/Sorting-Algorithm-Visualizer.html">this post</a> on my website.
+
 <!-- ![Startup](https://github.com/dlarocque/AlgorithmVisualizer/blob/master/images/Startup.PNG) -->
 
 [![AlgorithmVisualizer](https://github.com/dlarocque/AlgorithmVisualizer/blob/master/images/Startup.PNG)](https://www.youtube.com/watch?v=WDOpFcnzuaQ "AlgorithmVisualizer")
