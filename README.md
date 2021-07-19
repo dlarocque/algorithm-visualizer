@@ -1,6 +1,8 @@
 # algorithm-visualizer
 
-A program for visualizing sorting algorithms.
+An application for visualizing sorting algorithms.
+
+If you'd like to see a demo of the visualizations, check out <a href="https://dlarocque.github.io/2021/04/29/Sorting-Algorithm-Visualizer.html" target="blank_">this blog post</a> on my website 
 
 This is my freshman year summer project!  Trying to get a better understanding of sorting algorithms before my Data Structures and Algorithms class this fall while applying new things i've learned such as Swing, Git, Maven, and multi-threading.
 
